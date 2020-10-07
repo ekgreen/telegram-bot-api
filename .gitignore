@@ -1,0 +1,11 @@
+# Project exclude paths
+/.gradle/
+/build/
+/gradle/
+/telegram-bot-api/.gradle/
+/telegram-bot-api/build/
+/telegram-bot-api/build/classes/java/main/
+/telegram-bot-api/gradle/
+/telegram-bot-java-client/.gradle/
+/telegram-bot-java-client/build/
+/telegram-bot-java-client/gradle/

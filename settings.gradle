@@ -1,0 +1,6 @@
+rootProject.name = 'telegram-bot-parent'
+
+include ":telegram-bot-api"
+include ":telegram-bot-java-client"
+include 'telegram-bot-core'
+

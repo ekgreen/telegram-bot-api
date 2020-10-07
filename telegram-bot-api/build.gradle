@@ -1,0 +1,44 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group 'com.goodboy.telegram.bot'
+version '1.0.0-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+publishing {
+    publications {
+        maven(MavenPublication){
+            groupId 'com.goodboy.telegram.bot'
+            artifactId 'telegram-bot-api'
+            version '1.0.0-SNAPSHOT'
+
+            from components.java
+        }
+    }
+}
+
+dependencies {
+    implementation platform('com.fasterxml.jackson:jackson-bom:2.11.0')
+
+    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
+
+    implementation 'com.fasterxml.jackson.core:jackson-core'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
