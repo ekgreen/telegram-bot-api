@@ -42,4 +42,5 @@ public class TelegramCoreResponse<T> {
      * @optional
      */
     private @Optional T result;
+
 }

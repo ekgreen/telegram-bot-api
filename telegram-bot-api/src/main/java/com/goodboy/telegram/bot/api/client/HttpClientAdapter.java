@@ -1,7 +1,8 @@
-package com.goodboy.telegram.bot.core.method.message;
+package com.goodboy.telegram.bot.api.client;
 
 import com.goodboy.telegram.bot.api.response.TelegramCoreResponse;
 
+import javax.annotation.Nonnull;
 import java.util.concurrent.CompletableFuture;
 
 public interface HttpClientAdapter {
@@ -12,26 +13,20 @@ public interface HttpClientAdapter {
      * response status, headers, and body ( as handled by given response body
      * handler ).
      *
-     * @param <R> the request body type
-     * @param <T> the response body type
+     * @param <V> the request body type
      * @param request the request
      *
      * @return the response
      */
-    <T, R> TelegramCoreResponse<T> send(R request);
+    <V> byte[] send(@Nonnull Request<V> request);
 
     /**
      * Sends the given request asynchronously using this client with the given
      * response body handler.
      *
-     * @param <R> the request body type
-     * @param <T> the response body type
+     * @param <V> the request body type
      * @param request the request
      */
-    <T, R> CompletableFuture<TelegramCoreResponse<T>> sendAsync(R request);
+    <V> CompletableFuture<byte[]> sendAsync(Request<V> request);
 
-    interface Builder{
-
-
-    }
 }
