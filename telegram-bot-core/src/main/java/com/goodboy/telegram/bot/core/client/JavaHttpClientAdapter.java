@@ -105,7 +105,7 @@ public class JavaHttpClientAdapter implements JavaHttpClient {
             adapter = new EmptyRequestInstance(url);
             if (log.isDebugEnabled())
                 log.debug("body (Request.body) is null or empty -> selected client is {}", adapter.getClass());
-        } else if (isBinary = isBinaryBody(request) || !(isJson = (isJson(request)))) {
+        } else if ( (isBinary = isBinaryBody(request)) || (String.class.isAssignableFrom(request.getBody().getClass()) && !(isJson = (isJson(request))))) {
             // 2) if request contains binary array or any byte array wrapper or any string except already json formatted
             adapter = new MultipartInstance(url, isBinary);
             if (log.isDebugEnabled())

@@ -14,7 +14,7 @@ public interface TelegramMessageApi {
      *
      * @return on success, the sent Message is returned.
      */
-    @Nonnull TelegramCoreResponse<Message> sendMessage(@Nonnull SendMessageApi request) throws IOException, InterruptedException;
+    @Nonnull TelegramCoreResponse<Message> sendMessage(@Nonnull SendMessageApi request);
 
     /**
      * Double-argument method includes required parameter

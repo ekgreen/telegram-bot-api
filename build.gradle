@@ -34,8 +34,8 @@ allprojects {
         implementation platform('com.fasterxml.jackson:jackson-bom:2.11.0')
 
         compileOnly group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
-        compileOnly group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
-        compileOnly group: 'com.google.guava', name: 'guava', version: '29.0-jre'
+        implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
+        implementation group: 'com.google.guava', name: 'guava', version: '29.0-jre'
         compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
         annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
 

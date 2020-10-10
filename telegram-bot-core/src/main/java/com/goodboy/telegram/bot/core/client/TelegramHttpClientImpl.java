@@ -35,12 +35,13 @@ public class TelegramHttpClientImpl implements TelegramHttpClient {
     private final Map<String, PathHandler<?>> pathHandlers;
     private final List<TelegramHttpClientInterceptor> interceptors;
     private final String url;
+    private final String token;
 
     public TelegramHttpClientImpl(
             HttpClientAdapter adapter,
             ObjectMapper decoder
     ){
-        this(adapter, decoder, (List<PathHandler<?>>) null, null, DEFAULT_HOST);
+        this(adapter, decoder, (List<PathHandler<?>>) null, null, DEFAULT_HOST, null);
     }
 
     public TelegramHttpClientImpl(
@@ -48,7 +49,8 @@ public class TelegramHttpClientImpl implements TelegramHttpClient {
             ObjectMapper decoder,
             @Nullable List<PathHandler<?>> pathHandlers,
             @Nullable List<TelegramHttpClientInterceptor> interceptors,
-            @Nullable String url
+            @Nullable String url,
+            @Nullable String token
     ) {
         this.adapter = adapter;
         this.decoder = decoder;
@@ -58,6 +60,7 @@ public class TelegramHttpClientImpl implements TelegramHttpClient {
         )) : ImmutableMap.of();
         this.interceptors = interceptors != null ? interceptors : ImmutableList.of();
         this.url = StringUtils.isNotBlank(url) ? url : DEFAULT_HOST;
+        this.token = token;
     }
 
     @RequiredArgsConstructor
@@ -79,18 +82,32 @@ public class TelegramHttpClientImpl implements TelegramHttpClient {
 
     @Override
     public <T, V> TelegramCoreResponse<T> send(@NotNull Request<V> request) {
-        return new AggregationTelegramHttpClient(this::sync, interceptors).intercept(request.setHost(url));
+        return new AggregationTelegramHttpClient(this::sync, interceptors).intercept(enrich(request));
     }
 
     @Override
     public <T, V> CompletableFuture<TelegramCoreResponse<T>> sendAsync(Request<V> request) {
-        return adapter.sendAsync(request.setHost(url))
+        return adapter.sendAsync(enrich(request))
                 .thenApply(response -> new AggregationTelegramHttpClient(new TelegramHttpClientInterceptorChain() {
                     @Override
                     public <K, L> TelegramCoreResponse<K> intercept(Request<L> request) {
                         return processRequest(request, response);
                     }
                 }, interceptors).intercept(request));
+    }
+
+    private <V> Request<V> enrich(Request<V> request) {
+        if(request.getHost() == null && url != null){
+            if(log.isDebugEnabled())
+                log.debug("request not contains endpoint host. null value will be replaced by default { default_value = {} }", url);
+            request.setHost(url);
+        }
+        if(request.getAuthToken() == null && token != null){
+            if(log.isDebugEnabled())
+                log.debug("request not contains bot-token. null value will be replaced by default { default_value = **** (check out configuration, token is masked) }");
+            request.setHost(token);
+        }
+        return request;
     }
 
     private <T, V> TelegramCoreResponse<T> sync(Request<V> request) {
