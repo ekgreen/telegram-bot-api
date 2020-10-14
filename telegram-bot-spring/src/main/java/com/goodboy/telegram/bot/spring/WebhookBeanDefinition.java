@@ -10,11 +10,6 @@ import javax.annotation.Nonnull;
 public class WebhookBeanDefinition {
 
     /**
-     * related with metadata webhook instance
-     */
-    private Webhook webhook;
-
-    /**
      * unique bot name on spring container space
      */
     private String botName;
@@ -28,7 +23,7 @@ public class WebhookBeanDefinition {
      * Self registry bot use telegram bot api and request telegram
      * to registry bots webhook with other params
      */
-    private boolean selfRegistry = false;
+    private RegistryBot selfRegistry = RegistryBot.NON;
 
     /**
      * The token is a string along the lines of 110201543:AAHdqTcvCH1vGWJxfSeofSAs0K5PALDsaw that is required
@@ -40,7 +35,7 @@ public class WebhookBeanDefinition {
     /**
      * Path to Uploading your public key certificate so that the root certificate in use can be checked
      */
-    private String certificate;
+    private CertificateProvider certificateProvider;
 
     /**
      * Maximum allowed number of simultaneous HTTPS connections to the webhook for update delivery, 1-100.
@@ -51,4 +46,7 @@ public class WebhookBeanDefinition {
      */
     private Integer maxConnections;
 
+    public enum RegistryBot {
+        NON, REGISTRY_ON_MISSING, REWRITE
+    }
 }

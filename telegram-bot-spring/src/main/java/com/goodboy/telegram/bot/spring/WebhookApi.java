@@ -46,7 +46,7 @@ public @interface WebhookApi {
      *
      * Do not fill fields if {@see WebhookApi#selfRegistryBot()} is false
      */
-    boolean selfRegistryBot() default false;
+    WebhookBeanDefinition.RegistryBot selfRegistryBot() default WebhookBeanDefinition.RegistryBot.NON;
 
     /**
      * The token is a string along the lines of 110201543:AAHdqTcvCH1vGWJxfSeofSAs0K5PALDsaw that is required
@@ -73,11 +73,11 @@ public @interface WebhookApi {
     String tokenHandlerBean() default StringUtils.EMPTY;
 
     /**
-     * Path to Uploading your public key certificate so that the root certificate in use can be checked
+     * Uploading your public key certificate so that the root certificate in use can be checked
      */
-    String certificate() default StringUtils.EMPTY;
+    Class<? extends CertificateProvider> certificate() default ApplicationPropertyCertificateProvider.class;
 
-    /**
+      /**
      * Maximum allowed number of simultaneous HTTPS connections to the webhook for update delivery, 1-100.
      * Defaults to 40. Use lower values to limit the load on your bot's server, and higher values to increase
      * your bot's throughput.

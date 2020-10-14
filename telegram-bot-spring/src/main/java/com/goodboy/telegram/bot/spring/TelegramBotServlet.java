@@ -1,7 +1,8 @@
 package com.goodboy.telegram.bot.spring;
 
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
+import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,28 +15,19 @@ import java.util.Map;
  *
  */
 @Servlet
-public class TelegramBotServlet extends HttpServlet implements BeanPostProcessor {
+@RequiredArgsConstructor(onConstructor_={@Autowired})
+public class TelegramBotServlet extends HttpServlet implements BotWebhookListener {
 
-//    private final Map<String, Webhook> s;
+    private final TelegramEnvironment environment;
+    private final Map<String, Object> requestHandlers;
+    private final String rootContext;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
     }
 
     @Override
-    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        return null;
+    public void onWebhookCreation(@NotNull Webhook webhook, @NotNull WebhookBeanDefinition info) {
+
     }
-
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        return null;
-    }
-
-    public String resolveUrl() {
-
-        return null;
-    }
-
-
 }

@@ -1,6 +1,7 @@
 package com.goodboy.telegram.bot.spring;
 
 import com.google.common.base.Suppliers;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
@@ -24,18 +25,28 @@ public class WebhookAnnotationResolver implements BeanPostProcessor, Application
     private final Map<String, WebhookBeanDefinition> definitions = new HashMap<>();
 
     private final List<BotWebhookListener> listeners;
+    private final Environment environment;
     private final Supplier<TokenHandler> defaultStaticTokenHandler;
+    private final Supplier<CertificateProvider> defaultCertificateProvider;
 
     private ApplicationContext context;
 
     @Autowired
     public WebhookAnnotationResolver(@Nullable List<BotWebhookListener> listeners, Environment environment) {
         this.listeners = listeners;
+        this.environment = environment;
         this.defaultStaticTokenHandler = Suppliers.memoize(() -> {
             try {
                 return ApplicationPropertyTokenHandler.class.getDeclaredConstructor(Environment.class).newInstance(environment);
             } catch (Exception exception) {
                 throw new BeanCreationException("could not create default token handler { handler = ApplicationPropertyTokenHandler.class }", exception);
+            }
+        });
+        this.defaultCertificateProvider = Suppliers.memoize(() -> {
+            try {
+                return ApplicationPropertyCertificateProvider.class.getDeclaredConstructor(Environment.class).newInstance(environment);
+            } catch (Exception exception) {
+                throw new BeanCreationException("could not create default token handler { handler = ApplicationPropertyCertificateProvider.class }", exception);
             }
         });
     }
@@ -55,11 +66,9 @@ public class WebhookAnnotationResolver implements BeanPostProcessor, Application
 
         // mb call after application refresh(?)
         definitions.computeIfPresent(beanName, (name, definition) -> {
-            // set instance in definition
-            definition.setWebhook((Webhook) bean); // if Proxy212 ?
             // call listeners
             if (listeners != null)
-                listeners.forEach(listener -> listener.onWebhookCreation(definition));
+                listeners.forEach(listener -> listener.onWebhookCreation((Webhook) bean, definition));  // if Proxy212 ?
 
             return definition;
         });
@@ -70,6 +79,12 @@ public class WebhookAnnotationResolver implements BeanPostProcessor, Application
 
     @SneakyThrows
     private WebhookBeanDefinition createBeanDefinition(@Nonnull String beanName, @Nonnull WebhookApi api) {
+        // bot name
+        final String name = StringUtils.isNotEmpty(api.bot()) ? api.bot() : beanName;
+
+        // webhook file definition
+        final WebhookBeanDefinition propertyConfigurableDefinition = TelegramBotConfigurableDefinitions.BotDefinition.createWebhookBotDefinition(beanName, environment);
+
         // path pattern for http servlet
         final String path;
 
@@ -77,14 +92,13 @@ public class WebhookAnnotationResolver implements BeanPostProcessor, Application
             path = api.path();
         else if (StringUtils.isNotEmpty(api.value()))
             path = api.value();
+        else if (StringUtils.isNotEmpty(propertyConfigurableDefinition.getPath()))
+            path = propertyConfigurableDefinition.getPath();
         else
-            throw new BeanCreationException("WebhookApi[" + beanName + "] api not contains path/value");
-
-        // bot name
-        final String name = StringUtils.isNotEmpty(api.bot()) ? api.bot() : beanName;
+            path = name;
 
         // token resolver
-        final TokenHandler tokenHandler;
+        TokenHandler tokenHandler;
 
         if (StringUtils.isNotEmpty(api.token()))
             tokenHandler = (botName) -> api.token();
@@ -104,23 +118,52 @@ public class WebhookAnnotationResolver implements BeanPostProcessor, Application
                 tokenHandler = type.getConstructor().newInstance();
             }
         }
+        tokenHandler = new BotNameAwareTokenHandler(name, tokenHandler);
+
+        // self registry
+        WebhookBeanDefinition.RegistryBot registryBot = api.selfRegistryBot();
+
+        if(registryBot == WebhookBeanDefinition.RegistryBot.NON){
+            registryBot = propertyConfigurableDefinition.getSelfRegistry();
+        }
 
         // certificate
-        final String certificate = StringUtils.isNotEmpty(api.certificate()) ? api.certificate() : null;
+        CertificateProvider certificateProvider;
+
+        @Nonnull Class<? extends CertificateProvider> certificateTypeProvider = api.certificate();
+
+        if(ApplicationPropertyCertificateProvider.class.isAssignableFrom(certificateTypeProvider)){
+            certificateProvider = defaultCertificateProvider.get();
+        } else {
+            certificateProvider = certificateTypeProvider.getConstructor().newInstance();
+        }
 
         // max connections
-        final Integer maxConnections = api.maxConnections() >= 0 ? api.maxConnections() : null;
+        final Integer maxConnections = api.maxConnections() >= 0 ? api.maxConnections() : propertyConfigurableDefinition.getMaxConnections();
 
         return new WebhookBeanDefinition()
                 .setBotName(name)
                 .setPath(path)
                 .setTokenHandler(tokenHandler)
-                .setSelfRegistry(api.selfRegistryBot())
-                .setCertificate(certificate)
+                .setSelfRegistry(registryBot)
+                .setCertificateProvider(certificateProvider)
                 .setMaxConnections(maxConnections);
     }
 
+    @RequiredArgsConstructor
+    private static class BotNameAwareTokenHandler implements TokenHandler{
 
+        private final String bot;
+        private final TokenHandler origin;
+
+        @Override
+        public String token(@Nonnull String botName) {
+            if(!bot.equals(botName))
+                throw new IllegalStateException(String.format("incorrect bot name { expected = %s, incoming = %s }", botName, botName));
+
+            return origin.token(botName);
+        }
+    }
 
     @Override
     public void setApplicationContext(@Nonnull ApplicationContext applicationContext) throws BeansException {

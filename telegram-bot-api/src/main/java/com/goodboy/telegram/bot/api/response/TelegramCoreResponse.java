@@ -5,6 +5,8 @@ import com.goodboy.telegram.bot.api.meta.TelegramApi;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.util.function.Supplier;
+
 @TelegramApi
 @Data
 @Accessors(chain = true)
@@ -43,4 +45,35 @@ public class TelegramCoreResponse<T> {
      */
     private @Optional T result;
 
+    /**
+     * Use this method when you want to change TelegramCoreResponse on Optional
+     *
+     * @return optional
+     */
+    public java.util.Optional<T> get(){
+        return  java.util.Optional.ofNullable(isOk() ? result : null);
+    }
+
+    /**
+     * Use this method when you want to change TelegramCoreResponse on Optional and throw
+     * exception on false response
+     *
+     * @param exception runtime exception generator
+     * @return optional
+     */
+    public java.util.Optional<T> orThrow(Supplier<? extends RuntimeException> exception){
+        if(!isOk())
+            throw exception.get();
+
+        return java.util.Optional.ofNullable(result);
+    }
+
+    /**
+     * Wrapper around Boolean
+     *
+     * @return prime
+     */
+    public boolean isOk() {
+        return ok != null && ok;
+    }
 }

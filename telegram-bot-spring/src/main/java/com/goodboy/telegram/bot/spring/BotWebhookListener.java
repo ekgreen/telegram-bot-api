@@ -13,5 +13,5 @@ public interface BotWebhookListener {
      * @see WebhookApi
      * @see WebhookBeanDefinition
      */
-    public void onWebhookCreation(@Nonnull WebhookBeanDefinition info);
+    public void onWebhookCreation(@Nonnull Webhook webhook, @Nonnull WebhookBeanDefinition info);
 }
