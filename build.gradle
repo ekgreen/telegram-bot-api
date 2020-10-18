@@ -1,48 +1,27 @@
-plugins {
-    id 'java'
-    id 'maven-publish'
-}
-
-group 'com.goodboy.telegram.bot'
-version '1.0.0-SNAPSHOT'
-sourceCompatibility = '11'
-
-repositories {
-    mavenCentral()
-}
-
-publishing {
-    publications {
-        maven(MavenPublication){
-            groupId 'com.goodboy.telegram.bot'
-            artifactId 'telegram-bot-parent'
-            version '1.0.0-SNAPSHOT'
-
-            from components.java
-        }
-    }
-}
-
 allprojects {
     apply plugin: 'java'
+    apply plugin: 'java-library'
     apply plugin: 'maven-publish'
     
     group 'com.goodboy.telegram.bot'
     version '1.0.0-SNAPSHOT'
+    sourceCompatibility = '11'
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
 
     dependencies {
-        implementation platform('com.fasterxml.jackson:jackson-bom:2.11.0')
+        implementation 'org.jetbrains:annotations:19.0.0'
+        implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
 
         implementation group: 'org.reflections', name: 'reflections', version: '0.9.12'
-        implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
-        implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
         implementation group: 'com.google.guava', name: 'guava', version: '29.0-jre'
+        implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
+
         compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
         annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
-
-        implementation 'com.fasterxml.jackson.core:jackson-core'
-        implementation 'com.fasterxml.jackson.core:jackson-databind'
-        implementation 'com.fasterxml.jackson.core:jackson-annotations'
 
         implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
 

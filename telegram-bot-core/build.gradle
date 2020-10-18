@@ -1,17 +1,9 @@
-plugins {
-    id 'java'
-}
-
-group 'com.goodboy.telegram.bot'
-version '1.0.0-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-    implementation project(':telegram-bot-api')
-    implementation("com.squareup.okhttp3:okhttp:4.9.0")
+    api project(':telegram-bot-api')
 
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    implementation platform('com.fasterxml.jackson:jackson-bom:2.11.0')
+
+    implementation 'com.fasterxml.jackson.core:jackson-core'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations'
 }

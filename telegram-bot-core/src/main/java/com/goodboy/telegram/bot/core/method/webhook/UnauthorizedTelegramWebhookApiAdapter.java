@@ -15,7 +15,8 @@ public class UnauthorizedTelegramWebhookApiAdapter implements UnauthorizedTelegr
     public @NotNull
     TelegramCoreResponse<Boolean> setWebhook(@NotNull String token, @NotNull SetWebhookApi request) {
         return client.send(new Request<>()
-                .setAuthToken(token)
+                .setToken(token)
+                .setResponseType(Boolean.class)
                 .setCallName(TelegramWebhookApiDefinitions.SET_WEBHOOK_CALL_METHOD)
                 .setBody(request)
         );
@@ -25,7 +26,8 @@ public class UnauthorizedTelegramWebhookApiAdapter implements UnauthorizedTelegr
     public @NotNull
     TelegramCoreResponse<Boolean> deleteWebhook(@NotNull String token) {
         return client.send(new Request<>()
-                .setAuthToken(token)
+                .setToken(token)
+                .setResponseType(Boolean.class)
                 .setCallName(TelegramWebhookApiDefinitions.DELETE_WEBHOOK_CALL_METHOD)
         );
     }
@@ -33,8 +35,10 @@ public class UnauthorizedTelegramWebhookApiAdapter implements UnauthorizedTelegr
     public @NotNull
     TelegramCoreResponse<WebhookInfo> getWebhookInfo(@NotNull String token) {
         return client.send(new Request<>()
-                .setAuthToken(token)
+                .setToken(token)
+                .setResponseType(WebhookInfo.class)
                 .setCallName(TelegramWebhookApiDefinitions.GET_WEBHOOK_INFO_CALL_METHOD)
         );
     }
+
 }

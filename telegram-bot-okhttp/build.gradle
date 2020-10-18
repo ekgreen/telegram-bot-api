@@ -1,0 +1,6 @@
+dependencies {
+    api("com.squareup.okhttp3:okhttp:4.9.0")
+
+    implementation project(':telegram-bot-api')
+    implementation project(':telegram-bot-core')
+}

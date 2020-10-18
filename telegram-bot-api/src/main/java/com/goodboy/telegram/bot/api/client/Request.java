@@ -5,9 +5,9 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-public class Request<T> {
+public class Request<V> {
 
-    private String authToken;
+    private String token;
 
     private String callName;
 
@@ -15,5 +15,7 @@ public class Request<T> {
 
     private String path;
 
-    private T body;
+    private Class<?> responseType;
+
+    private V body;
 }

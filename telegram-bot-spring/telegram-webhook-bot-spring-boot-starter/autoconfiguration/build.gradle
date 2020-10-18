@@ -1,0 +1,11 @@
+publishing {
+    publications {
+        maven(MavenPublication) {
+            group 'com.goodboy.telegram.bot.spring'
+            artifactId = 'telegram-webhook-bot-spring-boot-autoconfiguration'
+            version '1.0.0-SNAPSHOT'
+
+            from components.java
+        }
+    }
+}

@@ -59,7 +59,7 @@ public interface TelegramHttpClient {
          * @param decoder the ObjectMapper
          * @return this builder
          */
-        public Builder decoder(ObjectMapper decoder);
+        public Builder mapper(ObjectMapper decoder);
 
         /**
          * Sets the path response decoder to be used for response demarshalling.
@@ -71,7 +71,7 @@ public interface TelegramHttpClient {
          * @param decoder the PathHandler
          * @return this builder
          */
-        public Builder decoder(PathHandler<?> decoder);
+        public Builder mapper(PathHandler<?> decoder);
 
         /**
          * Sets the telegram remote endpoint
@@ -83,15 +83,6 @@ public interface TelegramHttpClient {
          * @return this builder
          */
         public Builder remote(@Nonnull String hostPort);
-
-        /**
-         * The token is a string along the lines of 110201543:AAHdqTcvCH1vGWJxfSeofSAs0K5PALDsaw that is required
-         * to authorize the bot and send requests to the Bot API. Keep your token secure and store it safely,
-         * it can be used by anyone to control your bot.
-         *
-         * Linking btw client instance and specific bot
-         */
-        public Builder token(String token);
 
         /**
          * Sets the telegram request interceptor

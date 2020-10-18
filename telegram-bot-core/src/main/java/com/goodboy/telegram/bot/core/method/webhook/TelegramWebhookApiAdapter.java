@@ -18,6 +18,7 @@ public class TelegramWebhookApiAdapter implements TelegramWebhookApi {
     public @NotNull TelegramCoreResponse<Boolean> setWebhook(@NotNull SetWebhookApi request) {
         return client.send(new Request<>()
                 .setCallName(TelegramWebhookApiDefinitions.SET_WEBHOOK_CALL_METHOD)
+                .setResponseType(Boolean.class)
                 .setBody(request)
         );
     }
@@ -25,18 +26,14 @@ public class TelegramWebhookApiAdapter implements TelegramWebhookApi {
     public @NotNull TelegramCoreResponse<Boolean> deleteWebhook() {
         return client.send(new Request<>()
                 .setCallName(TelegramWebhookApiDefinitions.DELETE_WEBHOOK_CALL_METHOD)
+                .setResponseType(Boolean.class)
         );
     }
 
     public @NotNull TelegramCoreResponse<WebhookInfo> getWebhookInfo() {
-        return getWebhookInfo(null);
-    }
-
-
-    public @NotNull TelegramCoreResponse<WebhookInfo> getWebhookInfo(String token) {
         return client.send(new Request<>()
-                .setAuthToken(token)
                 .setCallName(TelegramWebhookApiDefinitions.GET_WEBHOOK_INFO_CALL_METHOD)
+                .setResponseType(WebhookInfo.class)
         );
     }
 

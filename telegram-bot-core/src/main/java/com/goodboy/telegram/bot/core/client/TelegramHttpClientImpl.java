@@ -1,12 +1,10 @@
 package com.goodboy.telegram.bot.core.client;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goodboy.telegram.bot.api.client.*;
 import com.goodboy.telegram.bot.api.response.TelegramCoreResponse;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -102,7 +100,7 @@ public class TelegramHttpClientImpl implements TelegramHttpClient {
                 log.debug("request not contains endpoint host. null value will be replaced by default { default_value = {} }", url);
             request.setHost(url);
         }
-        if(request.getAuthToken() == null && token != null){
+        if(request.getToken() == null && token != null){
             if(log.isDebugEnabled())
                 log.debug("request not contains bot-token. null value will be replaced by default { default_value = **** (check out configuration, token is masked) }");
             request.setHost(token);
@@ -126,7 +124,8 @@ public class TelegramHttpClientImpl implements TelegramHttpClient {
                 @Override
                 @SneakyThrows
                 public TelegramCoreResponse<T> handle(byte[] response) {
-                    return decoder.readValue(response, new TypeReference<>() {});
+                    return decoder.readValue(response, decoder.getTypeFactory().
+                            constructParametricType(TelegramCoreResponse.class, request.getResponseType()));
                 }
 
                 @Override

@@ -18,7 +18,7 @@ public class Main {
         final String token = "1012816442:AAFUeiJqd2VU_XWAH9l5p50WvfNCn7r23Eg";
 
         TelegramCoreResponse<Message> message = client.send(new Request<>()
-                .setAuthToken(token)
+                .setToken(token)
                 .setBody(new SendMessageApi()
                         .setChatId(422634112)
                         .setText("Im from Java code 2!")

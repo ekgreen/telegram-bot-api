@@ -53,13 +53,13 @@ public class HttpClientBuilder implements TelegramHttpClient.Builder {
     }
 
     @Override
-    public TelegramHttpClient.Builder decoder(ObjectMapper decoder) {
+    public TelegramHttpClient.Builder mapper(ObjectMapper decoder) {
         this.mapper = decoder;
         return this;
     }
 
     @Override
-    public TelegramHttpClient.Builder decoder(PathHandler<?> decoder) {
+    public TelegramHttpClient.Builder mapper(PathHandler<?> decoder) {
         if(pathHandlers == null)
             this.pathHandlers = new ArrayList<>();
 
@@ -113,11 +113,18 @@ public class HttpClientBuilder implements TelegramHttpClient.Builder {
     }
 
     private HttpClientAdapter defaultTelegramHttpClientAdapter() {
-        return new JavaHttpClientAdapter(
+        final JavaHttpClientAdapter javaHttpClientAdapter = new JavaHttpClientAdapter(
                 HttpClient.newBuilder()
                         .version(HttpClient.Version.HTTP_2)
                         .build(),
-                mapper == null ? DEFAULT_JSON_ENCODER : mapper
+                mapper == null ? DEFAULT_JSON_ENCODER : mapper);
+
+        final UniversalHttpClientAdapter universalHttpClientAdapter = new UniversalHttpClientAdapter(
+                javaHttpClientAdapter
         );
+
+        javaHttpClientAdapter.getMultipartTypePublishers().forEach(universalHttpClientAdapter::multipartHandledClass);
+
+        return universalHttpClientAdapter;
     }
 }
