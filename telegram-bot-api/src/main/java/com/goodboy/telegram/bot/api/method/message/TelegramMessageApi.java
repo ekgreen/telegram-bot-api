@@ -4,10 +4,10 @@ import com.goodboy.telegram.bot.api.Message;
 import com.goodboy.telegram.bot.api.client.Request;
 import com.goodboy.telegram.bot.api.exception.TelegramApiExceptionDefinitions;
 import com.goodboy.telegram.bot.api.exception.TelegramApiRuntimeException;
+import com.goodboy.telegram.bot.api.request.Uploading;
 import com.goodboy.telegram.bot.api.response.TelegramCoreResponse;
 
 import javax.annotation.Nonnull;
-import java.io.IOException;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -69,7 +69,7 @@ public interface TelegramMessageApi {
      *
      * @see TelegramMessageApi#sendPhoto(SendPhotoApi)
      */
-    default @Nonnull TelegramCoreResponse<Message> sendPhoto(@Nonnull Integer chatId, @Nonnull Supplier<?> photo) {
+    default @Nonnull TelegramCoreResponse<Message> sendPhoto(@Nonnull Integer chatId, @Nonnull Uploading<?> photo) {
         return sendPhoto(new SendPhotoApi()
                 .setChatId(chatId)
                 .setPhoto(photo)
@@ -197,7 +197,7 @@ public interface TelegramMessageApi {
      *
      * @see TelegramMessageApi#sendAnimation(SendAnimationApi)
      */
-    default @Nonnull TelegramCoreResponse<Message> sendAnimation(@Nonnull Integer chatId, @Nonnull Supplier<?> animation) {
+    default @Nonnull TelegramCoreResponse<Message> sendAnimation(@Nonnull Integer chatId, @Nonnull Uploading<?> animation) {
         return sendAnimation(new SendAnimationApi()
                 .setChatId(chatId)
                 .setAnimation(animation)

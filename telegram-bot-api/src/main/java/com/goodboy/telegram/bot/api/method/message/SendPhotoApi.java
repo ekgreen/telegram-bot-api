@@ -1,13 +1,13 @@
 package com.goodboy.telegram.bot.api.method.message;
 
-import com.goodboy.telegram.bot.api.client.Multipart;
+import com.goodboy.telegram.bot.api.meta.Multipart;
 import com.goodboy.telegram.bot.api.keyboard.ReplyMarkup;
 import com.goodboy.telegram.bot.api.meta.Optional;
 import com.goodboy.telegram.bot.api.meta.TelegramApi;
+import com.goodboy.telegram.bot.api.request.Uploading;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.io.InputStream;
 import java.util.function.Supplier;
 
 @Data
@@ -29,7 +29,7 @@ public class SendPhotoApi {
      *
      * @type ? = [String, InputStream, byte[]]
      */
-    private Supplier<?> photo;
+    private Uploading<?> photo;
 
     /**
      * Photo caption (may also be used when resending photos by file_id),

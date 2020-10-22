@@ -1,0 +1,9 @@
+telegram:
+  api:
+    callback:
+      proxy: http://192.168.209.193:8080
+    bots:
+      test:
+        path: '/test'
+        registry: REGISTRY_ON_MISSING
+        token: '1012816442:AAFUeiJqd2VU_XWAH9l5p50WvfNCn7r23Eg'

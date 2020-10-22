@@ -1,14 +1,12 @@
 package com.goodboy.telegram.bot.api.method.message;
 
-import com.goodboy.telegram.bot.api.client.Multipart;
-import com.goodboy.telegram.bot.api.client.Upload;
 import com.goodboy.telegram.bot.api.keyboard.ReplyMarkup;
+import com.goodboy.telegram.bot.api.meta.Multipart;
 import com.goodboy.telegram.bot.api.meta.Optional;
 import com.goodboy.telegram.bot.api.meta.TelegramApi;
+import com.goodboy.telegram.bot.api.request.Uploading;
 import lombok.Data;
 import lombok.experimental.Accessors;
-
-import java.util.function.Supplier;
 
 @Data
 @Multipart
@@ -20,16 +18,16 @@ public class SendAnimationApi {
      * Unique identifier for the target chat or username
      * of the target channel (in the format @channelusername)
      */
-    private Integer  chatId;
+    private Integer chatId;
 
     /**
-     * 	Video to send. Pass a file_id as String to send a video that exists on the Telegram servers (recommended),
-     * 	pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new video using
-     * 	multipart/form-data.
+     * Video to send. Pass a file_id as String to send a video that exists on the Telegram servers (recommended),
+     * pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new video using
+     * multipart/form-data.
      *
-     * @type ? = [String, InputStream, byte[]]
+     * @type ? = [String, InputStream, byte[], Supplier<byte[]>, Supplier<InputStream>]
      */
-    private @Upload Supplier<?> animation;
+    private Uploading<?> animation;
 
     /**
      * Duration of sent video in seconds
@@ -56,15 +54,15 @@ public class SendAnimationApi {
      * Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side.
      * The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should
      * not exceed 320. Ignored if the file is not uploaded using multipart/form-data.
-     *
+     * <p>
      * Thumbnails can't be reused and can be only uploaded as a new file, so you can pass
      * “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under
      * <file_attach_name>.
      *
-     * @type ? = [String, InputStream, byte[]]
+     * @type ? = [String, InputStream, byte[], Supplier<byte[]>, Supplier<InputStream>]
      * @optional
      */
-    private @Optional @Upload Supplier<?> thumb;
+    private @Optional Uploading<?> thumb;
 
     /**
      * Video caption (may also be used when resending photos by file_id),
@@ -77,8 +75,8 @@ public class SendAnimationApi {
     /**
      * Mode for parsing entities in the message text
      *
-     * @see <a href="https://core.telegram.org/bots/api#formatting-options">formatting options</a>
      * @optional
+     * @see <a href="https://core.telegram.org/bots/api#formatting-options">formatting options</a>
      */
     private @Optional String parseMode;
 
@@ -103,4 +101,5 @@ public class SendAnimationApi {
      * @optional
      */
     private @Optional ReplyMarkup replyMarkup;
+
 }

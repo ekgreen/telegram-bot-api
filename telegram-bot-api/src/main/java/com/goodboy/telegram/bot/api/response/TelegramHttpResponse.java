@@ -1,4 +1,4 @@
-package com.goodboy.telegram.bot.core.client;
+package com.goodboy.telegram.bot.api.response;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

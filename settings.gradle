@@ -1,11 +1,11 @@
 rootProject.name = 'telegram-bot-parent'
 
-include ":telegram-bot-api"
+include ':telegram-bot-api'
 include ':telegram-bot-core'
-include ':telegram-bot-okhttp'
 include ':telegram-bot-spring'
 include ':telegram-bot-spring:telegram-bot-spring-core'
 include ':telegram-bot-spring:telegram-webhook-bot-spring-boot-starter'
 include ':telegram-bot-spring:telegram-webhook-bot-spring-boot-starter:autoconfiguration'
 include ':telegram-bot-spring:telegram-webhook-bot-spring-boot-starter:starter'
+include ':telegram-bot-example'
 

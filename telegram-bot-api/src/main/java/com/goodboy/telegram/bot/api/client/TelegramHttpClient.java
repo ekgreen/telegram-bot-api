@@ -1,6 +1,7 @@
 package com.goodboy.telegram.bot.api.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.goodboy.telegram.bot.api.client.adapter.HttpClientAdapter;
 import com.goodboy.telegram.bot.api.response.TelegramCoreResponse;
 
 import javax.annotation.Nonnull;

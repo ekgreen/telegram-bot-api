@@ -3,13 +3,19 @@ package com.goodboy.telegram.bot.spring.autoconfiguration;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.goodboy.telegram.bot.api.client.HttpClientAdapter;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.goodboy.telegram.bot.api.client.adapter.HttpClientAdapter;
 import com.goodboy.telegram.bot.api.client.TelegramHttpClient;
+import com.goodboy.telegram.bot.api.client.adapter.MultipartHttpClientHandler;
 import com.goodboy.telegram.bot.api.method.webhook.UnauthorizedTelegramWebhookApi;
 import com.goodboy.telegram.bot.core.client.HttpClientBuilder;
+import com.goodboy.telegram.bot.core.client.MultipartDataHandlerImpl;
+import com.goodboy.telegram.bot.core.client.OkHttpClientAdapter;
 import com.goodboy.telegram.bot.core.method.webhook.UnauthorizedTelegramWebhookApiAdapter;
 import com.goodboy.telegram.bot.spring.environment.ApplicationPropertyBotEnvironment;
 import com.goodboy.telegram.bot.spring.environment.TelegramEnvironment;
@@ -18,7 +24,6 @@ import com.goodboy.telegram.bot.spring.processors.WebhookBotRegistry;
 import com.goodboy.telegram.bot.spring.providers.EnvironmentUrlResolver;
 import com.goodboy.telegram.bot.spring.providers.UrlResolver;
 import com.goodboy.telegram.bot.spring.servlets.TelegramBotServlet;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -28,8 +33,13 @@ import org.springframework.core.env.Environment;
 
 import javax.annotation.Nonnull;
 import javax.servlet.Servlet;
+import java.io.IOException;
 import java.net.http.HttpClient;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.Executors;
 
 @Configuration
@@ -82,13 +92,24 @@ public class TelegramBotConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public HttpClientAdapter telegramBotHttpClientAdapter(@Nonnull ObjectMapper mapper, @Value("${telegram.api.client.thread_pool_size:4}") Integer threadPoolSize){
-        final HttpClient client = HttpClient.newBuilder()
-                .executor(Executors.newFixedThreadPool(threadPoolSize))
-                .version(HttpClient.Version.HTTP_2)
+    public HttpClientAdapter telegramBotHttpClientAdapter(@Nonnull ObjectMapper mapper, MultipartHttpClientHandler multipartHttpClientHandler){
+        final OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(loggingInterceptor())
                 .build();
 
-        return new JavaHttpClientAdapter(client, mapper);
+        return new OkHttpClientAdapter(client, mapper, multipartHttpClientHandler);
+    }
+
+    private Interceptor loggingInterceptor() {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        return interceptor;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public MultipartHttpClientHandler multipartHttpClientHandler(@Nonnull ObjectMapper mapper){
+        return new MultipartDataHandlerImpl(mapper);
     }
 
     @Bean
@@ -112,12 +133,46 @@ public class TelegramBotConfiguration {
                         DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS
                 )
                 .disable(
-                        SerializationFeature.FAIL_ON_EMPTY_BEANS
+                        SerializationFeature.FAIL_ON_EMPTY_BEANS,
+                        SerializationFeature.WRITE_DATES_AS_TIMESTAMPS
                 )
                 .setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ"))
                 .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
                 .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
+                .registerModule(localDateTimeModule())
                 ;
+    }
+
+    private Module localDateTimeModule() {
+        JavaTimeModule module = new JavaTimeModule();
+
+        LocalDateTimeDeserializer deserializer = new MillisOrLocalDateTimeDeserializer();
+        module.addDeserializer(LocalDateTime.class, deserializer);
+
+        LocalDateTimeSerializer serializer = new LocalDateTimeSerializer(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        module.addSerializer(LocalDateTime.class, serializer);
+
+        return module;
+    }
+
+    private static class MillisOrLocalDateTimeDeserializer extends LocalDateTimeDeserializer {
+
+        public MillisOrLocalDateTimeDeserializer() {
+            super(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        }
+
+        @Override
+        public LocalDateTime deserialize(JsonParser parser, DeserializationContext context) throws IOException {
+            if (parser.hasToken(JsonToken.VALUE_NUMBER_INT)) {
+                long value = parser.getValueAsLong();
+                Instant instant = Instant.ofEpochMilli(value);
+
+                return LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
+            }
+
+            return super.deserialize(parser, context);
+        }
+
     }
 
 }

@@ -17,18 +17,6 @@ repositories {
     mavenCentral()
 }
 
-publishing {
-    publications {
-        maven(MavenPublication){
-            groupId 'com.goodboy.telegram.bot'
-            artifactId 'telegram-bot-api'
-            version '1.0.0-SNAPSHOT'
-
-            from components.java
-        }
-    }
-}
-
 dependencies {
     implementation platform('com.fasterxml.jackson:jackson-bom:2.11.0')
 

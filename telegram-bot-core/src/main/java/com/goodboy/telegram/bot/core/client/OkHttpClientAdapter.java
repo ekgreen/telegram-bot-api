@@ -1,41 +1,50 @@
-package com.goodboy.telegram.bot.client;
+package com.goodboy.telegram.bot.core.client;
 
-import com.goodboy.telegram.bot.core.client.TelegramHttpResponse;
-import com.goodboy.telegram.bot.core.client.uni.UniTypeRequest;
-import com.goodboy.telegram.bot.core.client.UniTypedHttpClientAdapter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.goodboy.telegram.bot.api.client.adapter.HttpClientAdapter;
+import com.goodboy.telegram.bot.api.client.adapter.MultipartHttpClientHandler;
+import com.goodboy.telegram.bot.api.client.adapter.UniTypeRequest;
+import com.goodboy.telegram.bot.api.response.TelegramHttpResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
-import okhttp3.MultipartBody.Part;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
 
 @Slf4j
 @Setter
 @RequiredArgsConstructor
-public class OkHttpClientAdapter implements UniTypedHttpClientAdapter {
+public class OkHttpClientAdapter implements HttpClientAdapter {
 
     private final OkHttpClient client;
-    private ExecutorService executorService;
+    private final ObjectMapper mapper;
+    private final MultipartHttpClientHandler multipartHttpClientHandler;
 
-    @Override
+    public static final MediaType JSON
+            = MediaType.get("application/json; charset=utf-8");
+
     public <V> TelegramHttpResponse post(UniTypeRequest<V> request) {
-        return null;
+        return handleRequest(buildPostRequest(request));
     }
 
-    @Override
     public <V> CompletableFuture<TelegramHttpResponse> postAsync(UniTypeRequest<V> request) {
-        return null;
+        return handleAsyncRequest(buildPostRequest(request));
     }
 
-    @Override
+    @SneakyThrows
+    private Request buildPostRequest(UniTypeRequest<?> request) {
+        return new Request.Builder()
+                .url(request.getUrl())
+                .post(RequestBody.create(mapper.writeValueAsString(request.getRequest().getBody()), JSON))
+                .build();
+    }
+
     public TelegramHttpResponse get(UniTypeRequest<?> request) {
         return handleRequest(buildGetRequest(request));
     }
@@ -53,18 +62,34 @@ public class OkHttpClientAdapter implements UniTypedHttpClientAdapter {
 
     @Override
     public <V> TelegramHttpResponse multipart(UniTypeRequest<V> request) {
-        return null;
+        return handleRequest(buildMultipartRequest(request));
     }
 
     @Override
     public <V> CompletableFuture<TelegramHttpResponse> multipartAsync(UniTypeRequest<V> request) {
-        return null;
+        return handleAsyncRequest(buildMultipartRequest(request));
     }
 
     private Request buildMultipartRequest(UniTypeRequest<?> request) {
-        RequestBody requestBody = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addPart(new Part.Builder)
+        MultipartBody.Builder builder = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM);
+
+        multipartHttpClientHandler.parts(request.getRequest()).forEach(part -> {
+            if(part instanceof MultipartHttpClientHandler.StringPart){
+                MultipartHttpClientHandler.StringPart string = (MultipartHttpClientHandler.StringPart) part;
+
+                builder.addFormDataPart(part.getKey(), string.getHandler());
+            } else if(part instanceof MultipartHttpClientHandler.StreamPart){
+                MultipartHttpClientHandler.StreamPart stream = (MultipartHttpClientHandler.StreamPart) part;
+
+                builder.addFormDataPart(part.getKey(), stream.getFileName(), RequestBody.create(stream.getHandler().get()));
+            } else
+                throw new IllegalStateException("illegal uploading class = " + part.getClass());
+        });
+
+        return new Request.Builder()
+                .url(request.getUrl())
+                .post(builder.build())
                 .build();
     }
 

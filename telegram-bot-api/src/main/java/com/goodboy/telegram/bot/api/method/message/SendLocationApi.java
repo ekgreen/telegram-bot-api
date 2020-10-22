@@ -1,13 +1,11 @@
 package com.goodboy.telegram.bot.api.method.message;
 
-import com.goodboy.telegram.bot.api.client.Multipart;
+import com.goodboy.telegram.bot.api.meta.Multipart;
 import com.goodboy.telegram.bot.api.keyboard.ReplyMarkup;
 import com.goodboy.telegram.bot.api.meta.Optional;
 import com.goodboy.telegram.bot.api.meta.TelegramApi;
 import lombok.Data;
 import lombok.experimental.Accessors;
-
-import java.util.function.Supplier;
 
 @Data
 @Multipart

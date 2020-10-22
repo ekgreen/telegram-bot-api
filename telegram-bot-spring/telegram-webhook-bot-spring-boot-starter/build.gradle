@@ -1,7 +1,5 @@
 subprojects {
     dependencies {
-        api project(':telegram-bot-api')
-        api project(':telegram-bot-core')
         api project(':telegram-bot-spring:telegram-bot-spring-core')
     }
 }

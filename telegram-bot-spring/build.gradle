@@ -8,7 +8,13 @@ bootJar {
     enabled = false
 }
 
+jar{
+    enabled = true
+}
+
+
 subprojects {
+
     apply plugin: 'java-library'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
@@ -24,7 +30,6 @@ subprojects {
     dependencies {
         api 'org.springframework.boot:spring-boot-starter-web'
 
-        api project(':telegram-bot-api')
         api project(':telegram-bot-core')
     }
 }

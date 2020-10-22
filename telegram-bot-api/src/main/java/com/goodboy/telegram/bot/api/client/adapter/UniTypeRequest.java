@@ -1,4 +1,4 @@
-package com.goodboy.telegram.bot.core.client.uni;
+package com.goodboy.telegram.bot.api.client.adapter;
 
 import com.goodboy.telegram.bot.api.client.Request;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.goodboy.telegram.bot.api.client;
+package com.goodboy.telegram.bot.api.meta;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

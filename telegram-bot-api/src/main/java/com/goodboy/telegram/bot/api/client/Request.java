@@ -11,8 +11,6 @@ public class Request<V> {
 
     private String callName;
 
-    private String host;
-
     private String path;
 
     private Class<?> responseType;

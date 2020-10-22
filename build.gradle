@@ -1,15 +1,33 @@
 allprojects {
+    task printDependencies {
+        dependsOn 'dependencies'
+    }
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+}
+
+
+subprojects {
     apply plugin: 'java'
+    apply plugin: 'idea'
     apply plugin: 'java-library'
     apply plugin: 'maven-publish'
-    
+
     group 'com.goodboy.telegram.bot'
     version '1.0.0-SNAPSHOT'
     sourceCompatibility = '11'
 
-    repositories {
-        mavenCentral()
-        mavenLocal()
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                group 'com.goodboy.telegram.bot'
+                version '1.0.0-SNAPSHOT'
+
+                from components.java
+            }
+        }
     }
 
     dependencies {

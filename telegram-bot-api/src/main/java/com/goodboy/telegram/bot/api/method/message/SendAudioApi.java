@@ -1,14 +1,19 @@
 package com.goodboy.telegram.bot.api.method.message;
 
-import com.goodboy.telegram.bot.api.client.Multipart;
-import com.goodboy.telegram.bot.api.client.Upload;
+import com.goodboy.telegram.bot.api.meta.Multipart;
+import com.goodboy.telegram.bot.api.meta.Upload;
 import com.goodboy.telegram.bot.api.keyboard.ReplyMarkup;
 import com.goodboy.telegram.bot.api.meta.Optional;
 import com.goodboy.telegram.bot.api.meta.TelegramApi;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.util.function.Supplier;
+
+import static lombok.AccessLevel.PRIVATE;
 
 @Data
 @Multipart
@@ -27,9 +32,9 @@ public class SendAudioApi {
      * 	pass an HTTP URL as a String for Telegram to get an audio file from the Internet, or upload a new one using
      * 	multipart/form-data.
      *
-     * @type ? = [String, InputStream, byte[]]
+     * @type ? = [String, InputStream, byte[], Supplier<byte[]>, Supplier<InputStream>]
      */
-    private @Upload Supplier<?> audio;
+    private @Upload Object audio;
 
     /**
      * Audio caption (may also be used when resending photos by file_id),

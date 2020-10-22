@@ -1,16 +1,3 @@
-publishing {
-    publications {
-        maven(MavenPublication) {
-            group 'com.goodboy.telegram.bot.spring'
-            artifactId = 'telegram-webhook-bot-spring-boot-starter'
-            version '1.0.0-SNAPSHOT'
-
-            from components.java
-        }
-    }
-}
-
-
 dependencies {
     api project(':telegram-bot-spring:telegram-webhook-bot-spring-boot-starter:autoconfiguration')
 }
