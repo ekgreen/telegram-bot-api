@@ -6,10 +6,10 @@ import com.goodboy.telegram.bot.api.meta.Ignore;
 import com.goodboy.telegram.bot.api.meta.Json;
 import com.goodboy.telegram.bot.api.meta.Multipart;
 import com.goodboy.telegram.bot.api.client.Request;
-import com.goodboy.telegram.bot.api.meta.Upload;
 import com.goodboy.telegram.bot.api.client.adapter.MultipartHttpClientHandler;
 import com.goodboy.telegram.bot.api.exception.TelegramApiExceptionDefinitions;
 import com.goodboy.telegram.bot.api.exception.TelegramApiRuntimeException;
+import com.goodboy.telegram.bot.api.request.ContentDispositionUploading;
 import com.goodboy.telegram.bot.api.request.StreamUploading;
 import com.goodboy.telegram.bot.api.request.StringUploading;
 import com.goodboy.telegram.bot.api.request.Uploading;
@@ -17,7 +17,6 @@ import com.google.common.collect.Sets;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 import java.io.InputStream;
@@ -29,6 +28,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
 import static java.lang.reflect.Modifier.*;
 
 @RequiredArgsConstructor
@@ -43,7 +43,7 @@ public class MultipartDataHandlerImpl implements MultipartHttpClientHandler {
 
     @SneakyThrows
     public <V> Iterable<Part<?>> parts(Request<V> request) {
-        @Nonnull V body = Objects.requireNonNull(request.getBody());
+        @NotNull V body = Objects.requireNonNull(request.getBody());
 
         final Class<?> type = body.getClass();
 
@@ -70,24 +70,40 @@ public class MultipartDataHandlerImpl implements MultipartHttpClientHandler {
                 } else {
                     return anyFieldWithCustoms(name, field, fieldValue);
                 }
-            }catch (Exception exception){
+            } catch (Exception exception) {
                 throw new TelegramApiRuntimeException(TelegramApiExceptionDefinitions.HTTP_REQUEST_ERROR, exception);
             }
         }).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
-    private Part<?> uploadingPart(@Nonnull String name, @Nonnull Object fieldValue) {
+    private Part<?> uploadingPart(@NotNull String name, @NotNull Object fieldValue) {
         final Class<?> fieldType = fieldValue.getClass();
 
-        if(StringUploading.class.isAssignableFrom(fieldType))
+        if (StringUploading.class.isAssignableFrom(fieldType))
             return new StringPart(name, ((StringUploading) fieldValue).uploading());
 
-        if(!StreamUploading.class.isAssignableFrom(fieldType))
-            throw new IllegalStateException("illegal uploading class = " + fieldType);
+        if (StreamUploading.class.isAssignableFrom(fieldType)) {
 
-        final StreamUploading<?> uploading = (StreamUploading<?>) fieldValue;
+            final StreamUploading<?> uploading = (StreamUploading<?>) fieldValue;
 
-        return new StreamPart(name, uploading.uploadingName(), () -> {
+            return new StreamPart(name, uploading.uploadingName(), createUploadingLoader(uploading));
+        }
+
+        if(ContentDispositionUploading.class.isAssignableFrom(fieldType)){
+            final ContentDispositionUploading<?> uploading = (ContentDispositionUploading<?>) fieldValue;
+
+            return new ContentPart(createContentDisposition(uploading), createUploadingLoader(uploading));
+        }
+
+        throw new IllegalStateException("illegal uploading class = " + fieldType);
+    }
+
+    private String createContentDisposition(@NotNull ContentDispositionUploading<?> uploading) {
+        return "form-data; " + uploading.disposition();
+    }
+
+    private Supplier<byte[]> createUploadingLoader(Uploading<? extends Supplier<?>> uploading) {
+        return () -> {
             try {
                 final Object data = uploading.uploading().get();
 
@@ -106,21 +122,21 @@ public class MultipartDataHandlerImpl implements MultipartHttpClientHandler {
                     throw new IllegalStateException("illegal uploading class = " + dataType);
 
                 return array;
-            }catch (Exception exception){
+            } catch (Exception exception) {
                 throw new TelegramApiRuntimeException(TelegramApiExceptionDefinitions.HTTP_REQUEST_ERROR, exception);
             }
-        });
+        };
     }
 
     @SneakyThrows
-    private Part<String> anyFieldWithCustoms(@Nonnull String name, @Nonnull Field fieldType, @Nonnull Object fieldValue) {
+    private Part<String> anyFieldWithCustoms(@NotNull String name, @NotNull Field fieldType, @NotNull Object fieldValue) {
         boolean map = fieldType.isAnnotationPresent(Json.class);
 
         String data;
 
-        if(map){
+        if (map) {
             data = mapper.writeValueAsString(fieldValue);
-        }else {
+        } else {
             data = fieldValue.toString();
         }
 

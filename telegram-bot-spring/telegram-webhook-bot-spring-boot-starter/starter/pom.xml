@@ -1,0 +1,21 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.goodboy.telegram.bot.spring</groupId>
+        <artifactId>spring-boot-webhook-starter-parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>spring-boot-webhook-starter</artifactId>
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+                <groupId>com.goodboy.telegram.bot.spring</groupId>
+                <artifactId>spring-boot-webhook-starter-autoconfiguration</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

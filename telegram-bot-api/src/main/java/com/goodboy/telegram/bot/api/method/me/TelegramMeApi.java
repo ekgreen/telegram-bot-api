@@ -2,8 +2,8 @@ package com.goodboy.telegram.bot.api.method.me;
 
 import com.goodboy.telegram.bot.api.User;
 import com.goodboy.telegram.bot.api.response.TelegramCoreResponse;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 
 public interface TelegramMeApi {
 
@@ -12,6 +12,6 @@ public interface TelegramMeApi {
      *
      * @return on success, the sent User is returned.
      */
-    @Nonnull TelegramCoreResponse<User> getMe();
+    @NotNull TelegramCoreResponse<User> getMe();
 
 }

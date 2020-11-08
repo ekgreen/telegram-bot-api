@@ -1,0 +1,172 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.goodboy.telegram.bot</groupId>
+    <artifactId>telegram-bot-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>telegram-bot-api</module>
+        <module>telegram-bot-core</module>
+        <module>telegram-bot-spring</module>
+        <module>telegram-bot-example</module>
+    </modules>
+
+
+    <properties>
+        <!-- build properties-->
+        <maven.compile.plugin>3.8.1</maven.compile.plugin>
+
+        <java.source>11</java.source>
+        <java.target>11</java.target>
+
+        <!-- annotation processors -->
+        <project.lombok.version>1.18.12</project.lombok.version>
+
+        <!-- utility libraries -->
+        <org.reflections.version>0.9.12</org.reflections.version>
+        <google.guava.version>29.0-jre</google.guava.version>
+        <apache.commons.lang3.version>3.11</apache.commons.lang3.version>
+        <jetbrains.annotations.version>19.0.0</jetbrains.annotations.version>
+
+        <!-- testing versions -->
+        <junit5.bom>5.5.2</junit5.bom>
+
+        <!-- core versions -->
+        <okhttp.version>4.9.0</okhttp.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- project dependencies -->
+            <dependency>
+                <groupId>com.goodboy.telegram.bot</groupId>
+                <artifactId>telegram-bot-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.goodboy.telegram.bot</groupId>
+                <artifactId>telegram-bot-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${project.lombok.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.reflections</groupId>
+                <artifactId>reflections</artifactId>
+                <version>${org.reflections.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${google.guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${apache.commons.lang3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains</groupId>
+                <artifactId>annotations</artifactId>
+                <version>${jetbrains.annotations.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit5.bom}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <!-- Import dependency management from Spring Boot -->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>2.3.4.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.squareup.okhttp3</groupId>
+                        <artifactId>okhttp</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.squareup.okhttp3</groupId>
+                        <artifactId>logging-interceptor</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>${okhttp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>logging-interceptor</artifactId>
+                <version>${okhttp.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+    </dependencies>
+
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven.compile.plugin}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.source}</source>
+                    <target>${java.target}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

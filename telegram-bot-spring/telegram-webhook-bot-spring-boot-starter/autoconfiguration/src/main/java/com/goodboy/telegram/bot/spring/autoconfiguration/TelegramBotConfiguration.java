@@ -12,76 +12,73 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.goodboy.telegram.bot.api.client.adapter.HttpClientAdapter;
 import com.goodboy.telegram.bot.api.client.TelegramHttpClient;
 import com.goodboy.telegram.bot.api.client.adapter.MultipartHttpClientHandler;
-import com.goodboy.telegram.bot.api.method.webhook.UnauthorizedTelegramWebhookApi;
+import com.goodboy.telegram.bot.api.method.webhook.TelegramWebhookApi;
 import com.goodboy.telegram.bot.core.client.HttpClientBuilder;
 import com.goodboy.telegram.bot.core.client.MultipartDataHandlerImpl;
 import com.goodboy.telegram.bot.core.client.OkHttpClientAdapter;
-import com.goodboy.telegram.bot.core.method.webhook.UnauthorizedTelegramWebhookApiAdapter;
-import com.goodboy.telegram.bot.spring.environment.ApplicationPropertyBotEnvironment;
-import com.goodboy.telegram.bot.spring.environment.TelegramEnvironment;
-import com.goodboy.telegram.bot.spring.meta.BotWebhookListener;
-import com.goodboy.telegram.bot.spring.processors.WebhookBotRegistry;
-import com.goodboy.telegram.bot.spring.providers.EnvironmentUrlResolver;
-import com.goodboy.telegram.bot.spring.providers.UrlResolver;
-import com.goodboy.telegram.bot.spring.servlets.TelegramBotServlet;
+import com.goodboy.telegram.bot.spring.impl.environment.ApplicationPropertyBotEnvironment;
+import com.goodboy.telegram.bot.spring.api.environment.TelegramEnvironment;
+import com.goodboy.telegram.bot.spring.api.listeners.OnBotCreationListener;
+import com.goodboy.telegram.bot.spring.impl.listeners.WebhookBotRegistry;
+import com.goodboy.telegram.bot.spring.impl.providers.EnvironmentUrlResolver;
+import com.goodboy.telegram.bot.spring.api.providers.UrlResolver;
+import com.goodboy.telegram.bot.spring.impl.servlets.TelegramBotServlet;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
+
 import javax.servlet.Servlet;
 import java.io.IOException;
-import java.net.http.HttpClient;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.concurrent.Executors;
 
 @Configuration
+@Import(TelegramApiConfiguration.class)
 @ComponentScan("com.goodboy.telegram.bot.spring")
 public class TelegramBotConfiguration {
 
     @Bean
-    public ServletRegistrationBean<Servlet> telegramBotServletRegistration(TelegramBotServlet servlet, @Nonnull TelegramEnvironment environment) {
+    public ServletRegistrationBean<Servlet> telegramBotServletRegistration(TelegramBotServlet servlet, @NotNull TelegramEnvironment environment) {
         return new ServletRegistrationBean<>(servlet, environment.getRootContext() + "/*");
     }
 
     @Bean
-    public TelegramBotServlet telegramBotServlet(@Nonnull ObjectMapper mapper) {
+    public TelegramBotServlet telegramBotServlet(@NotNull ObjectMapper mapper) {
         return new TelegramBotServlet(mapper);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public TelegramEnvironment telegramBotEnvironment(@Nonnull Environment environment) {
+    public TelegramEnvironment telegramBotEnvironment(@NotNull Environment environment) {
         return new ApplicationPropertyBotEnvironment(environment);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public UrlResolver telegramBotUrlResolver(@Nonnull TelegramEnvironment environment) {
+    public UrlResolver telegramBotUrlResolver(@NotNull TelegramEnvironment environment) {
         return new EnvironmentUrlResolver(environment);
     }
 
     @Bean
-    public BotWebhookListener telegramBotWebhookRegistry(@Nonnull UrlResolver urlResolver, @Nonnull UnauthorizedTelegramWebhookApi webhookApi) {
+    public OnBotCreationListener telegramBotWebhookRegistry(@NotNull UrlResolver urlResolver, @NotNull TelegramWebhookApi webhookApi) {
         return new WebhookBotRegistry(urlResolver, webhookApi);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public UnauthorizedTelegramWebhookApi telegramBotUnauthorisedWebhookApi(@Nonnull TelegramHttpClient client){
-        return new UnauthorizedTelegramWebhookApiAdapter(client);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public TelegramHttpClient telegramBotHttpClient(@Nonnull ObjectMapper mapper, @Nonnull HttpClientAdapter adapter){
+    public TelegramHttpClient telegramBotHttpClient(@NotNull ObjectMapper mapper, @NotNull HttpClientAdapter adapter){
         return HttpClientBuilder.newBuilder()
                 .remote("https://api.telegram.org")
                 .executor(adapter)
@@ -92,7 +89,7 @@ public class TelegramBotConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public HttpClientAdapter telegramBotHttpClientAdapter(@Nonnull ObjectMapper mapper, MultipartHttpClientHandler multipartHttpClientHandler){
+    public HttpClientAdapter telegramBotHttpClientAdapter(@NotNull ObjectMapper mapper, MultipartHttpClientHandler multipartHttpClientHandler){
         final OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor())
                 .build();
@@ -108,7 +105,7 @@ public class TelegramBotConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public MultipartHttpClientHandler multipartHttpClientHandler(@Nonnull ObjectMapper mapper){
+    public MultipartHttpClientHandler multipartHttpClientHandler(@NotNull ObjectMapper mapper){
         return new MultipartDataHandlerImpl(mapper);
     }
 

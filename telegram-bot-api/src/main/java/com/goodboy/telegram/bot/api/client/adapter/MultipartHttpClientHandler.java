@@ -34,6 +34,14 @@ public interface MultipartHttpClientHandler {
         }
     }
 
+    @Getter
+    class ContentPart extends Part<Supplier<byte[]>>{
+
+        public ContentPart(String key, Supplier<byte[]> handler) {
+            super(key, handler);
+        }
+    }
+
     class StringPart extends Part<String>{
         public StringPart(String key, String handler) {
             super(key, handler);

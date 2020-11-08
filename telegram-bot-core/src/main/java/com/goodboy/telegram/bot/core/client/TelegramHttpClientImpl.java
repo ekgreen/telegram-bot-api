@@ -7,6 +7,7 @@ import com.goodboy.telegram.bot.api.client.adapter.UniTypeRequest;
 import com.goodboy.telegram.bot.api.exception.TelegramApiExceptionDefinitions;
 import com.goodboy.telegram.bot.api.exception.TelegramApiRuntimeException;
 import com.goodboy.telegram.bot.api.meta.Multipart;
+import com.goodboy.telegram.bot.api.method.token.TokenSupplier;
 import com.goodboy.telegram.bot.api.response.TelegramCoreResponse;
 import com.goodboy.telegram.bot.api.response.TelegramHttpResponse;
 import com.google.common.collect.ImmutableList;
@@ -18,7 +19,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -41,13 +41,14 @@ public class TelegramHttpClientImpl implements TelegramHttpClient {
     private final TelegramHttpClientProperties properties;
     private final Map<String, PathHandler<?>> pathHandlers;
     private final List<TelegramHttpClientInterceptor> interceptors;
+    private final TokenSupplier tokenSupplier;
     private final String host;
 
     public TelegramHttpClientImpl(
             HttpClientAdapter adapter,
             ObjectMapper decoder
     ){
-        this(adapter, decoder, null, (List<PathHandler<?>>) null, null, DEFAULT_HOST);
+        this(adapter, decoder, null, (List<PathHandler<?>>) null, null, null, DEFAULT_HOST);
     }
 
     public TelegramHttpClientImpl(
@@ -56,6 +57,7 @@ public class TelegramHttpClientImpl implements TelegramHttpClient {
             TelegramHttpClientProperties properties,
             @Nullable List<PathHandler<?>> pathHandlers,
             @Nullable List<TelegramHttpClientInterceptor> interceptors,
+            @Nullable TokenSupplier tokenSupplier,
             @Nullable String url
     ) {
         this.adapter = adapter;
@@ -66,6 +68,7 @@ public class TelegramHttpClientImpl implements TelegramHttpClient {
                 handler -> handler
         )) : ImmutableMap.of();
         this.interceptors = interceptors != null ? interceptors : ImmutableList.of();
+        this.tokenSupplier = tokenSupplier != null ? tokenSupplier : () -> null;
         this.host = StringUtils.isNotBlank(url) ? url : DEFAULT_HOST;
     }
 
@@ -82,11 +85,12 @@ public class TelegramHttpClientImpl implements TelegramHttpClient {
     private <T, V> TelegramHttpClient getOriginClientByRequestGenericType(Request<V> request) {
         InnerHttpClientAdapter adapter;
 
+        final Request.RequestType requestType = request.getRequestType();
         final String url = createUrl(request);
 
         @Nullable V body = request.getBody();
 
-        if(isNullOrEmptyBody(body)){
+        if(requestType == Request.RequestType.GET || (requestType == Request.RequestType.AUTO && isNullOrEmptyBody(body))){
             adapter = new InnerHttpClientAdapter() {
 
                 @Override
@@ -102,7 +106,7 @@ public class TelegramHttpClientImpl implements TelegramHttpClient {
             };
             if (log.isDebugEnabled())
                 log.debug("body (Request.body) is null or empty -> selected client is GET");
-        }else if(isMultipartBody(body)){
+        }else if(requestType == Request.RequestType.MULTIPART || (requestType == Request.RequestType.AUTO && isMultipartBody(body))){
             adapter = new InnerHttpClientAdapter() {
 
                 @Override
@@ -139,9 +143,9 @@ public class TelegramHttpClientImpl implements TelegramHttpClient {
 
 
     private interface InnerHttpClientAdapter{
-        <A> TelegramHttpResponse send(@Nonnull Request<A> request);
+        <A> TelegramHttpResponse send(@NotNull Request<A> request);
 
-        <A> CompletableFuture<TelegramHttpResponse> sendAsync(@Nonnull Request<A> request);
+        <A> CompletableFuture<TelegramHttpResponse> sendAsync(@NotNull Request<A> request);
     }
 
     private <A> UniTypeRequest<A> createRequest(@NotNull String url, @NotNull Request<A> request) {

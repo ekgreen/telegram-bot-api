@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -83,6 +82,16 @@ public class OkHttpClientAdapter implements HttpClientAdapter {
                 MultipartHttpClientHandler.StreamPart stream = (MultipartHttpClientHandler.StreamPart) part;
 
                 builder.addFormDataPart(part.getKey(), stream.getFileName(), RequestBody.create(stream.getHandler().get()));
+            } else if(part instanceof MultipartHttpClientHandler.ContentPart){
+                MultipartHttpClientHandler.ContentPart stream = (MultipartHttpClientHandler.ContentPart) part;
+                byte[] bytes = stream.getHandler().get();
+
+                builder.addPart(
+                        Headers.of(
+                                "Content-Disposition", stream.getKey()
+                        ),
+                        RequestBody.create(bytes)
+                );
             } else
                 throw new IllegalStateException("illegal uploading class = " + part.getClass());
         });
@@ -94,13 +103,13 @@ public class OkHttpClientAdapter implements HttpClientAdapter {
     }
 
     @SneakyThrows
-    private TelegramHttpResponse handleRequest(@Nonnull Request request) {
+    private TelegramHttpResponse handleRequest(@NotNull Request request) {
         try(Response response = client.newCall(request).execute()){
             return convert(response);
         }
     }
 
-    private CompletableFuture<TelegramHttpResponse> handleAsyncRequest(@Nonnull Request request) {
+    private CompletableFuture<TelegramHttpResponse> handleAsyncRequest(@NotNull Request request) {
         final CompletableFuture<TelegramHttpResponse> future = new CompletableFuture<>();
 
         client.newCall(request).enqueue(new Callback() {
@@ -119,7 +128,7 @@ public class OkHttpClientAdapter implements HttpClientAdapter {
     }
 
     @SneakyThrows
-    private TelegramHttpResponse convert(@Nonnull Response response) {
+    private TelegramHttpResponse convert(@NotNull Response response) {
         return new TelegramHttpResponse()
                 .setStatusCode(response.code())
                 .setBody(Objects.requireNonNull(response.body()).bytes());

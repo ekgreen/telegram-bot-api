@@ -2,9 +2,10 @@ package com.goodboy.telegram.bot.api.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goodboy.telegram.bot.api.client.adapter.HttpClientAdapter;
+import com.goodboy.telegram.bot.api.method.token.TokenSupplier;
 import com.goodboy.telegram.bot.api.response.TelegramCoreResponse;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.concurrent.CompletableFuture;
 
 public interface TelegramHttpClient {
@@ -21,7 +22,7 @@ public interface TelegramHttpClient {
      *
      * @return the response
      */
-    <T, V> TelegramCoreResponse<T> send(@Nonnull Request<V> request);
+    <T, V> TelegramCoreResponse<T> send(@NotNull Request<V> request);
 
     /**
      * Sends the given request asynchronously using this client with the given
@@ -75,6 +76,18 @@ public interface TelegramHttpClient {
         public Builder mapper(PathHandler<?> decoder);
 
         /**
+         * Sets token supplier, used for authentication user requests.
+         *
+         * <p> If this method is not invoked prior to {@linkplain #build()
+         * building}, a default decoder is created once {@code
+         * PathHandler}.
+         *
+         * @param tokenSupplier - return token's
+         * @return
+         */
+        public Builder token(TokenSupplier tokenSupplier);
+
+        /**
          * Sets the telegram remote endpoint
          *
          * <p> If this method is not invoked prior to {@linkplain #build()
@@ -83,7 +96,7 @@ public interface TelegramHttpClient {
          * @param hostPort the host port of remote endpoint
          * @return this builder
          */
-        public Builder remote(@Nonnull String hostPort);
+        public Builder remote(@NotNull String hostPort);
 
         /**
          * Sets the telegram request interceptor
@@ -91,7 +104,7 @@ public interface TelegramHttpClient {
          * @param interceptor the interceptor
          * @return this builder
          */
-        public Builder interceptor(@Nonnull TelegramHttpClientInterceptor interceptor);
+        public Builder interceptor(@NotNull TelegramHttpClientInterceptor interceptor);
 
         /**
          * Returns a new {@link TelegramHttpClient} built from the current state of this

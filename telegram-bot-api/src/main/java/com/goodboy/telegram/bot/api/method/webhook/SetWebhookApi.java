@@ -1,14 +1,19 @@
 package com.goodboy.telegram.bot.api.method.webhook;
 
+import com.goodboy.telegram.bot.api.meta.Multipart;
 import com.goodboy.telegram.bot.api.meta.Optional;
 import com.goodboy.telegram.bot.api.meta.TelegramApi;
+import com.goodboy.telegram.bot.api.request.StreamUploading;
+import com.goodboy.telegram.bot.api.request.Uploading;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.util.List;
+import java.util.function.Supplier;
 
-@TelegramApi
 @Data
+@Multipart
+@TelegramApi
 @Accessors(chain = true)
 public class SetWebhookApi {
 
@@ -22,7 +27,7 @@ public class SetWebhookApi {
      *
      * @optional
      */
-    private @Optional byte[] certificate;
+    private @Optional Uploading<Supplier<byte[]>> certificate;
 
     /**
      * Maximum allowed number of simultaneous HTTPS connections to the webhook for update delivery, 1-100.

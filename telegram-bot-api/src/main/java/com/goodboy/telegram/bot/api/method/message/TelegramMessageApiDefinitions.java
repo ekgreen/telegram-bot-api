@@ -5,7 +5,7 @@ import com.goodboy.telegram.bot.api.response.TelegramCoreResponse;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

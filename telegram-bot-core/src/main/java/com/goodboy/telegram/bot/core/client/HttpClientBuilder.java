@@ -5,6 +5,7 @@ import com.goodboy.telegram.bot.api.client.PathHandler;
 import com.goodboy.telegram.bot.api.client.TelegramHttpClient;
 import com.goodboy.telegram.bot.api.client.adapter.HttpClientAdapter;
 import com.goodboy.telegram.bot.api.client.TelegramHttpClientInterceptor;
+import com.goodboy.telegram.bot.api.method.token.TokenSupplier;
 import com.goodboy.telegram.bot.core.method.message.FilePathHandler;
 import com.google.common.base.Suppliers;
 import com.google.common.collect.Lists;
@@ -14,7 +15,7 @@ import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -34,6 +35,8 @@ public class HttpClientBuilder implements TelegramHttpClient.Builder {
     private List<TelegramHttpClientInterceptor> interceptors;
 
     private List<PathHandler<?>> pathHandlers;
+
+    private TokenSupplier tokenSupplier;
 
     private ObjectMapper mapper;
 
@@ -68,6 +71,12 @@ public class HttpClientBuilder implements TelegramHttpClient.Builder {
     }
 
     @Override
+    public TelegramHttpClient.Builder token(TokenSupplier tokenSupplier) {
+        this.tokenSupplier = tokenSupplier;
+        return this;
+    }
+
+    @Override
     public TelegramHttpClient.Builder remote(@NotNull String hostPort) {
         this.host = hostPort;
         return this;
@@ -91,6 +100,7 @@ public class HttpClientBuilder implements TelegramHttpClient.Builder {
                 null,
                 getPathHandlerWithDefault(pathHandlers),
                 interceptors,
+                tokenSupplier,
                 host
         );
     }
@@ -107,7 +117,7 @@ public class HttpClientBuilder implements TelegramHttpClient.Builder {
         return mapper == null ? DEFAULT_JSON_ENCODER : mapper;
     }
 
-    private @Nonnull
+    private @NotNull
     List<PathHandler<?>> getPathHandlerWithDefault(@Nullable List<PathHandler<?>> pathHandlers) {
         final List<PathHandler<?>> handlers = new ArrayList<>(DEFAULT_PATH_HANDLERS.get());
 

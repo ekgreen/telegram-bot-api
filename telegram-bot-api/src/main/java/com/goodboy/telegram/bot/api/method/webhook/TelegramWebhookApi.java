@@ -1,8 +1,16 @@
 package com.goodboy.telegram.bot.api.method.webhook;
 
+import com.goodboy.telegram.bot.api.Message;
+import com.goodboy.telegram.bot.api.client.Request;
+import com.goodboy.telegram.bot.api.exception.TelegramApiExceptionDefinitions;
+import com.goodboy.telegram.bot.api.exception.TelegramApiRuntimeException;
+import com.goodboy.telegram.bot.api.method.message.SendPhotoApi;
+import com.goodboy.telegram.bot.api.method.message.TelegramMessageApi;
 import com.goodboy.telegram.bot.api.response.TelegramCoreResponse;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Consumer;
 
 public interface TelegramWebhookApi {
 
@@ -19,7 +27,7 @@ public interface TelegramWebhookApi {
      * @see <a href="https://core.telegram.org/bots/api#setwebhook">setWebhook</a>
      * @return returns True on success
      */
-    @Nonnull TelegramCoreResponse<Boolean> setWebhook(@Nonnull SetWebhookApi request);
+    @NotNull TelegramCoreResponse<Boolean> setWebhook(@NotNull SetWebhookApi request);
 
     /**
      * Single-argument method includes required parameter
@@ -28,10 +36,19 @@ public interface TelegramWebhookApi {
      *
      * @see TelegramWebhookApi#setWebhook(SetWebhookApi)
      */
-    default @Nonnull TelegramCoreResponse<Boolean> setWebhook(@Nonnull String url){
+    default @NotNull TelegramCoreResponse<Boolean> setWebhook(@NotNull String url){
         return setWebhook(new SetWebhookApi()
                 .setUrl(url)
         );
+    }
+
+    /**
+     * Use this method to specify a url and receive incoming updates via an outgoing webhook with specify request data like token
+     *
+     * @see TelegramWebhookApi#setWebhook(SetWebhookApi)
+     */
+    default @NotNull TelegramCoreResponse<Boolean> setWebhook(Consumer<Request<SetWebhookApi>> handler){
+        throw new TelegramApiRuntimeException(TelegramApiExceptionDefinitions.HTTP_REQUEST_ERROR, "missed token");
     }
 
     /**
@@ -39,8 +56,16 @@ public interface TelegramWebhookApi {
      *
      * @return returns True on success
      */
-    @Nonnull TelegramCoreResponse<Boolean> deleteWebhook();
+    @NotNull TelegramCoreResponse<Boolean> deleteWebhook();
 
+    /**
+     * Use this method to remove webhook integration if you decide to switch back to getUpdates with specify request data like token
+     *
+     * @see TelegramWebhookApi#deleteWebhook()
+     */
+    default @NotNull TelegramCoreResponse<Boolean> deleteWebhook(Consumer<Request<DeleteWebhookApi>> handler){
+        throw new TelegramApiRuntimeException(TelegramApiExceptionDefinitions.HTTP_REQUEST_ERROR, "missed token");
+    }
 
     /**
      * Use this method to get current webhook status. Requires no parameters.
@@ -48,6 +73,15 @@ public interface TelegramWebhookApi {
      *
      * @return on success, returns a WebhookInfo object
      */
-    @Nonnull TelegramCoreResponse<WebhookInfo> getWebhookInfo();
+    @NotNull TelegramCoreResponse<WebhookInfo> getWebhookInfo();
+
+    /**
+     * Use this method to get current webhook status. Requires no parameters with specify request data like token
+     *
+     * @see TelegramWebhookApi#getWebhookInfo()
+     */
+    default @NotNull TelegramCoreResponse<WebhookInfo> getWebhookInfo(Consumer<Request<GetWebhookApi>> handler){
+        throw new TelegramApiRuntimeException(TelegramApiExceptionDefinitions.HTTP_REQUEST_ERROR, "missed token");
+    }
 
 }

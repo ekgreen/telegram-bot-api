@@ -7,15 +7,17 @@ import com.goodboy.telegram.bot.api.exception.TelegramApiExceptionDefinitions;
 import com.goodboy.telegram.bot.api.method.message.*;
 import com.goodboy.telegram.bot.api.method.token.TokenSupplier;
 import com.goodboy.telegram.bot.api.response.TelegramCoreResponse;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.util.function.Consumer;
 
 @Setter
+@AllArgsConstructor
 @RequiredArgsConstructor
 public class TelegramMessageApiAdapter implements TelegramMessageApi {
 
@@ -111,7 +113,7 @@ public class TelegramMessageApiAdapter implements TelegramMessageApi {
         return handleTelegramRequest(TelegramMessageApiDefinitions.SEND_MESSAGE_CALL_METHOD, handler);
     }
 
-    private <T> TelegramCoreResponse<Message> handleTelegramRequest(@Nonnull String callName, @Nonnull Consumer<Request<T>> handler) {
+    private <T> TelegramCoreResponse<Message> handleTelegramRequest(@NotNull String callName, @NotNull Consumer<Request<T>> handler) {
         final Request<T> request = new Request<T>()
                 .setCallName(callName)
                 .setResponseType(Message.class);

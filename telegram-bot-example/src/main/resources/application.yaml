@@ -1,9 +1,15 @@
+server:
+  port: 5000
+#  ssl:
+#    enabled: true
+#    key-store-type: JKS
+#    key-store: ${certificates.path}\pk_spring_boot.jks
+#    key-store-password: ${certificate.password}
 telegram:
   api:
     callback:
-      proxy: http://192.168.209.193:8080
+      proxy: ${public.host.ip4}
     bots:
       test:
         path: '/test'
-        registry: REGISTRY_ON_MISSING
-        token: '1012816442:AAFUeiJqd2VU_XWAH9l5p50WvfNCn7r23Eg'
+        token: ${token.test}

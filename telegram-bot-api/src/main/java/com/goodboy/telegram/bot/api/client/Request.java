@@ -13,7 +13,13 @@ public class Request<V> {
 
     private String path;
 
+    private RequestType requestType = RequestType.AUTO;
+
     private Class<?> responseType;
 
     private V body;
+
+    public enum RequestType{
+        AUTO, POST, GET, MULTIPART
+    }
 }

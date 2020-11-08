@@ -7,7 +7,7 @@ import com.goodboy.telegram.bot.api.exception.TelegramApiRuntimeException;
 import com.goodboy.telegram.bot.api.request.Uploading;
 import com.goodboy.telegram.bot.api.response.TelegramCoreResponse;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -19,14 +19,14 @@ public interface TelegramMessageApi {
      *
      * @return on success, the sent Message is returned.
      */
-    @Nonnull TelegramCoreResponse<Message> sendMessage(@Nonnull SendMessageApi request);
+    @NotNull TelegramCoreResponse<Message> sendMessage(@NotNull SendMessageApi request);
 
     /**
      * Use this method to send text messages with specify request data like token
      *
      * @see TelegramMessageApi#sendMessage(SendMessageApi)
      */
-    default @Nonnull TelegramCoreResponse<Message> sendMessage(Consumer<Request<SendMessageApi>> handler){
+    default @NotNull TelegramCoreResponse<Message> sendMessage(Consumer<Request<SendMessageApi>> handler){
         throw new TelegramApiRuntimeException(TelegramApiExceptionDefinitions.HTTP_REQUEST_ERROR, "missed token");
     }
 
@@ -38,7 +38,7 @@ public interface TelegramMessageApi {
      *
      * @see TelegramMessageApi#sendMessage(SendMessageApi)
      */
-    default @Nonnull TelegramCoreResponse<Message> sendMessage(@Nonnull Integer chatId, @Nonnull String text) {
+    default @NotNull TelegramCoreResponse<Message> sendMessage(@NotNull Integer chatId, @NotNull String text) {
         return sendMessage(new SendMessageApi()
                 .setChatId(chatId)
                 .setText(text)
@@ -50,14 +50,14 @@ public interface TelegramMessageApi {
      *
      * @return on success, the sent Message is returned.
      */
-    @Nonnull TelegramCoreResponse<Message> sendPhoto(@Nonnull SendPhotoApi request);
+    @NotNull TelegramCoreResponse<Message> sendPhoto(@NotNull SendPhotoApi request);
 
     /**
      * Use this method to send photos with specify request data like token
      *
      * @see TelegramMessageApi#sendPhoto(SendPhotoApi)
      */
-    default @Nonnull TelegramCoreResponse<Message> sendPhoto(Consumer<Request<SendPhotoApi>> handler){
+    default @NotNull TelegramCoreResponse<Message> sendPhoto(Consumer<Request<SendPhotoApi>> handler){
         throw new TelegramApiRuntimeException(TelegramApiExceptionDefinitions.HTTP_REQUEST_ERROR, "missed token");
     }
 
@@ -69,7 +69,7 @@ public interface TelegramMessageApi {
      *
      * @see TelegramMessageApi#sendPhoto(SendPhotoApi)
      */
-    default @Nonnull TelegramCoreResponse<Message> sendPhoto(@Nonnull Integer chatId, @Nonnull Uploading<?> photo) {
+    default @NotNull TelegramCoreResponse<Message> sendPhoto(@NotNull Integer chatId, @NotNull Uploading<?> photo) {
         return sendPhoto(new SendPhotoApi()
                 .setChatId(chatId)
                 .setPhoto(photo)
@@ -81,14 +81,14 @@ public interface TelegramMessageApi {
      *
      * @return on success, the sent Message is returned.
      */
-    @Nonnull TelegramCoreResponse<Message> sendAudio(@Nonnull SendAudioApi request);
+    @NotNull TelegramCoreResponse<Message> sendAudio(@NotNull SendAudioApi request);
 
     /**
      * Use this method to send audio files with specify request data like token
      *
      * @see TelegramMessageApi#sendAudio(SendAudioApi)
      */
-    default @Nonnull TelegramCoreResponse<Message> sendAudio(Consumer<Request<SendAudioApi>> handler){
+    default @NotNull TelegramCoreResponse<Message> sendAudio(Consumer<Request<SendAudioApi>> handler){
         throw new TelegramApiRuntimeException(TelegramApiExceptionDefinitions.HTTP_REQUEST_ERROR, "missed token");
     }
 
@@ -100,7 +100,7 @@ public interface TelegramMessageApi {
      *
      * @see TelegramMessageApi#sendAudio(SendAudioApi)
      */
-    default @Nonnull TelegramCoreResponse<Message> sendAudio(@Nonnull Integer chatId, @Nonnull Supplier<?> audio) {
+    default @NotNull TelegramCoreResponse<Message> sendAudio(@NotNull Integer chatId, @NotNull Supplier<?> audio) {
         return sendAudio(new SendAudioApi()
                 .setChatId(chatId)
                 .setAudio(audio)
@@ -112,14 +112,14 @@ public interface TelegramMessageApi {
      *
      * @return on success, the sent Message is returned.
      */
-    @Nonnull TelegramCoreResponse<Message> sendDocument(@Nonnull SendDocumentApi request);
+    @NotNull TelegramCoreResponse<Message> sendDocument(@NotNull SendDocumentApi request);
 
     /**
      * Use this method to send general files with specify request data like token
      *
      * @see TelegramMessageApi#sendDocument(SendDocumentApi)
      */
-    default @Nonnull TelegramCoreResponse<Message> sendDocument(Consumer<Request<SendDocumentApi>> handler){
+    default @NotNull TelegramCoreResponse<Message> sendDocument(Consumer<Request<SendDocumentApi>> handler){
         throw new TelegramApiRuntimeException(TelegramApiExceptionDefinitions.HTTP_REQUEST_ERROR, "missed token");
     }
 
@@ -131,7 +131,7 @@ public interface TelegramMessageApi {
      *
      * @see TelegramMessageApi#sendDocument(SendDocumentApi)
      */
-    default @Nonnull TelegramCoreResponse<Message> sendDocument(@Nonnull Integer chatId, @Nonnull Supplier<?> document) {
+    default @NotNull TelegramCoreResponse<Message> sendDocument(@NotNull Integer chatId, @NotNull Supplier<?> document) {
         return sendDocument(new SendDocumentApi()
                 .setChatId(chatId)
                 .setDocument(document)
@@ -145,14 +145,14 @@ public interface TelegramMessageApi {
      *
      * @return on success, the sent Message is returned.
      */
-    @Nonnull TelegramCoreResponse<Message> sendVideo(@Nonnull SendVideoApi request);
+    @NotNull TelegramCoreResponse<Message> sendVideo(@NotNull SendVideoApi request);
 
     /**
      * Use this method to send video files with specify request data like token
      *
      * @see TelegramMessageApi#sendVideo(SendVideoApi)
      */
-    default @Nonnull TelegramCoreResponse<Message> sendVideo(Consumer<Request<SendVideoApi>> handler){
+    default @NotNull TelegramCoreResponse<Message> sendVideo(Consumer<Request<SendVideoApi>> handler){
         throw new TelegramApiRuntimeException(TelegramApiExceptionDefinitions.HTTP_REQUEST_ERROR, "missed token");
     }
 
@@ -164,7 +164,7 @@ public interface TelegramMessageApi {
      *
      * @see TelegramMessageApi#sendVideo(SendVideoApi)
      */
-    default @Nonnull TelegramCoreResponse<Message> sendVideo(@Nonnull Integer chatId, @Nonnull Supplier<?> video) {
+    default @NotNull TelegramCoreResponse<Message> sendVideo(@NotNull Integer chatId, @NotNull Supplier<?> video) {
         return sendVideo(new SendVideoApi()
                 .setChatId(chatId)
                 .setVideo(video)
@@ -178,14 +178,14 @@ public interface TelegramMessageApi {
      *
      * @return on success, the sent Message is returned.
      */
-    @Nonnull TelegramCoreResponse<Message> sendAnimation(@Nonnull SendAnimationApi request);
+    @NotNull TelegramCoreResponse<Message> sendAnimation(@NotNull SendAnimationApi request);
 
     /**
      * Use this method to send video files with specify request data like token
      *
      * @see TelegramMessageApi#sendAnimation(SendAnimationApi)
      */
-    default @Nonnull TelegramCoreResponse<Message> sendAnimation(Consumer<Request<SendAnimationApi>> handler){
+    default @NotNull TelegramCoreResponse<Message> sendAnimation(Consumer<Request<SendAnimationApi>> handler){
         throw new TelegramApiRuntimeException(TelegramApiExceptionDefinitions.HTTP_REQUEST_ERROR, "missed token");
     }
 
@@ -197,7 +197,7 @@ public interface TelegramMessageApi {
      *
      * @see TelegramMessageApi#sendAnimation(SendAnimationApi)
      */
-    default @Nonnull TelegramCoreResponse<Message> sendAnimation(@Nonnull Integer chatId, @Nonnull Uploading<?> animation) {
+    default @NotNull TelegramCoreResponse<Message> sendAnimation(@NotNull Integer chatId, @NotNull Uploading<?> animation) {
         return sendAnimation(new SendAnimationApi()
                 .setChatId(chatId)
                 .setAnimation(animation)
@@ -209,14 +209,14 @@ public interface TelegramMessageApi {
      *
      * @return on success, the sent Message is returned.
      */
-    @Nonnull TelegramCoreResponse<Message> sendLocation(@Nonnull SendLocationApi request);
+    @NotNull TelegramCoreResponse<Message> sendLocation(@NotNull SendLocationApi request);
 
     /**
      * Use this method to send video files with specify request data like token
      *
      * @see TelegramMessageApi#sendLocation(SendLocationApi)
      */
-    default @Nonnull TelegramCoreResponse<Message> sendLocation(Consumer<Request<SendLocationApi >> handler){
+    default @NotNull TelegramCoreResponse<Message> sendLocation(Consumer<Request<SendLocationApi >> handler){
         throw new TelegramApiRuntimeException(TelegramApiExceptionDefinitions.HTTP_REQUEST_ERROR, "missed token");
     }
 
@@ -229,7 +229,7 @@ public interface TelegramMessageApi {
      *
      * @see TelegramMessageApi#sendLocation(SendLocationApi)
      */
-    default @Nonnull TelegramCoreResponse<Message> sendLocation(@Nonnull Integer chatId, @Nonnull Double latitude, @Nonnull Double longitude) {
+    default @NotNull TelegramCoreResponse<Message> sendLocation(@NotNull Integer chatId, @NotNull Double latitude, @NotNull Double longitude) {
         return sendLocation(new SendLocationApi()
                 .setChatId(chatId)
                 .setLatitude(latitude)
@@ -242,14 +242,14 @@ public interface TelegramMessageApi {
      *
      * @return on success, the sent Message is returned.
      */
-    @Nonnull TelegramCoreResponse<Message> sendSticker(@Nonnull SendStickerApi request);
+    @NotNull TelegramCoreResponse<Message> sendSticker(@NotNull SendStickerApi request);
 
     /**
      * Use this method to send video files with specify request data like token
      *
      * @see TelegramMessageApi#sendSticker(SendStickerApi)
      */
-    default @Nonnull TelegramCoreResponse<Message> sendSticker(Consumer<Request<SendStickerApi >> handler){
+    default @NotNull TelegramCoreResponse<Message> sendSticker(Consumer<Request<SendStickerApi >> handler){
         throw new TelegramApiRuntimeException(TelegramApiExceptionDefinitions.HTTP_REQUEST_ERROR, "missed token");
     }
 
@@ -262,7 +262,7 @@ public interface TelegramMessageApi {
      *
      * @see TelegramMessageApi#sendSticker(SendStickerApi)
      */
-    default @Nonnull TelegramCoreResponse<Message> sendSticker(@Nonnull Integer chatId, @Nonnull Supplier<?> sticker) {
+    default @NotNull TelegramCoreResponse<Message> sendSticker(@NotNull Integer chatId, @NotNull Supplier<?> sticker) {
         return sendSticker(new SendStickerApi()
                 .setChatId(chatId)
                 .setSticker(sticker)
