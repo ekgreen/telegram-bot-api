@@ -55,6 +55,15 @@ public class TelegramCoreResponse<T> {
     }
 
     /**
+     * Use this method when you want to change TelegramCoreResponse as Optional sequence
+     *
+     * @return optional
+     */
+    public T orElseGet(Supplier<T> handler){
+        return get().orElseGet(handler);
+    }
+
+    /**
      * Use this method when you want to change TelegramCoreResponse on Optional and throw
      * exception on false response
      *

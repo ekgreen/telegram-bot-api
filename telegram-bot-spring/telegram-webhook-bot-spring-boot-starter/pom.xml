@@ -23,6 +23,11 @@
                 <artifactId>spring-boot-webhook-starter-autoconfiguration</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.goodboy.telegram.bot.spring</groupId>
+                <artifactId>telegram-bot-spring-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

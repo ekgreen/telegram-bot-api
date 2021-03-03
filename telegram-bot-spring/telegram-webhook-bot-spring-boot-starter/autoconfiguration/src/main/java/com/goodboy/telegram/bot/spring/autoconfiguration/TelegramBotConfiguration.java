@@ -4,113 +4,112 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.Module;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.goodboy.telegram.bot.api.client.adapter.HttpClientAdapter;
-import com.goodboy.telegram.bot.api.client.TelegramHttpClient;
-import com.goodboy.telegram.bot.api.client.adapter.MultipartHttpClientHandler;
-import com.goodboy.telegram.bot.api.method.webhook.TelegramWebhookApi;
-import com.goodboy.telegram.bot.core.client.HttpClientBuilder;
-import com.goodboy.telegram.bot.core.client.MultipartDataHandlerImpl;
-import com.goodboy.telegram.bot.core.client.OkHttpClientAdapter;
-import com.goodboy.telegram.bot.spring.impl.environment.ApplicationPropertyBotEnvironment;
-import com.goodboy.telegram.bot.spring.api.environment.TelegramEnvironment;
-import com.goodboy.telegram.bot.spring.api.listeners.OnBotCreationListener;
-import com.goodboy.telegram.bot.spring.impl.listeners.WebhookBotRegistry;
-import com.goodboy.telegram.bot.spring.impl.providers.EnvironmentUrlResolver;
-import com.goodboy.telegram.bot.spring.api.providers.UrlResolver;
-import com.goodboy.telegram.bot.spring.impl.servlets.TelegramBotServlet;
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
+import com.goodboy.telegram.bot.api.meta.Multipart;
+import com.goodboy.telegram.bot.http.api.client.BaseTelegramHttpClient;
+import com.goodboy.telegram.bot.http.api.client.TelegramHttpClient;
+import com.goodboy.telegram.bot.http.api.client.adapter.HttpClientAdapter;
+import com.goodboy.telegram.bot.http.api.client.adapter.HttpClientAdapterCallback;
+import com.goodboy.telegram.bot.http.api.client.adapter.get.GetCallback;
+import com.goodboy.telegram.bot.http.api.client.adapter.get.TelegramApiToAdapterGetRequestMapper;
+import com.goodboy.telegram.bot.http.api.client.adapter.multipart.MultipartCallback;
+import com.goodboy.telegram.bot.http.api.client.adapter.multipart.TelegramApiToAdapterMultipartRequestMapper;
+import com.goodboy.telegram.bot.http.api.client.adapter.post.PostCallback;
+import com.goodboy.telegram.bot.http.api.client.adapter.post.TelegramApiToAdapterPostRequestMapper;
+import com.goodboy.telegram.bot.http.api.client.configuration.PropertyTelegramApiConfiguration;
+import com.goodboy.telegram.bot.http.api.client.configuration.TelegramApiConfiguration;
+import com.goodboy.telegram.bot.http.api.client.configuration.TelegramHttpClientProperties;
+import com.goodboy.telegram.bot.http.api.client.context.TelegramApiContextHandler;
+import com.goodboy.telegram.bot.http.api.client.context.TelegramApiContextResolver;
+import com.goodboy.telegram.bot.http.api.client.context.TelegramApiThreadLocalContextHandlerImpl;
+import com.goodboy.telegram.bot.http.api.client.handlers.HttpCommandBasedHandler;
+import com.goodboy.telegram.bot.http.api.client.handlers.HttpFileBasedHandler;
+import com.goodboy.telegram.bot.http.api.client.handlers.HttpRequestTypeBasedHandler;
+import com.goodboy.telegram.bot.http.api.client.token.ContextBasedTokenResolver;
+import com.goodboy.telegram.bot.http.api.client.token.TelegramApiTokenResolver;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.boot.autoconfigure.condition.SearchStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
-import org.jetbrains.annotations.NotNull;
-
-import javax.servlet.Servlet;
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Configuration
-@Import(TelegramApiConfiguration.class)
+@EnableScheduling
 @ComponentScan("com.goodboy.telegram.bot.spring")
 public class TelegramBotConfiguration {
 
-    @Bean
-    public ServletRegistrationBean<Servlet> telegramBotServletRegistration(TelegramBotServlet servlet, @NotNull TelegramEnvironment environment) {
-        return new ServletRegistrationBean<>(servlet, environment.getRootContext() + "/*");
+    @Bean @ConditionalOnMissingBean
+    public TelegramHttpClient telegramHttpClient(
+            @Nonnull HttpClientAdapter adapter,
+            @Nonnull TelegramApiConfiguration configuration,
+            @Nonnull List<HttpClientAdapterCallback> mappers,
+            @Nonnull List<HttpRequestTypeBasedHandler> handlers,
+            @Nonnull TelegramApiTokenResolver tokenResolver
+    ) {
+        return new BaseTelegramHttpClient(
+                adapter,
+                configuration,
+                mappers,
+                handlers,
+                tokenResolver
+        );
     }
 
     @Bean
-    public TelegramBotServlet telegramBotServlet(@NotNull ObjectMapper mapper) {
-        return new TelegramBotServlet(mapper);
+    public TelegramApiConfiguration propertyTelegramApiConfiguration() {
+        return new PropertyTelegramApiConfiguration(new TelegramHttpClientProperties());
     }
 
     @Bean
-    @ConditionalOnMissingBean
-    public TelegramEnvironment telegramBotEnvironment(@NotNull Environment environment) {
-        return new ApplicationPropertyBotEnvironment(environment);
+    public HttpClientAdapterCallback httpGetCallback(ObjectMapper objectMapper) {
+        return new GetCallback(new TelegramApiToAdapterGetRequestMapper(objectMapper));
     }
 
     @Bean
-    @ConditionalOnMissingBean
-    public UrlResolver telegramBotUrlResolver(@NotNull TelegramEnvironment environment) {
-        return new EnvironmentUrlResolver(environment);
+    public HttpClientAdapterCallback httpPostCallback(ObjectMapper objectMapper) {
+        return new PostCallback(new TelegramApiToAdapterPostRequestMapper(objectMapper));
     }
 
     @Bean
-    public OnBotCreationListener telegramBotWebhookRegistry(@NotNull UrlResolver urlResolver, @NotNull TelegramWebhookApi webhookApi) {
-        return new WebhookBotRegistry(urlResolver, webhookApi);
+    public HttpClientAdapterCallback httpMultipartCallback(ObjectMapper objectMapper) {
+        return new MultipartCallback(new TelegramApiToAdapterMultipartRequestMapper(objectMapper));
     }
 
     @Bean
-    @ConditionalOnMissingBean
-    public TelegramHttpClient telegramBotHttpClient(@NotNull ObjectMapper mapper, @NotNull HttpClientAdapter adapter){
-        return HttpClientBuilder.newBuilder()
-                .remote("https://api.telegram.org")
-                .executor(adapter)
-                .mapper(mapper)
-                .build()
-                ;
+    public HttpRequestTypeBasedHandler httpCommandBasedHandler(ObjectMapper objectMapper) {
+        return new HttpCommandBasedHandler(objectMapper);
     }
 
     @Bean
-    @ConditionalOnMissingBean
-    public HttpClientAdapter telegramBotHttpClientAdapter(@NotNull ObjectMapper mapper, MultipartHttpClientHandler multipartHttpClientHandler){
-        final OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(loggingInterceptor())
-                .build();
-
-        return new OkHttpClientAdapter(client, mapper, multipartHttpClientHandler);
+    public HttpRequestTypeBasedHandler httpCommandBasedHandler() {
+        return new HttpFileBasedHandler();
     }
 
-    private Interceptor loggingInterceptor() {
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        return interceptor;
+    @Bean @ConditionalOnMissingBean
+    public TelegramApiTokenResolver contextTelegramApiTokenResolver(TelegramApiContextResolver telegramApiContextResolver) {
+        return new ContextBasedTokenResolver(telegramApiContextResolver);
     }
 
-    @Bean
-    @ConditionalOnMissingBean
-    public MultipartHttpClientHandler multipartHttpClientHandler(@NotNull ObjectMapper mapper){
-        return new MultipartDataHandlerImpl(mapper);
+    @Bean @ConditionalOnMissingBean
+    public TelegramApiContextHandler threadLocalTelegramApiContextResolver() {
+        return new TelegramApiThreadLocalContextHandlerImpl();
     }
 
-    @Bean
-    @ConditionalOnMissingBean
+    @Bean @ConditionalOnMissingBean
     public ObjectMapper telegramBotServiceObjectMapper() {
         return new ObjectMapper()
                 .enable(

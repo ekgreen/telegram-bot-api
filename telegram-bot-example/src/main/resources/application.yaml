@@ -1,15 +1,6 @@
 server:
-  port: 5000
-#  ssl:
-#    enabled: true
-#    key-store-type: JKS
-#    key-store: ${certificates.path}\pk_spring_boot.jks
-#    key-store-password: ${certificate.password}
+  servlet:
+    context-path: /telegram-bot
 telegram:
-  api:
-    callback:
-      proxy: ${public.host.ip4}
-    bots:
-      test:
-        path: '/test'
-        token: ${token.test}
+  brownie:
+    token: ${brownie.token.value}

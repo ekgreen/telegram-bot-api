@@ -1,17 +1,22 @@
 package com.goodboy.telegram.bot.spring.api.meta;
 
-import com.goodboy.telegram.bot.spring.api.handlers.token.TokenHandler;
-import com.goodboy.telegram.bot.spring.impl.providers.ApplicationPropertyTokenHandler;
-import org.apache.commons.lang3.StringUtils;
+import com.goodboy.telegram.bot.spring.api.token.TelegramApiTokenProvider;
+import com.goodboy.telegram.bot.spring.impl.token.SpringEnvironmentTelegramApiTokenProvider;
 import org.springframework.core.annotation.AliasFor;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.FIELD)
+@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
+@RestController
+@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
 public @interface Bot {
 
     /**
@@ -19,53 +24,40 @@ public @interface Bot {
      *
      * @return bot name
      */
-    @AliasFor("value")
-    String name() default "";
+    @AliasFor(annotation = Controller.class)
+    String value();
 
     /**
      * @return bot name
      */
-    @AliasFor("name")
-    String value() default "";
+    @AliasFor(value = "value", annotation = RequestMapping.class)
+    String[] mapping() default "";
 
     /**
-     *  This method to specify a url and receive incoming updates via an outgoing webhook.
-     *  Whenever there is an update for the bot, we will send an HTTPS POST request to the specified url,
-     *  containing a JSON-serialized Update. In case of an unsuccessful request, we will give up after
-     *  a reasonable amount of attempts
-     *
-     * @return hook
+     * @return request mapping
      */
-    WebhookApi hook();
+    @AliasFor(attribute = "value", annotation = RequestMapping.class)
+    String[] path() default "";
 
     /**
-     * Use this method to change the list of the bot's commands.
-     *
-     * @return commands
+     * @return token provider class
      */
-    BotCommand[] commands() default {};
+    Class<? extends TelegramApiTokenProvider> apiTokenProvider() default SpringEnvironmentTelegramApiTokenProvider.class;
 
     /**
-     * The token is a string along the lines of 110201543:AAHdqTcvCH1vGWJxfSeofSAs0K5PALDsaw that is required
-     * to authorize the bot and send requests to the Bot API. Keep your token secure and store it safely,
-     * it can be used by anyone to control your bot.
+     * @return proxy type
      */
-    String token() default StringUtils.EMPTY;
+    ProxyType proxyType() default ProxyType.THREAD_SCOPE;
 
-    /**
-     * Non-bean implementation of {@see TokenHandler} which used for
-     * more completed way than {@link this#token()}.
-     * <p>
-     * For example: use it to read bot token from a file
-     */
-    Class<? extends TokenHandler> tokenHandler() default ApplicationPropertyTokenHandler.class;
-
-    /**
-     * Non-bean implementation of {@see TokenHandler} which used for
-     * more completed way than {@link this#token()}.
-     * Use it when you enjoy
-     * <p>
-     * For example: use it to read bot token from a file
-     */
-    String tokenHandlerBean() default StringUtils.EMPTY;
+    enum ProxyType{
+        /**
+         * Контекстные данные будет возможно достать из {@link ThreadLocal} в который процессор аннотации сложит его
+         * Данный скоуп более широкий, чем {@link this#ARGUMENT_SCOPE} и включает его в себя
+         */
+        THREAD_SCOPE,
+        /**
+         * Контекстные данные будет возхможно получить на вход в метод в виде аргумента
+         */
+        ARGUMENT_SCOPE
+    }
 }
