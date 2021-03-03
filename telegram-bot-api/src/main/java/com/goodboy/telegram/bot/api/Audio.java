@@ -38,8 +38,7 @@ public class Audio {
      *
      * @optional
      */
-    private @Optional
-    String performer;
+    private @Optional String performer;
 
 
     /**

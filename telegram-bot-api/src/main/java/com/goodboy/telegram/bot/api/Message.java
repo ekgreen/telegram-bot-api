@@ -29,8 +29,7 @@ public class Message {
      *
      * @optional
      */
-    private @Optional
-    User from;
+    private @Optional User from;
 
     /**
      * Date the message was sent in Unix time

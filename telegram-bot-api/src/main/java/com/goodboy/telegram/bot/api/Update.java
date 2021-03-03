@@ -29,8 +29,7 @@ public class Update {
      *
      * @optional
      */
-    private @Optional
-    Message message;
+    private @Optional Message message;
 
     /**
      * New version of a message that is known to the bot and was edited

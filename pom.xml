@@ -1,0 +1,18 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.goodboy.telegram.bot</groupId>
+    <artifactId>telegram-bot-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>bom</module>
+        <module>telegram-bot-api</module>
+        <module>telegram-bot-http-api</module>
+        <module>telegram-bot-ok-http-client</module>
+        <module>telegram-bot-spring</module>
+        <module>telegram-bot-example</module>
+    </modules>
+
+</project>

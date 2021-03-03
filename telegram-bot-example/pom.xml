@@ -1,0 +1,46 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.goodboy.telegram.bot</groupId>
+    <artifactId>telegram-bot-example</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <packaging>jar</packaging>
+
+    <properties>
+        <!-- build properties-->
+        <maven.compile.plugin>3.8.1</maven.compile.plugin>
+
+        <java.source>11</java.source>
+        <java.target>11</java.target>
+    </properties>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>com.goodboy.telegram.bot.spring</groupId>
+            <artifactId>spring-boot-bot-http-starter</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.goodboy.telegram.bot.spring</groupId>
+            <artifactId>telegram-bot-spring-core</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compile.plugin}</version>
+                <configuration>
+                    <source>${java.source}</source>
+                    <target>${java.target}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
