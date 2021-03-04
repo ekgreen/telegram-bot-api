@@ -22,12 +22,6 @@
             <artifactId>spring-boot-bot-http-starter</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>com.goodboy.telegram.bot.spring</groupId>
-            <artifactId>telegram-bot-spring-core</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
     <build>

@@ -2,9 +2,10 @@ package com.goodboy.telegram.bot.spring.impl.processors.arguments;
 
 import com.goodboy.telegram.bot.api.Update;
 import com.goodboy.telegram.bot.spring.api.meta.Infrastructure;
+import com.goodboy.telegram.bot.spring.api.meta.Webhook;
 import com.goodboy.telegram.bot.spring.api.processor.arguments.BotArgumentProcessor;
 import com.goodboy.telegram.bot.spring.api.processor.arguments.BotArgumentProcessorFactory;
-import com.goodboy.telegram.bot.spring.api.processor.BotData;
+import com.goodboy.telegram.bot.spring.api.data.BotData;
 import com.goodboy.telegram.bot.spring.api.processor.arguments.TypeArgumentProcessor;
 import com.goodboy.telegram.bot.http.api.client.response.UpdateProvider;
 import com.google.common.collect.ImmutableMap;
@@ -64,7 +65,7 @@ public class BaseBotArgumentProcessorFactory implements BotArgumentProcessorFact
         if (argumentProcessors.size() == 0)
             return NoArgumentProcessor.INSTANCE;
 
-        return new EachArgumentProcessor(findUpdatePosition(parameterTypes), argumentProcessors);
+        return new EachArgumentProcessor(findUpdatePosition(parameterTypes), defineIsWebhookType(method), argumentProcessors);
     }
 
     private <T> PositionArgumentProcessor createArgumentHandlerOrSkip(Class<T> type, Annotation[] parameterAnnotation, int position) {
@@ -99,15 +100,33 @@ public class BaseBotArgumentProcessorFactory implements BotArgumentProcessorFact
         return DEFAULT_UPDATE_POSITION;
     }
 
+    private boolean defineIsWebhookType(@Nonnull Method method) {
+        return Arrays
+                .stream(method.getDeclaredAnnotations())
+                .map(Annotation::annotationType)
+                .collect(Collectors.toSet())
+                .contains(Webhook.class); // переделать на общий конфиг?
+    }
+
     @RequiredArgsConstructor
     private class EachArgumentProcessor implements BotArgumentProcessor {
 
         private final int updatePosition;
+        private final boolean isWebhook;
 
         private final List<PositionArgumentProcessor> argumentProcessors;
 
         @Override
         public void setArguments(@NotNull BotData botData, Object[] arguments) {
+            final Update request = isWebhook ?
+                    workWithUpdate(botData, arguments)
+                    :
+                    null;
+
+            argumentProcessors.forEach(processor -> processor.setArgument(arguments, botData, request));
+        }
+
+        private Update workWithUpdate(@NotNull BotData botData, Object[] arguments) {
             final Update request;
 
             if (updatePosition >= 0 && arguments[updatePosition] != null)
@@ -119,7 +138,9 @@ public class BaseBotArgumentProcessorFactory implements BotArgumentProcessorFact
             if (updatePosition >= 0)
                 arguments[updatePosition] = request;
 
-            argumentProcessors.forEach(processor -> processor.setArgument(arguments, botData, request));
+            log.info("bots [{}] webhook {} received a message [update] -> {}", botData.getName(), botData.getPaths(), request);
+
+            return request;
         }
     }
 

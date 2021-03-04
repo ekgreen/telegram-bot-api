@@ -3,7 +3,9 @@ package com.goodboy.telegram.bot.api;
 import java.util.List;
 
 import com.goodboy.telegram.bot.api.meta.TelegramApi;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 
 /**
@@ -12,6 +14,7 @@ import lombok.experimental.Accessors;
 @TelegramApi
 @Data
 @Accessors(chain = true)
+@Setter(AccessLevel.PRIVATE)
 public class PollAnswer {
 
     /**

@@ -3,7 +3,7 @@ package com.goodboy.telegram.bot.spring.impl.processors.arguments;
 import com.goodboy.telegram.bot.api.Message;
 import com.goodboy.telegram.bot.api.Update;
 import com.goodboy.telegram.bot.spring.api.meta.Infrastructure;
-import com.goodboy.telegram.bot.spring.api.processor.BotData;
+import com.goodboy.telegram.bot.spring.api.data.BotData;
 import com.goodboy.telegram.bot.spring.api.processor.arguments.TypeArgumentProcessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

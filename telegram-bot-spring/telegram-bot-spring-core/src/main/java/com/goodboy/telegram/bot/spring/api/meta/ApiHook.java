@@ -12,17 +12,36 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Webhook {
+@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
+public @interface ApiHook {
+
+    /**
+     * The primary mapping expressed by this annotation.
+     * <p>This is an alias for {@link #path}.
+     * <p>
+     * For example:
+     * {@code @WebhookApi("/foo")} is equivalent to
+     * {@code @WebhookApi(path="/foo")}.
+     */
+    @AliasFor(value = "path", annotation = RequestMapping.class)
+    String[] value() default StringUtils.EMPTY;
+
+    /**
+     * The path mapping URIs (e.g. {@code "/profile"})
+     */
+    @AliasFor(annotation = RequestMapping.class)
+    String[] path() default StringUtils.EMPTY;
 
     /**
      * The HTTP request methods to map
      */
+    @AliasFor(annotation = RequestMapping.class)
     RequestMethod[] method() default {RequestMethod.POST};
 
     /**
      * The commands which supports webhook (part of API Telegram)
      */
-    String[] command() default {};
+    String[] command() default StringUtils.EMPTY;
 
     /**
      * Type of webhook execution

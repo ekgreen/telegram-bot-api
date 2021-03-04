@@ -38,6 +38,7 @@
         <telegram.bot.http.api.version>0.0.1-SNAPSHOT</telegram.bot.http.api.version>
         <telegram.bot.ok.http.client.version>0.0.1-SNAPSHOT</telegram.bot.ok.http.client.version>
         <telegram.bot.spring.version>0.0.1-SNAPSHOT</telegram.bot.spring.version>
+        <telegram.bot.spring.core.version>0.0.1-SNAPSHOT</telegram.bot.spring.core.version>
         <telegram.bot.spring.http.autoconfiguration.version>0.0.1-SNAPSHOT</telegram.bot.spring.http.autoconfiguration.version>
     </properties>
 
@@ -60,6 +61,12 @@
                 <groupId>com.goodboy.telegram.bot</groupId>
                 <artifactId>telegram-bot-ok-http-client</artifactId>
                 <version>${telegram.bot.ok.http.client.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.goodboy.telegram.bot.spring</groupId>
+                <artifactId>telegram-bot-spring-core</artifactId>
+                <version>${telegram.bot.spring.core.version}</version>
             </dependency>
 
             <dependency>
