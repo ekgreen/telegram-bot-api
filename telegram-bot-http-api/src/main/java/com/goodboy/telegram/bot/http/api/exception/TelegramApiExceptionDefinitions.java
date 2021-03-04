@@ -8,9 +8,15 @@ public final class TelegramApiExceptionDefinitions {
 
     /**
      * Any technical exception. Core literal (prefix) for other
-     * validation exceptions
+     * technical exceptions
      */
     public static final String TECHNICAL_EXCEPTION = "TECHNICAL_EXCEPTION";
+
+    /**
+     * Any gateway exception. Core literal (prefix) for other
+     * gateway exceptions
+     */
+    public static final String GATEWAY_EXCEPTION = "GATEWAY_EXCEPTION";
 
     /**
      * Any entity validation exception. Core literal (prefix) for other

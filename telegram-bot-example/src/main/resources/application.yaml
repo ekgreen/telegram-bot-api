@@ -1,6 +1,7 @@
-server:
+telegram:
   servlet:
     context-path: /telegram-bot
-telegram:
   brownie:
-    token: ${brownie.token.value}
+    token: ${test.token.value}
+  example:
+    token: ${test.token.value}

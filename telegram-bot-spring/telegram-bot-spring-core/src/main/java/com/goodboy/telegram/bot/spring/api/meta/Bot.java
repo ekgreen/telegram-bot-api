@@ -1,9 +1,10 @@
 package com.goodboy.telegram.bot.spring.api.meta;
 
+import com.goodboy.telegram.bot.spring.api.gateway.GatewayRoutingResolver;
 import com.goodboy.telegram.bot.spring.api.token.TelegramApiTokenProvider;
+import com.goodboy.telegram.bot.spring.impl.gateway.UniformWeightGatewayRoutingResolver;
 import com.goodboy.telegram.bot.spring.impl.token.SpringEnvironmentTelegramApiTokenProvider;
 import org.springframework.core.annotation.AliasFor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +14,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+@AmIBot
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @RestController
@@ -24,8 +26,8 @@ public @interface Bot {
      *
      * @return bot name
      */
-    @AliasFor(annotation = Controller.class)
-    String value();
+    @AliasFor(annotation = RestController.class)
+    String value() default "";
 
     /**
      * @return bot name
@@ -45,9 +47,16 @@ public @interface Bot {
     Class<? extends TelegramApiTokenProvider> apiTokenProvider() default SpringEnvironmentTelegramApiTokenProvider.class;
 
     /**
+     * @return routing calculator
+     */
+    Class<? extends GatewayRoutingResolver> apiGatewayRoutingResolver() default UniformWeightGatewayRoutingResolver.class;
+
+    /**
      * @return proxy type
      */
     ProxyType proxyType() default ProxyType.THREAD_SCOPE;
+
+    //todo polling here - полинг это способ получения дополнительных данных для контроллера а не отдельный вид среза внутри
 
     enum ProxyType{
         /**

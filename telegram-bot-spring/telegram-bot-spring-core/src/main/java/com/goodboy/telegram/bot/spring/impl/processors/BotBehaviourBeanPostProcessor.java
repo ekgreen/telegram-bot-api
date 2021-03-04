@@ -1,26 +1,12 @@
 package com.goodboy.telegram.bot.spring.impl.processors;
 
-import com.goodboy.telegram.bot.api.BotCommand;
-import com.goodboy.telegram.bot.api.User;
-import com.goodboy.telegram.bot.api.methods.TelegramMethodApiDefinition;
-import com.goodboy.telegram.bot.http.api.client.TelegramHttpClient;
 import com.goodboy.telegram.bot.http.api.client.context.TelegramApiContextHandler;
-import com.goodboy.telegram.bot.http.api.client.context.TelegramApiUpdateContextImpl;
-import com.goodboy.telegram.bot.http.api.client.context.UpdateContext;
-import com.goodboy.telegram.bot.http.api.client.request.CallMethodImpl;
-import com.goodboy.telegram.bot.http.api.client.request.MethodRequest;
-import com.goodboy.telegram.bot.http.api.client.request.Request;
-import com.goodboy.telegram.bot.http.api.client.request.RequestType;
-import com.goodboy.telegram.bot.http.api.client.token.TelegramApiTokenResolver;
-import com.goodboy.telegram.bot.http.api.exception.TelegramApiExceptionDefinitions;
-import com.goodboy.telegram.bot.http.api.exception.TelegramApiRuntimeException;
+import com.goodboy.telegram.bot.spring.api.data.BotData;
 import com.goodboy.telegram.bot.spring.api.meta.Bot;
 import com.goodboy.telegram.bot.spring.api.meta.Infrastructure;
-import com.goodboy.telegram.bot.spring.api.context.TelegramApiProviderContext;
 import com.goodboy.telegram.bot.spring.api.processor.*;
 import com.goodboy.telegram.bot.spring.api.processor.arguments.BotArgumentProcessor;
 import com.goodboy.telegram.bot.spring.api.processor.arguments.BotArgumentProcessorFactory;
-import com.goodboy.telegram.bot.spring.api.token.TelegramApiTokenProvider;
 import com.goodboy.telegram.bot.spring.impl.processors.arguments.TransformDataToContextArgumentProcessor;
 import com.google.common.collect.ImmutableList;
 import lombok.Getter;
@@ -37,20 +23,17 @@ import org.springframework.lang.Nullable;
 import javax.annotation.Nonnull;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Infrastructure
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
-public class BotControllerBehaviourBeanPostProcessor implements BeanPostProcessor {
+public class BotBehaviourBeanPostProcessor implements BeanPostProcessor {
 
     private final Map<String, BotMetadata> bots = new HashMap<>();
 
-    private final TelegramHttpClient client;
-
-    private final TelegramApiProviderContext providerContext;
     private final TelegramApiContextHandler apiContextHandler;
+    private final BotRegistryService botRegistryService;
 
     private final BotArgumentProcessorFactory botArgumentProcessorFactory;
     private final BotAnnotationProcessorFactory botAnnotationProcessorFactory;
@@ -86,8 +69,8 @@ public class BotControllerBehaviourBeanPostProcessor implements BeanPostProcesso
             final Class<?> controllerType = bot.getNativeBotType();
             final Bot annotation = bot.getAnnotation();
 
-            // 3. Трансформация данных из аннотации в данные о боте
-            final BotData botData = transformAnnotationToData(annotation);
+            // 3. Регистрируем данные о боте
+            final BotData botData = botRegistryService.registryBot(beanName, controllerType);
 
             // 4. Инициализируем описание для каждого желанного метода
             final Map<Method, BotMethodProcessorChain> processors = createCallMethodDefinitions(controllerType, annotation, botData);
@@ -110,60 +93,6 @@ public class BotControllerBehaviourBeanPostProcessor implements BeanPostProcesso
         }
 
         return bean;
-    }
-
-    private @Nonnull
-    BotData transformAnnotationToData(@Nonnull Bot annotation) {
-        try {
-            // 1. Вычислим и создадим провайдер токена для Telegram Api
-            final var telegramApiTokenProvider = annotation.apiTokenProvider().getConstructor().newInstance();
-
-            // 2.  Вычисляем токен резолвер  для Telegram Api
-            final TelegramApiTokenResolver apiTokenResolver = createTelegramApiTokenResolver(telegramApiTokenProvider, annotation);
-
-            // 3. Создадим объект, отвечающий заданные о боте (те данные которые мы меожем вычислитьв  момент поднятия контекста)
-            final BotData botData = new BotData(annotation.value(), annotation.path(), apiTokenResolver);
-
-            // 4. Получим данные о боте из API Телеграм
-            enrichDataByOpenApi(botData);
-
-            // 5. Залогируем
-            if (log.isDebugEnabled())
-                log.debug("Bit data successful initialized = {}", botData);
-
-            return botData;
-        } catch (Exception transformationException) {
-            throw new TelegramApiRuntimeException(TelegramApiExceptionDefinitions.TECHNICAL_EXCEPTION, "can not create bot [" + annotation.value() + "] data", transformationException);
-        }
-    }
-
-    private void enrichDataByOpenApi(final BotData botData) {
-        try {
-            // 0. Вычислим токен с которым будем ходить в сервис
-            final String token = Objects.requireNonNull(botData.getTelegramApiTokenResolver().get());
-
-            // 1. Получим данные о командах
-            client.<User, Object>send(new MethodRequest<>(
-                            new CallMethodImpl(TelegramMethodApiDefinition.GET_ME, RequestType.COMMAND, User.class)
-                                    .setHttpMethod(Request.HttpMethod.GET)
-                    )
-                            .setToken(token)
-            )
-                    .orThrow(NullPointerException::new)
-                    .ifPresent(botData::setDefinition);
-
-            // 2. Получим данные об операциях
-            client.<BotCommand[], Object>send(new MethodRequest<>(
-                            new CallMethodImpl(TelegramMethodApiDefinition.GET_MY_COMMANDS, RequestType.COMMAND, BotCommand[].class)
-                                    .setHttpMethod(Request.HttpMethod.GET)
-                    )
-                            .setToken(token)
-            )
-                    .orThrow(NullPointerException::new)
-                    .ifPresent(commands -> botData.setCommands(List.of(commands)));
-        } catch (Exception enrichException) {
-            throw new TelegramApiRuntimeException(TelegramApiExceptionDefinitions.HTTP_REQUEST_ERROR, "can not enrich bot [" + botData.getName() + "] data from open api", enrichException);
-        }
     }
 
     private Map<Method, BotMethodProcessorChain> createCallMethodDefinitions(@Nonnull Class<?> controllerType, @Nonnull Bot annotation, @Nonnull BotData botData) {
@@ -214,24 +143,6 @@ public class BotControllerBehaviourBeanPostProcessor implements BeanPostProcesso
         }
 
         return holders;
-    }
-
-    private @Nonnull
-    TelegramApiTokenResolver createTelegramApiTokenResolver(@Nonnull TelegramApiTokenProvider telegramApiTokenProvider, @Nonnull Bot annotation) {
-        if (telegramApiTokenProvider.type() == TelegramApiTokenProvider.Type.STATIC) {
-            final String apiToken = getApiToken(telegramApiTokenProvider, annotation);
-            return () -> apiToken;
-        }
-
-        if (telegramApiTokenProvider.type() == TelegramApiTokenProvider.Type.DYNAMIC) {
-            return () -> getApiToken(telegramApiTokenProvider, annotation);
-        }
-
-        throw new UnsupportedOperationException("неизвестный тип api token провайдера = " + telegramApiTokenProvider.type());
-    }
-
-    private String getApiToken(@Nonnull TelegramApiTokenProvider telegramApiTokenProvider, @Nonnull Bot annotation) {
-        return telegramApiTokenProvider.resolve(annotation.value(), providerContext);
     }
 
     @RequiredArgsConstructor

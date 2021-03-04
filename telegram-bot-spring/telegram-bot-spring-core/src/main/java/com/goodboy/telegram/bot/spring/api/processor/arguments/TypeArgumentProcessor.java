@@ -1,10 +1,9 @@
 package com.goodboy.telegram.bot.spring.api.processor.arguments;
 
 import com.goodboy.telegram.bot.api.Update;
-import com.goodboy.telegram.bot.spring.api.processor.BotData;
+import com.goodboy.telegram.bot.spring.api.data.BotData;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public interface TypeArgumentProcessor<C> {
 

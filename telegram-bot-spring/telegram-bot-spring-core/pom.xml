@@ -33,6 +33,13 @@
             <groupId>com.goodboy.telegram.bot</groupId>
             <artifactId>telegram-bot-http-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+
 
         <dependency>
             <groupId>org.springframework</groupId>
