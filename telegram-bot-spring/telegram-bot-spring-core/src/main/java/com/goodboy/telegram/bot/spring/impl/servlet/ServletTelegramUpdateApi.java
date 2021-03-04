@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goodboy.telegram.bot.api.Update;
 import com.goodboy.telegram.bot.http.api.exception.TelegramApiExceptionDefinitions;
 import com.goodboy.telegram.bot.http.api.exception.TelegramApiRuntimeException;
-import com.goodboy.telegram.bot.spring.api.ServletTelegramApi;
+import com.goodboy.telegram.bot.spring.api.servlet.ServletTelegramApi;
 import com.goodboy.telegram.bot.spring.api.data.BotData;
 import com.goodboy.telegram.bot.spring.api.events.OnBotRegistry;
 import com.goodboy.telegram.bot.spring.api.gateway.Gateway;
@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.goodboy.telegram.bot.spring.api.ServletTelegramApi.GET_UPDATE_TELEGRAM_API_SERVLET;
+import static com.goodboy.telegram.bot.spring.api.servlet.ServletTelegramApi.GET_UPDATE_TELEGRAM_API_SERVLET;
 
 /**
  * Не сложная реализация сервлета, без миллиона обворочек {@link org.springframework.web.servlet.DispatcherServlet}

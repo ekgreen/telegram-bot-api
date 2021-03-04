@@ -1,4 +1,4 @@
-package com.goodboy.telegram.bot.spring.api;
+package com.goodboy.telegram.bot.spring.api.servlet;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.AliasFor;
