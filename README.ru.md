@@ -1,0 +1,1 @@
+# <img src="docs/bender.png" width="80" height="80"> Telegram Bot Framework [![Build Status](https://travis-ci.org/ekgreen/telegram-bot-api.svg?branch=master)](https://travis-ci.org/pengrad/java-telegram-bot-api) [![codecov](https://codecov.io/gh/ekgreen/telegram-bot-api/branch/master/graph/badge.svg)](https://codecov.io/gh/pengrad/java-telegram-bot-api)
