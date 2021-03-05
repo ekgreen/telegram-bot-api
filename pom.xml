@@ -1,7 +1,7 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.goodboy.telegram.bot</groupId>
+    <groupId>com.github.ekgreen</groupId>
     <artifactId>telegram-bot-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -11,8 +11,92 @@
         <module>telegram-bot-api</module>
         <module>telegram-bot-http-api</module>
         <module>telegram-bot-ok-http-client</module>
-        <module>telegram-bot-spring</module>
+        <module>telegram-bot-spring/telegram-bot-spring-core</module>
+        <module>telegram-bot-spring/telegram-webhook-bot-spring-boot-starter/autoconfiguration</module>
+        <module>telegram-bot-spring/telegram-webhook-bot-spring-boot-starter/starter</module>
         <module>telegram-bot-example</module>
+        <module>coverage</module>
     </modules>
+
+    <properties>
+        <!-- build properties-->
+        <java.source>11</java.source>
+        <java.target>11</java.target>
+
+        <!-- maven plugins -->
+        <maven.compile.plugin>3.8.1</maven.compile.plugin>
+        <maven.surface.plugin>2.22.2</maven.surface.plugin>
+        <maven.jacoco.plugin>0.8.6</maven.jacoco.plugin>
+
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.github.ekgreen</groupId>
+                <artifactId>telegram-bot-bom</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compile.plugin}</version>
+                <configuration>
+                    <source>${java.source}</source>
+                    <target>${java.target}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven.surface.plugin}</version>
+                <configuration>
+                    <!-- Jacoco prepare-agent builds some command-line params without -->
+                    <!-- which jacoco will not instrument. Hence it is important to add -->
+                    <!-- those command-line params here (${argLine} holds those params) -->
+                    <argLine>${argLine} -Xms256m -Xmx2048m</argLine>
+                    <forkCount>1</forkCount>
+                    <runOrder>random</runOrder>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${maven.jacoco.plugin}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

@@ -14,7 +14,6 @@ import lombok.experimental.Accessors;
 @TelegramApi
 @Data
 @Accessors(chain = true)
-@Setter(AccessLevel.PRIVATE)
 public class Update {
 
     /**

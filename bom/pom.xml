@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.goodboy.telegram.bot</groupId>
+    <groupId>com.github.ekgreen</groupId>
     <artifactId>telegram-bot-bom</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
@@ -46,31 +46,31 @@
         <dependencies>
             <!-- project dependencies -->
             <dependency>
-                <groupId>com.goodboy.telegram.bot</groupId>
+                <groupId>com.github.ekgreen</groupId>
                 <artifactId>telegram-bot-api</artifactId>
                 <version>${telegram.bot.api.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.goodboy.telegram.bot</groupId>
+                <groupId>com.github.ekgreen</groupId>
                 <artifactId>telegram-bot-http-api</artifactId>
                 <version>${telegram.bot.http.api.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.goodboy.telegram.bot</groupId>
+                <groupId>com.github.ekgreen</groupId>
                 <artifactId>telegram-bot-ok-http-client</artifactId>
                 <version>${telegram.bot.ok.http.client.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.goodboy.telegram.bot.spring</groupId>
+                <groupId>com.github.ekgreen</groupId>
                 <artifactId>telegram-bot-spring-core</artifactId>
                 <version>${telegram.bot.spring.core.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.goodboy.telegram.bot.spring</groupId>
+                <groupId>com.github.ekgreen</groupId>
                 <artifactId>spring-boot-bot-http-autoconfiguration</artifactId>
                 <version>${telegram.bot.spring.http.autoconfiguration.version}</version>
             </dependency>

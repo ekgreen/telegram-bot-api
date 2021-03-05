@@ -1,0 +1,117 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.github.ekgreen</groupId>
+        <artifactId>telegram-bot-parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>telegram-bot-coverage</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.deploy.skip>true</maven.deploy.skip>
+
+        <!-- build properties-->
+        <java.source>11</java.source>
+        <java.target>11</java.target>
+
+        <!-- maven plugins -->
+        <maven.compile.plugin>3.8.1</maven.compile.plugin>
+        <maven.surface.plugin>2.22.2</maven.surface.plugin>
+        <maven.jacoco.plugin>0.8.6</maven.jacoco.plugin>
+
+        <!-- JaCoCo properties -->
+        <code-coverage.line-covered-ratio.min>0.00</code-coverage.line-covered-ratio.min>
+        <code.coverage.project.folder>${basedir}/../</code.coverage.project.folder>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.ekgreen</groupId>
+            <artifactId>telegram-bot-http-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.ekgreen</groupId>
+            <artifactId>telegram-bot-ok-http-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.ekgreen</groupId>
+            <artifactId>telegram-bot-spring-core</artifactId>
+        </dependency>
+    </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compile.plugin}</version>
+                <configuration>
+                    <source>${java.source}</source>
+                    <target>${java.target}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven.surface.plugin}</version>
+                <configuration>
+                    <!-- Jacoco prepare-agent builds some command-line params without -->
+                    <!-- which jacoco will not instrument. Hence it is important to add -->
+                    <!-- those command-line params here (${argLine} holds those params) -->
+                    <argLine>${argLine} -Xms256m -Xmx2048m</argLine>
+                    <forkCount>1</forkCount>
+                    <runOrder>random</runOrder>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>jacoco-check</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <rule>
+                                    <element>PACKAGE</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>${code-coverage.line-covered-ratio.min}</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>report-aggregate</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report-aggregate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
