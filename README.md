@@ -353,6 +353,6 @@ public class ShowExampleBot {
 атрибутам, например по nickname, через разные ресурсы - файл база и тд. Легковесное, тяжеловесное, динамическое исполнение
 вебхуков. Многозадачность - gateway будет иметь вызывать (синхронно\асинхронно) все методы с равным весом\подходящие по параметрам. 
 
-# Лицензия
+# License
 
-The Spring Framework is released under version 2.0 of the [Apache License](https://www.apache.org/licenses/LICENSE-2.0).
+Telegram Bot Framework is released under version 2.0 of the [Apache License](https://www.apache.org/licenses/LICENSE-2.0).
