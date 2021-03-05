@@ -1,4 +1,4 @@
-package com.goodboy.telegram.example.service;
+package com.goodboy.telegram.bot.example.service;
 
 import org.springframework.stereotype.Service;
 

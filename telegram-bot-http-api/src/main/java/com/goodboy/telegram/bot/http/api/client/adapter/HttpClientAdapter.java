@@ -47,6 +47,4 @@ public interface HttpClientAdapter {
      */
     TelegramHttpResponse multipart(@Nonnull MultipartRequest request);
 
-
-
 }

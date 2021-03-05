@@ -1,4 +1,4 @@
-package com.goodboy.telegram.example;
+package com.goodboy.telegram.bot.example;
 
 import com.goodboy.telegram.bot.api.Chat;
 import com.goodboy.telegram.bot.api.Message;

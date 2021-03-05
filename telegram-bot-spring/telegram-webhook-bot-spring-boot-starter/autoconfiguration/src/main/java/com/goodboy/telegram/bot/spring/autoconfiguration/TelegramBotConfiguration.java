@@ -95,7 +95,7 @@ public class TelegramBotConfiguration {
     }
 
     @Bean
-    public HttpRequestTypeBasedHandler httpCommandBasedHandler() {
+    public HttpRequestTypeBasedHandler httpFileBasedHandler() {
         return new HttpFileBasedHandler();
     }
 

@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nonnull;
 
 import static com.goodboy.telegram.bot.http.api.client.request.RequestType.COMMAND;
+import static com.goodboy.telegram.bot.http.api.client.request.RequestType.FILE;
 
 @RequiredArgsConstructor
 public class HttpFileBasedHandler implements HttpRequestTypeBasedHandler {
@@ -22,6 +23,6 @@ public class HttpFileBasedHandler implements HttpRequestTypeBasedHandler {
     }
 
     public @NotNull RequestType type() {
-        return COMMAND;
+        return FILE;
     }
 }
