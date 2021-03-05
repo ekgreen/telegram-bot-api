@@ -40,6 +40,7 @@
         <telegram.bot.spring.version>0.0.1-SNAPSHOT</telegram.bot.spring.version>
         <telegram.bot.spring.core.version>0.0.1-SNAPSHOT</telegram.bot.spring.core.version>
         <telegram.bot.spring.http.autoconfiguration.version>0.0.1-SNAPSHOT</telegram.bot.spring.http.autoconfiguration.version>
+        <telegram.bot.spring.hook.bot.starter.version>0.0.1-SNAPSHOT</telegram.bot.spring.hook.bot.starter.version>
     </properties>
 
     <dependencyManagement>
@@ -73,6 +74,12 @@
                 <groupId>com.github.ekgreen</groupId>
                 <artifactId>spring-boot-bot-http-autoconfiguration</artifactId>
                 <version>${telegram.bot.spring.http.autoconfiguration.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.ekgreen</groupId>
+                <artifactId>spring-boot-hook-bot-starter</artifactId>
+                <version>${telegram.bot.spring.hook.bot.starter.version}</version>
             </dependency>
 
             <dependency>

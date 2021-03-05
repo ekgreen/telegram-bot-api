@@ -8,7 +8,7 @@
         <relativePath>../../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>spring-boot-bot-http-starter</artifactId>
+    <artifactId>spring-boot-hook-bot-starter</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <packaging>jar</packaging>

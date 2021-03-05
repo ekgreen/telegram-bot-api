@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020-2021 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.goodboy.telegram.bot.spring.impl.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,7 +49,10 @@ import static com.goodboy.telegram.bot.spring.api.servlet.ServletTelegramApi.GET
  * Авторизацию мы также не будем прикручивать к данному сервлету так как это не имеет никакого смысла, мы выставляем
  * публичное API наружу и ожидаем что нас будет вызывать Telegram без дополнительной аутентификации и авторизации
  * <p>
- * Для прочих своих эндпоинтов продолжайте пользоваться мощным средсвто Spring {@link org.springframework.web.servlet.DispatcherServlet}
+ * Для прочих своих эндпоинтов продолжайте пользоваться мощным средство Spring {@link org.springframework.web.servlet.DispatcherServlet}
+ *
+ * @author Izmalkov Roman (ekgreen)
+ * @since 1.0.0
  */
 @Infrastructure
 @ServletTelegramApi(GET_UPDATE_TELEGRAM_API_SERVLET)
@@ -46,7 +65,10 @@ public class ServletTelegramUpdateApi extends HttpServlet implements OnBotRegist
     private final Gateway gateway;
     // input stream de/marshaller
     private final ObjectMapper mapper;
-    // root servlet context
+    // root server context
+    @Value("${server.servlet.context-path:#{null}}")
+    private String serverServletContextPath;
+    // root telegram servlet context
     @Value("${telegram.servlet.context-path}")
     private String telegramApiServletContextPath;
 
@@ -84,6 +106,6 @@ public class ServletTelegramUpdateApi extends HttpServlet implements OnBotRegist
         final String botName = data.getName();
         final String[] paths = data.getPaths();
 
-        Arrays.stream(paths).forEach(path -> routes.put(telegramApiServletContextPath + path, botName));
+        Arrays.stream(paths).forEach(path -> routes.put((serverServletContextPath != null ? serverServletContextPath : "") + telegramApiServletContextPath + path, botName));
     }
 }

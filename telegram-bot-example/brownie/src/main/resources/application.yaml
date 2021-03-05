@@ -1,3 +1,7 @@
+server:
+  servlet:
+    context-path: /root-context #as example
+
 telegram:
   servlet:
     context-path: /telegram-bot
