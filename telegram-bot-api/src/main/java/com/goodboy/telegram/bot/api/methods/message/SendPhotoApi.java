@@ -17,11 +17,10 @@
 package com.goodboy.telegram.bot.api.methods.message;
 
 import com.goodboy.telegram.bot.api.keyboard.ReplyMarkup;
-import com.goodboy.telegram.bot.api.meta.Multipart;
 import com.goodboy.telegram.bot.api.meta.Optional;
 import com.goodboy.telegram.bot.api.meta.TelegramApi;
 import com.goodboy.telegram.bot.api.methods.Api;
-import com.goodboy.telegram.bot.api.platform.upload.Uploading;
+import com.goodboy.telegram.bot.api.platform.entry.Uploading;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -30,7 +29,6 @@ import lombok.experimental.Accessors;
  * @since 1.0.0
  */
 @Data
-@Multipart
 @TelegramApi
 @Accessors(chain = true)
 public class SendPhotoApi implements Api {

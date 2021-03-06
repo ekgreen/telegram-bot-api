@@ -19,13 +19,10 @@ package com.goodboy.telegram.bot.spring.autoconfiguration;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.goodboy.telegram.bot.api.meta.Multipart;
 import com.goodboy.telegram.bot.http.api.client.BaseTelegramHttpClient;
 import com.goodboy.telegram.bot.http.api.client.TelegramHttpClient;
 import com.goodboy.telegram.bot.http.api.client.adapter.HttpClientAdapter;
@@ -48,19 +45,13 @@ import com.goodboy.telegram.bot.http.api.client.handlers.HttpRequestTypeBasedHan
 import com.goodboy.telegram.bot.http.api.client.token.ContextBasedTokenResolver;
 import com.goodboy.telegram.bot.http.api.client.token.TelegramApiTokenResolver;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.SearchStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.annotation.Nonnull;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -156,40 +147,8 @@ public class TelegramBotConfiguration {
                 .setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ"))
                 .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
                 .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
-                .registerModule(localDateTimeModule())
+                .registerModule(new JavaTimeModule())
                 ;
-    }
-
-    private Module localDateTimeModule() {
-        JavaTimeModule module = new JavaTimeModule();
-
-        LocalDateTimeDeserializer deserializer = new MillisOrLocalDateTimeDeserializer();
-        module.addDeserializer(LocalDateTime.class, deserializer);
-
-        LocalDateTimeSerializer serializer = new LocalDateTimeSerializer(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-        module.addSerializer(LocalDateTime.class, serializer);
-
-        return module;
-    }
-
-    private static class MillisOrLocalDateTimeDeserializer extends LocalDateTimeDeserializer {
-
-        public MillisOrLocalDateTimeDeserializer() {
-            super(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-        }
-
-        @Override
-        public LocalDateTime deserialize(JsonParser parser, DeserializationContext context) throws IOException {
-            if (parser.hasToken(JsonToken.VALUE_NUMBER_INT)) {
-                long value = parser.getValueAsLong();
-                Instant instant = Instant.ofEpochMilli(value);
-
-                return LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
-            }
-
-            return super.deserialize(parser, context);
-        }
-
     }
 
 }

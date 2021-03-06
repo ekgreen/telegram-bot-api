@@ -16,17 +16,15 @@
 
 package com.goodboy.telegram.bot.api;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 import com.goodboy.telegram.bot.api.keyboard.InlineKeyboardMarkup;
 import com.goodboy.telegram.bot.api.meta.MessageId;
 import com.goodboy.telegram.bot.api.meta.Optional;
 import com.goodboy.telegram.bot.api.meta.TelegramApi;
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Setter;
 import lombok.experimental.Accessors;
+
+import java.time.Instant;
+import java.util.List;
 
 /**
  * This object represents a message
@@ -55,7 +53,7 @@ public class Message {
     /**
      * Date the message was sent in Unix time
      */
-    private LocalDateTime date;
+    private Instant date;
 
     /**
      * Conversation the message belongs to
@@ -95,7 +93,7 @@ public class Message {
      *
      * @optional
      */
-    private @Optional LocalDateTime forwardDate;
+    private @Optional Instant forwardDate;
 
     /**
      * For replies, the original message. Note that the Message object in this field will not contain further
@@ -117,7 +115,7 @@ public class Message {
      *
      * @optional
      */
-    private @Optional LocalDateTime editDate;
+    private @Optional Instant editDate;
 
     /**
      * The unique identifier of a media message group this message belongs to

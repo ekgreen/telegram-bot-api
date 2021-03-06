@@ -31,10 +31,21 @@ import java.lang.annotation.Target;
  * @author Izmalkov Roman (ekgreen)
  * @since 1.0.0
  */
-@JsonIgnoreProperties
-@JacksonAnnotationsInside
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonNaming(SnakeCaseStrategy.class)
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface TelegramApi {}
+public @interface ApiQuery {
+    /**
+     * @return related with current api method
+     */
+    String method();
+
+    /**
+     * @return query to telegram api provides data of type
+     */
+    Class<?> provides();
+
+    /**
+     * @return telegram api url building semantic, for the vast majority requests it is empty
+     */
+    String path() default "";
+}

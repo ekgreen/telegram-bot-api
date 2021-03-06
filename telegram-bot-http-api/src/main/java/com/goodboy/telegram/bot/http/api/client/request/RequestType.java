@@ -29,8 +29,8 @@ import static com.goodboy.telegram.bot.http.api.client.configuration.TelegramHtt
 @Getter
 @RequiredArgsConstructor
 public enum RequestType {
-    FILE(CAll_METHOD_FILE_PATH),
-    COMMAND(CAll_METHOD_COMMAND_PATH)
+    COMMAND(CAll_METHOD_COMMAND_PATH),
+    FILE(CAll_METHOD_FILE_PATH)
     ;
 
     private final String path;

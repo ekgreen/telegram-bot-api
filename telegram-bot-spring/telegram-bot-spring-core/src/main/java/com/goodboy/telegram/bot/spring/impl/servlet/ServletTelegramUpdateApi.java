@@ -26,6 +26,7 @@ import com.goodboy.telegram.bot.spring.api.events.OnBotRegistry;
 import com.goodboy.telegram.bot.spring.api.gateway.Gateway;
 import com.goodboy.telegram.bot.spring.api.meta.Infrastructure;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,6 +55,7 @@ import static com.goodboy.telegram.bot.spring.api.servlet.ServletTelegramApi.GET
  * @author Izmalkov Roman (ekgreen)
  * @since 1.0.0
  */
+@Slf4j
 @Infrastructure
 @ServletTelegramApi(GET_UPDATE_TELEGRAM_API_SERVLET)
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -96,7 +98,8 @@ public class ServletTelegramUpdateApi extends HttpServlet implements OnBotRegist
             gateway.routing(botName, update);
         } catch (Exception exception) {
             // todo code error resolver
-            throw new TelegramApiRuntimeException(TelegramApiExceptionDefinitions.TECHNICAL_EXCEPTION, exception);
+            log.warn("service not available", exception);
+            response.sendError(500, "unavailable");
         }
     }
 

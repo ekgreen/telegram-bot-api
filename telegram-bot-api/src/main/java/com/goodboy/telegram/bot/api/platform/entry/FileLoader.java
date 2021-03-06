@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.goodboy.telegram.bot.api.platform.upload;
+package com.goodboy.telegram.bot.api.platform.entry;
 
 import javax.annotation.Nonnull;
 

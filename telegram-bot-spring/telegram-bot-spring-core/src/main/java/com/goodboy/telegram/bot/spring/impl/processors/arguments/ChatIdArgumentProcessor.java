@@ -42,7 +42,7 @@ public class ChatIdArgumentProcessor implements TypeArgumentProcessor<ChatId> {
     public void setArgument(int position, @Nonnull Class<?> argumentType, @NotNull Object[] arguments, @NotNull BotData botData, @Nullable Update update) {
         if (update != null) {
             final Chat chat = findChatFromUpdate(update);
-            arguments[position] = chat.getId();
+            arguments[position] = String.valueOf(chat.getId());
         }
     }
 

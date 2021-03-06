@@ -16,7 +16,7 @@
 
 package com.goodboy.telegram.bot.http.api.client.adapter.multipart;
 
-import com.goodboy.telegram.bot.api.platform.upload.FileLoader;
+import com.goodboy.telegram.bot.api.platform.entry.FileLoader;
 
 import javax.annotation.Nonnull;
 

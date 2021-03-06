@@ -14,44 +14,57 @@
  * limitations under the License.
  */
 
-package com.goodboy.telegram.bot.api.platform.upload;
+package com.goodboy.telegram.bot.api;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.goodboy.telegram.bot.api.meta.Optional;
-import com.goodboy.telegram.bot.api.platform.serializer.UploadingTypeSerializer;
+import com.goodboy.telegram.bot.api.meta.TelegramApi;
+import lombok.Data;
+import lombok.experimental.Accessors;
+
+import java.util.List;
 
 /**
+ * This object represents a sticker set
+ *
  * @author Izmalkov Roman (ekgreen)
  * @since 1.0.0
  */
-@JsonSerialize(using = UploadingTypeSerializer.class)
-public interface Uploading {
+@TelegramApi
+@Data
+@Accessors(chain = true)
+public class StickerSet {
 
     /**
-     * Pass a file_id as String to send an audio file that exists on the Telegram servers (recommended)
-     *
-     * @return file_id
+     * Sticker set name
      */
-    @Optional
-    String fileId();
+    private String name;
 
     /**
-     * Pass an HTTP URL as a String for Telegram to get an audio file from the Internet
-     *
-     * @return link
+     * Sticker set title
      */
-    default @Optional
-    String httpLink() {
-        return null;
-    }
+    private String title;
 
     /**
-     * Upload a new one using multipart/form-data
-     *
-     * @return file
+     * True, if the sticker set contains animated stickers
      */
-    default @Optional
-    FileLoader uploadNewFile() {
-        return null;
-    }
+    private Boolean isAnimated;
+
+    /**
+     * True, if the sticker set contains masks
+     */
+    private Boolean containsMasks;
+
+
+    /**
+     * List of all set stickers
+     */
+    private List<Sticker> stickers;
+
+
+    /**
+     * Sticker set thumbnail in the .WEBP or .TGS format
+     *
+     * @optional
+     */
+    private @Optional PhotoSize thumb;
 }

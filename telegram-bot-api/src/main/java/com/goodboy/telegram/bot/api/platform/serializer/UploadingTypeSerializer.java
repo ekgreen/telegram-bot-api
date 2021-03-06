@@ -19,7 +19,7 @@ package com.goodboy.telegram.bot.api.platform.serializer;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.goodboy.telegram.bot.api.platform.upload.Uploading;
+import com.goodboy.telegram.bot.api.platform.entry.Uploading;
 
 import java.io.IOException;
 

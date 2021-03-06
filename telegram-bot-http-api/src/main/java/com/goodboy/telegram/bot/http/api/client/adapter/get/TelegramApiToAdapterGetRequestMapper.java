@@ -24,7 +24,7 @@ import com.goodboy.telegram.bot.api.meta.Json;
 import com.goodboy.telegram.bot.api.meta.TelegramApi;
 import com.goodboy.telegram.bot.http.api.client.request.Request;
 import com.goodboy.telegram.bot.http.api.client.adapter.TelegramApiToAdapterRequestMapper;
-import com.goodboy.telegram.bot.api.platform.upload.Uploading;
+import com.goodboy.telegram.bot.api.platform.entry.Uploading;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;

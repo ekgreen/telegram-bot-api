@@ -22,6 +22,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.goodboy.telegram.bot.http.api.client.BaseTelegramHttpClient;
 import com.goodboy.telegram.bot.http.api.client.TelegramHttpClient;
 import com.goodboy.telegram.bot.http.api.client.adapter.Callback;
@@ -252,6 +253,7 @@ public class FilledTelegramHttpClientBuilder implements TelegramHttpClientBuilde
                 .setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ"))
                 .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
                 .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
+                .registerModule(new JavaTimeModule())
                 ;
     }
 }

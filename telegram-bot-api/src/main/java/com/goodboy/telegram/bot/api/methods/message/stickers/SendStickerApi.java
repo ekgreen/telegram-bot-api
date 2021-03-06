@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package com.goodboy.telegram.bot.api.methods.message;
+package com.goodboy.telegram.bot.api.methods.message.stickers;
 
+import com.goodboy.telegram.bot.api.Message;
+import com.goodboy.telegram.bot.api.StickerSet;
 import com.goodboy.telegram.bot.api.keyboard.ReplyMarkup;
-import com.goodboy.telegram.bot.api.meta.Multipart;
-import com.goodboy.telegram.bot.api.meta.Optional;
-import com.goodboy.telegram.bot.api.meta.TelegramApi;
-import com.goodboy.telegram.bot.api.meta.Upload;
+import com.goodboy.telegram.bot.api.meta.*;
 import com.goodboy.telegram.bot.api.methods.Api;
+import com.goodboy.telegram.bot.api.methods.TelegramMethodApiDefinition;
+import com.goodboy.telegram.bot.api.platform.entry.Uploading;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -32,23 +33,23 @@ import java.util.function.Supplier;
  * @since 1.0.0
  */
 @Data
-@Multipart
 @TelegramApi
 @Accessors(chain = true)
+@ApiQuery(method = TelegramMethodApiDefinition.SEND_STICKER_CALL_METHOD, provides = Message.class)
 public class SendStickerApi implements Api {
 
     /**
      * Unique identifier for the target chat or username
      * of the target channel (in the format @channelusername)
      */
-    private Integer  chatId;
+    private String chatId;
 
     /**
      * Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended),
      * pass an HTTP URL as a String for Telegram to get a .WEBP file from the Internet, or upload a new one using
      * multipart/form-data.
      */
-    private @Upload Supplier<?> sticker;
+    private Uploading sticker;
 
     /**
      * Sends the message silently. Users will receive a notification with no sound

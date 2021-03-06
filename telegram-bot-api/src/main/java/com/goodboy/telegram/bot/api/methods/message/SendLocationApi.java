@@ -32,7 +32,6 @@ import javax.annotation.Nonnull;
  * @since 1.0.0
  */
 @Data
-@Multipart
 @TelegramApi
 @Accessors(chain = true)
 public class SendLocationApi implements Api {

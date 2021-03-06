@@ -26,7 +26,7 @@ import com.goodboy.telegram.bot.http.api.exception.TelegramApiExceptionDefinitio
 import com.goodboy.telegram.bot.http.api.exception.TelegramApiRuntimeException;
 import com.goodboy.telegram.bot.http.api.client.request.Request;
 import com.goodboy.telegram.bot.http.api.client.request.RequestType;
-import com.goodboy.telegram.bot.api.platform.upload.Uploading;
+import com.goodboy.telegram.bot.api.platform.entry.Uploading;
 import com.goodboy.telegram.bot.api.response.TelegramCoreResponse;
 import com.goodboy.telegram.bot.http.api.client.response.TelegramHttpResponse;
 import lombok.NonNull;
