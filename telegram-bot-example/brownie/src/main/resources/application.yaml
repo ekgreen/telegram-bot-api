@@ -6,6 +6,6 @@ telegram:
   servlet:
     context-path: /telegram-bot
   brownie:
-    token: ${test.token.value}
+    token: ${DEFAULT_TEST_TOKEN_VALUE}
   example:
-    token: ${test.token.value}
+    token: ${DEFAULT_TEST_TOKEN_VALUE}

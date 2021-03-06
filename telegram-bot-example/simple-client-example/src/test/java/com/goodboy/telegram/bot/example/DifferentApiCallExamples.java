@@ -25,10 +25,12 @@ package com.goodboy.telegram.bot.example;
  import com.goodboy.telegram.bot.http.api.client.request.RequestType;
  import com.goodboy.telegram.bot.http.api.method.me.TelegramMeImpl;
  import com.goodboy.telegram.bot.http.client.OkHttpFilledTelegramHttpClientBuilder;
+ import com.google.common.base.Suppliers;
  import org.junit.jupiter.api.Assertions;
  import org.junit.jupiter.api.Test;
 
  import javax.annotation.Nonnull;
+ import java.util.function.Supplier;
 
 /**
  * @author Izmalkov Roman (ekgreen)
@@ -36,12 +38,15 @@ package com.goodboy.telegram.bot.example;
  */
 public final class DifferentApiCallExamples {
 
+    // get token and cache
+    private final static Supplier<String> token = Suppliers.memoize(DifferentApiCallExamples::getToken);
+
     @Test
     public void sendMessageWithApi() {
         // simple call
 
         final TelegramHttpClient client = new OkHttpFilledTelegramHttpClientBuilder()
-                .token(getToken())
+                .token(token.get())
                 .build();
 
         // create getMe service
@@ -55,8 +60,8 @@ public final class DifferentApiCallExamples {
 
         // assert that it is success call
         Assertions.assertTrue(response.isOk());
-        // my test bot name is 10words - here no logic
-        Assertions.assertEquals("10words", response.getResult().getFirstName());
+        // my test bot name is Wall-E in the Space - here no logic
+        Assertions.assertEquals("Wall-E in the Space", response.getResult().getFirstName());
     }
 
 
@@ -64,7 +69,7 @@ public final class DifferentApiCallExamples {
     public void sendMessageWithClientTest() {
         // this example show some entrails of client implementation
         final TelegramHttpClient client = new OkHttpFilledTelegramHttpClientBuilder()
-                .token(getToken())
+                .token(token.get())
                 .build();
 
 
@@ -85,12 +90,12 @@ public final class DifferentApiCallExamples {
 
         // assert that it is success call
         Assertions.assertTrue(response.isOk());
-        // my test bot name is 10words - here no logic
-        Assertions.assertEquals("10words", response.getResult().getFirstName());
+        // my test bot name is Wall-E in the Space - here no logic
+        Assertions.assertEquals("Wall-E in the Space", response.getResult().getFirstName());
     }
 
-    public @Nonnull String getToken() {
+    public static @Nonnull String getToken() {
         // always hide your token from other!
-        return System.getenv("test.token.value");
+        return System.getenv("DEFAULT_TEST_TOKEN_VALUE");
     }
 }
