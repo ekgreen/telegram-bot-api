@@ -42,7 +42,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- *
  * @author Izmalkov Roman (ekgreen)
  * @since 1.0.0
  */

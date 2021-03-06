@@ -49,8 +49,6 @@ public class SendAnimationApi implements Api {
      * Video to send. Pass a file_id as String to send a video that exists on the Telegram servers (recommended),
      * pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new video using
      * multipart/form-data.
-     *
-     * @type ? = [String, InputStream, byte[], Supplier<byte[]>, Supplier<InputStream>]
      */
     private Uploading animation;
 
@@ -84,7 +82,6 @@ public class SendAnimationApi implements Api {
      * “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under
      * <file_attach_name>.
      *
-     * @type ? = [String, InputStream, byte[], Supplier<byte[]>, Supplier<InputStream>]
      * @optional
      */
     private @Optional Uploading thumb;

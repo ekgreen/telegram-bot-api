@@ -49,8 +49,6 @@ public class SendAudioApi implements Api {
      * 	Audio file to send. Pass a file_id as String to send an audio file that exists on the Telegram servers (recommended),
      * 	pass an HTTP URL as a String for Telegram to get an audio file from the Internet, or upload a new one using
      * 	multipart/form-data.
-     *
-     * @type ? = [String, InputStream, byte[], Supplier<byte[]>, Supplier<InputStream>]
      */
     private @Upload Object audio;
 
@@ -97,8 +95,6 @@ public class SendAudioApi implements Api {
      * not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused
      * and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>”
      * if the thumbnail was uploaded using multipart/form-data under <file_attach_name>.
-     *
-     * @type ? = [String, InputStream, byte[]]
      * @optional
      */
     private @Optional @Upload Supplier<?> thumb;
