@@ -1,6 +1,6 @@
 # <img src="docs/bender.png" width="80" height="95"> Telegram Bot Framework [![Build Status](https://travis-ci.org/ekgreen/telegram-bot-api.svg?branch=master)](https://travis-ci.org/pengrad/java-telegram-bot-api) [![codecov](https://codecov.io/gh/ekgreen/telegram-bot-api/branch/master/graph/badge.svg)](https://codecov.io/gh/pengrad/java-telegram-bot-api)
 
-*Here should be english  readme file, but now its in progress*
+*Here should be english  readme file, but it is in progress yet*
 
 *Read this in other languages: [Russian](README.ru.md)*
 

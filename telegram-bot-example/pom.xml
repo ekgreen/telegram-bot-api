@@ -24,6 +24,10 @@
     </dependencyManagement>
 
     <properties>
+        <!-- properties for maven build -->
+        <maven.deploy.skip>true</maven.deploy.skip>
+        <skipNexusStagingDeployMojo>true</skipNexusStagingDeployMojo>
+
         <!-- build properties-->
         <maven.compile.plugin>3.8.1</maven.compile.plugin>
 

@@ -45,8 +45,6 @@ public class SendPhotoApi implements Api {
      * 	Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended),
      * 	pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new photo using
      * 	multipart/form-data.
-     *
-     * @type ? = [String, InputStream, byte[]]
      */
     private Uploading photo;
 

@@ -47,8 +47,6 @@ public class SendStickerApi implements Api {
      * Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended),
      * pass an HTTP URL as a String for Telegram to get a .WEBP file from the Internet, or upload a new one using
      * multipart/form-data.
-     *
-     * @type ? = [String, InputStream, byte[]]
      */
     private @Upload Supplier<?> sticker;
 
