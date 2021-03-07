@@ -100,6 +100,11 @@ public final class TelegramMethodApiDefinition {
     public final static String SEND_STICKER_CALL_METHOD = "sendSticker";
 
     /**
+     * Use this method to get a sticker set. On success, a StickerSet object is returned
+     */
+    public final static String GET_STICKER_SET_CALL_METHOD = "getStickerSet";
+
+    /**
      * As of v.4.0, Telegram clients support rounded square mp4 videos of up to 1 minute long.
      * Use this method to send video messages. On success, the sent Message is returned.
      */

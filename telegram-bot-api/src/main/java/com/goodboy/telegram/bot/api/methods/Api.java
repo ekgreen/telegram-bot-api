@@ -22,5 +22,4 @@ import java.io.Serializable;
  * @author Izmalkov Roman (ekgreen)
  * @since 1.0.0
  */
-public interface Api extends Serializable {
-}
+public interface Api extends Serializable {}

@@ -17,7 +17,8 @@
 package com.goodboy.telegram.bot.api.methods.message;
 
 import com.goodboy.telegram.bot.api.Message;
-import com.goodboy.telegram.bot.api.platform.upload.Uploading;
+import com.goodboy.telegram.bot.api.methods.message.stickers.SendStickerApi;
+import com.goodboy.telegram.bot.api.platform.entry.Uploading;
 import com.goodboy.telegram.bot.api.response.TelegramCoreResponse;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,7 +45,7 @@ public interface TelegramMessageApi {
      *
      * @see TelegramMessageApi#sendMessage(SendMessageApi)
      */
-    default @NotNull TelegramCoreResponse<Message> sendMessage(@NotNull Integer chatId, @NotNull String text) {
+    default @NotNull TelegramCoreResponse<Message> sendMessage(@NotNull String chatId, @NotNull String text) {
         return sendMessage(new SendMessageApi()
                 .setChatId(chatId)
                 .setText(text)
@@ -204,7 +205,7 @@ public interface TelegramMessageApi {
      *
      * @see TelegramMessageApi#sendSticker(SendStickerApi)
      */
-    default @NotNull TelegramCoreResponse<Message> sendSticker(@NotNull Integer chatId, @NotNull Supplier<?> sticker) {
+    default @NotNull TelegramCoreResponse<Message> sendSticker(@NotNull String chatId, @NotNull Uploading sticker) {
         return sendSticker(new SendStickerApi()
                 .setChatId(chatId)
                 .setSticker(sticker)

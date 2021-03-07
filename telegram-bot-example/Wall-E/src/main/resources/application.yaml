@@ -1,0 +1,5 @@
+telegram:
+  servlet:
+    context-path: /telegram-bot
+  walle:
+    token: ${DEFAULT_TEST_TOKEN_VALUE}

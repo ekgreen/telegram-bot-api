@@ -20,7 +20,7 @@ import com.goodboy.telegram.bot.api.meta.Multipart;
 import com.goodboy.telegram.bot.api.meta.Optional;
 import com.goodboy.telegram.bot.api.meta.TelegramApi;
 import com.goodboy.telegram.bot.api.methods.Api;
-import com.goodboy.telegram.bot.api.platform.upload.Uploading;
+import com.goodboy.telegram.bot.api.platform.entry.Uploading;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

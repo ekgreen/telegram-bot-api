@@ -42,7 +42,7 @@ public class Brownie {
 
     @Webhook
     public @Nonnull Api onUpdate(
-            @ChatId Integer chatId,
+            @ChatId String chatId,
             @Nickname String nickname,
             @MessageText String text
     ) {

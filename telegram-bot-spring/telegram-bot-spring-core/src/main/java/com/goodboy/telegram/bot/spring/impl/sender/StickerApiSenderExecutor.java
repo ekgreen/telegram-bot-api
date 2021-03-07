@@ -18,7 +18,7 @@ package com.goodboy.telegram.bot.spring.impl.sender;
 
 import com.goodboy.telegram.bot.api.User;
 import com.goodboy.telegram.bot.api.methods.TelegramMethodApiDefinition;
-import com.goodboy.telegram.bot.api.methods.message.SendStickerApi;
+import com.goodboy.telegram.bot.api.methods.message.stickers.SendStickerApi;
 import com.goodboy.telegram.bot.http.api.client.TelegramHttpClient;
 import com.goodboy.telegram.bot.http.api.client.context.UpdateContext;
 import com.goodboy.telegram.bot.http.api.client.request.CallMethodImpl;

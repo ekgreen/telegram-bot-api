@@ -34,7 +34,6 @@ import java.util.function.Supplier;
  * @since 1.0.0
  */
 @Data
-@Multipart
 @TelegramApi
 @Accessors(chain = true)
 public class SendAudioApi implements Api {

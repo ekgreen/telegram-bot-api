@@ -37,5 +37,4 @@ import java.lang.annotation.Target;
 @JsonNaming(SnakeCaseStrategy.class)
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface TelegramApi {
-}
+public @interface TelegramApi {}

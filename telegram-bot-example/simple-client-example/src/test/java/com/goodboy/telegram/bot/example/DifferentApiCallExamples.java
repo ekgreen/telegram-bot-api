@@ -36,10 +36,8 @@ package com.goodboy.telegram.bot.example;
  * @author Izmalkov Roman (ekgreen)
  * @since 1.0.0
  */
-public final class DifferentApiCallExamples {
+public final class DifferentApiCallExamples implements BotTest{
 
-    // get token and cache
-    private final static Supplier<String> token = Suppliers.memoize(DifferentApiCallExamples::getToken);
 
     @Test
     public void sendMessageWithApi() {
@@ -94,8 +92,4 @@ public final class DifferentApiCallExamples {
         Assertions.assertEquals("Wall-E in the Space", response.getResult().getFirstName());
     }
 
-    public static @Nonnull String getToken() {
-        // always hide your token from other!
-        return System.getenv("DEFAULT_TEST_TOKEN_VALUE");
-    }
 }

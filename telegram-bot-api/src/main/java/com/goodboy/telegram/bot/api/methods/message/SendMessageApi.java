@@ -16,15 +16,15 @@
 
 package com.goodboy.telegram.bot.api.methods.message;
 
+import com.goodboy.telegram.bot.api.Message;
 import com.goodboy.telegram.bot.api.keyboard.ReplyMarkup;
+import com.goodboy.telegram.bot.api.meta.ApiQuery;
 import com.goodboy.telegram.bot.api.meta.Optional;
 import com.goodboy.telegram.bot.api.meta.TelegramApi;
 import com.goodboy.telegram.bot.api.methods.Api;
 import com.goodboy.telegram.bot.api.methods.TelegramMethodApiDefinition;
 import lombok.Data;
 import lombok.experimental.Accessors;
-
-import javax.annotation.Nonnull;
 
 /**
  * @author Izmalkov Roman (ekgreen)
@@ -33,13 +33,14 @@ import javax.annotation.Nonnull;
 @Data
 @TelegramApi
 @Accessors(chain = true)
+@ApiQuery(method = TelegramMethodApiDefinition.SEND_MESSAGE_CALL_METHOD, provides = Message.class)
 public class SendMessageApi implements Api {
 
     /**
      * Unique identifier for the target chat or username
      * of the target channel (in the format @channelusername)
      */
-    private Integer  chatId;
+    private String chatId;
 
     /**
      * Text of the message to be sent, 1-4096 characters after entities parsing
@@ -49,8 +50,8 @@ public class SendMessageApi implements Api {
     /**
      * Mode for parsing entities in the message text
      *
-     * @see <a href="https://core.telegram.org/bots/api#formatting-options">formatting options</a>
      * @optional
+     * @see <a href="https://core.telegram.org/bots/api#formatting-options">formatting options</a>
      */
     private @Optional String parseMode;
 
@@ -82,4 +83,5 @@ public class SendMessageApi implements Api {
      * @optional
      */
     private @Optional ReplyMarkup replyMarkup;
+
 }

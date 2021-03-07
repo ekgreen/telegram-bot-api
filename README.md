@@ -146,19 +146,19 @@ final TelegramHttpClient client = new OkHttpFilledTelegramHttpClientBuilder()
 * Имплементация всего Telegram API в базовых API сервисах, например как [TelegramMeApi](telegram-bot-api/src/main/java/com/goodboy/telegram/bot/api/methods/me/TelegramMeApi.java);
 * Покрытие клиента unit-тестами;
 * асинхронные запросы;
-* Общий клиент для всего API (под вопросом).
+* Общий клиент для всего API (в разработке).
 
 # Сервер
 
 Gradle:
 ```groovy
-api 'com.github.ekgreen:spring-boot-hook-bot-starter:0.0.1-SNAPSHOT'
+api 'com.github.ekgreen:spring-boot-web-telegram-bot-starter:0.0.1-SNAPSHOT'
 ```
 Maven:
 ```xml
 <dependency>
   <groupId>com.github.ekgreen</groupId>
-  <artifactId>spring-boot-hook-bot-starter</artifactId>
+  <artifactId>spring-boot-web-telegram-bot-starter</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 </dependency>
 ```
@@ -168,10 +168,8 @@ Maven:
 "Как быстро запустить собственного бота". Пример также можно посмотреть в репозитории [тут](telegram-bot-example/brownie/src/main/java/com/goodboy/telegram/bot/example/Brownie.java) 
 и [тут](telegram-bot-example/brownie/src/main/java/com/goodboy/telegram/bot/example/ShowExampleBot.java).
 
-Аннотация __@Bot__ - как контроллер, только для ботов; на самом деле над ней есть и аннотация контроллера: такой
-подход позволяет инкапсулировать всю логику по работе с ботом внутри бота (ведь его потребности не заканчиваются на
-обработке запросов от Telegram, также важно иметь возможность, например, администрировать бота. Сразу отмечу что
-нужно не забывать - у сервлетов (DispatcherServlet и ServletTelegramUpdateApi) разные пути!
+Аннотация __@Bot__ - как контроллер, только для ботов;
+
 ```java
 @Bot(value = "example", path = "/example")
 public class ShowExampleBot {
@@ -233,7 +231,7 @@ public void showCommandExample() {
 | Type | Annotation | Description |
 | :---: | :---: | ---|
 | Update | --- | Основная сущность запроса. Стандартный формат запроса Telegram API |
-| Integer | `@ChatId` | Идентификатор чата из которого пришло сообщение |
+| String | `@ChatId` | Идентификатор чата из которого пришло сообщение |
 | String | `@MessageText` | Текст сообщения |
 | String | `@Nickname` | Никнейм от кого пришел запрос|
 | Message | --- | Сущность сообщения. Стандартный формат запроса Telegram API |
