@@ -168,10 +168,8 @@ Maven:
 "Как быстро запустить собственного бота". Пример также можно посмотреть в репозитории [тут](telegram-bot-example/brownie/src/main/java/com/goodboy/telegram/bot/example/Brownie.java) 
 и [тут](telegram-bot-example/brownie/src/main/java/com/goodboy/telegram/bot/example/ShowExampleBot.java).
 
-Аннотация __@Bot__ - как контроллер, только для ботов; на самом деле над ней есть и аннотация контроллера: такой
-подход позволяет инкапсулировать всю логику по работе с ботом внутри бота (ведь его потребности не заканчиваются на
-обработке запросов от Telegram, также важно иметь возможность, например, администрировать бота. Сразу отмечу что
-нужно не забывать - у сервлетов (DispatcherServlet и ServletTelegramUpdateApi) разные пути!
+Аннотация __@Bot__ - как контроллер, только для ботов;
+
 ```java
 @Bot(value = "example", path = "/example")
 public class ShowExampleBot {
