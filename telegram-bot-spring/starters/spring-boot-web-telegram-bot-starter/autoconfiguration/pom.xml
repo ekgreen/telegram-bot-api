@@ -5,10 +5,10 @@
         <groupId>com.github.ekgreen</groupId>
         <artifactId>telegram-bot-parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
+        <relativePath>../../../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>telegram-bot-spring-core</artifactId>
+    <artifactId>spring-boot-web-telegram-bot-autoconfiguration</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <packaging>jar</packaging>
@@ -17,17 +17,22 @@
         <dependency>
             <groupId>com.github.ekgreen</groupId>
             <artifactId>telegram-bot-http-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <scope>provided</scope>
+            <groupId>com.github.ekgreen</groupId>
+            <artifactId>telegram-bot-ok-http-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.ekgreen</groupId>
+            <artifactId>telegram-bot-spring-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
     </dependencies>
 

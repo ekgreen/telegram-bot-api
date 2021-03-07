@@ -78,8 +78,9 @@
         <telegram.bot.ok.http.client.version>0.0.1-SNAPSHOT</telegram.bot.ok.http.client.version>
         <telegram.bot.spring.version>0.0.1-SNAPSHOT</telegram.bot.spring.version>
         <telegram.bot.spring.core.version>0.0.1-SNAPSHOT</telegram.bot.spring.core.version>
-        <telegram.bot.spring.http.autoconfiguration.version>0.0.1-SNAPSHOT</telegram.bot.spring.http.autoconfiguration.version>
-        <telegram.bot.spring.hook.bot.starter.version>0.0.1-SNAPSHOT</telegram.bot.spring.hook.bot.starter.version>
+        <telegram.bot.spring.web.version>0.0.1-SNAPSHOT</telegram.bot.spring.web.version>
+        <telegram.bot.web.spring.autoconfiguration.version>0.0.1-SNAPSHOT</telegram.bot.web.spring.autoconfiguration.version>
+        <telegram.bot.web.spring.starter.version>0.0.1-SNAPSHOT</telegram.bot.web.spring.starter.version>
 
         <!-- maven plugins -->
         <maven.compile.plugin>3.8.1</maven.compile.plugin>
@@ -92,6 +93,7 @@
         <maven.scm.provider.gitexe.version>1.11.2</maven.scm.provider.gitexe.version>
         <maven.surface.plugin>2.22.2</maven.surface.plugin>
         <maven.jacoco.plugin>0.8.6</maven.jacoco.plugin>
+        <java.servlet.api.version>2.5</java.servlet.api.version>
     </properties>
 
     <dependencyManagement>
@@ -123,14 +125,26 @@
 
             <dependency>
                 <groupId>com.github.ekgreen</groupId>
-                <artifactId>spring-boot-bot-http-autoconfiguration</artifactId>
-                <version>${telegram.bot.spring.http.autoconfiguration.version}</version>
+                <artifactId>telegram-bot-spring-web</artifactId>
+                <version>${telegram.bot.spring.web.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.github.ekgreen</groupId>
-                <artifactId>spring-boot-hook-bot-starter</artifactId>
-                <version>${telegram.bot.spring.hook.bot.starter.version}</version>
+                <artifactId>spring-boot-web-telegram-bot-autoconfiguration</artifactId>
+                <version>${telegram.bot.web.spring.autoconfiguration.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.ekgreen</groupId>
+                <artifactId>spring-boot-web-telegram-bot-starter</artifactId>
+                <version>${telegram.bot.web.spring.starter.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>servlet-api</artifactId>
+                <version>${java.servlet.api.version}</version>
             </dependency>
 
             <dependency>

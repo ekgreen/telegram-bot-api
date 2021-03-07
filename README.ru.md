@@ -152,13 +152,13 @@ final TelegramHttpClient client = new OkHttpFilledTelegramHttpClientBuilder()
 
 Gradle:
 ```groovy
-api 'com.github.ekgreen:spring-boot-hook-bot-starter:0.0.1-SNAPSHOT'
+api 'com.github.ekgreen:spring-boot-web-telegram-bot-starter:0.0.1-SNAPSHOT'
 ```
 Maven:
 ```xml
 <dependency>
   <groupId>com.github.ekgreen</groupId>
-  <artifactId>spring-boot-hook-bot-starter</artifactId>
+  <artifactId>spring-boot-web-telegram-bot-starter</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 </dependency>
 ```

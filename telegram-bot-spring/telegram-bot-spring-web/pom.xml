@@ -8,7 +8,7 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>telegram-bot-spring-core</artifactId>
+    <artifactId>telegram-bot-spring-web</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <packaging>jar</packaging>
@@ -16,7 +16,7 @@
     <dependencies>
         <dependency>
             <groupId>com.github.ekgreen</groupId>
-            <artifactId>telegram-bot-http-api</artifactId>
+            <artifactId>telegram-bot-spring-core</artifactId>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -26,7 +26,12 @@
 
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
+            <artifactId>spring-web</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>

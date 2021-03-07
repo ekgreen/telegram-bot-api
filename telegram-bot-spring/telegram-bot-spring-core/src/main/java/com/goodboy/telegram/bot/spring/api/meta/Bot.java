@@ -21,9 +21,7 @@ import com.goodboy.telegram.bot.spring.api.token.TelegramApiTokenProvider;
 import com.goodboy.telegram.bot.spring.impl.gateway.UniformWeightGatewayRoutingResolver;
 import com.goodboy.telegram.bot.spring.impl.token.SpringEnvironmentTelegramApiTokenProvider;
 import org.springframework.core.annotation.AliasFor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -36,10 +34,9 @@ import java.lang.annotation.Target;
  * @since 1.0.0
  */
 @AmIBot
-@RestController
+@Service
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@RequestMapping
 public @interface Bot {
 
     /**
@@ -47,19 +44,17 @@ public @interface Bot {
      *
      * @return bot name
      */
-    @AliasFor(annotation = RestController.class)
+    @AliasFor(annotation = Service.class)
     String value() default "";
 
     /**
      * @return bot name
      */
-    @AliasFor(value = "value", annotation = RequestMapping.class)
     String[] mapping() default "";
 
     /**
      * @return request mapping
      */
-    @AliasFor(attribute = "value", annotation = RequestMapping.class)
     String[] path() default "";
 
     /**

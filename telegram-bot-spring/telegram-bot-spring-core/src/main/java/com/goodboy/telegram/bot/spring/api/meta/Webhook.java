@@ -16,11 +16,6 @@
 
 package com.goodboy.telegram.bot.spring.api.meta;
 
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.core.annotation.AliasFor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -34,11 +29,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Webhook {
-
-    /**
-     * The HTTP request methods to map
-     */
-    RequestMethod[] method() default {RequestMethod.POST};
 
     /**
      * The commands which supports webhook (part of API Telegram)

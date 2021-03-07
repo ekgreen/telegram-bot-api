@@ -9,6 +9,7 @@
     <modules>
         <module>brownie</module>
         <module>simple-client-example</module>
+        <module>Wall-E</module>
     </modules>
 
     <dependencyManagement>
