@@ -39,7 +39,7 @@ public class ResponseParameters {
      * @optional
      */
     private @Optional
-    Integer migrateToChatId;
+    Long migrateToChatId;
 
     /**
      * In case of exceeding flood control a number of seconds to
@@ -48,5 +48,5 @@ public class ResponseParameters {
      * @optional
      */
     private @Optional
-    Integer retryAfter;
+    Long retryAfter;
 }

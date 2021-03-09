@@ -29,7 +29,7 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 public class TelegramApiUpdateContextImpl implements UpdateContext {
-    private final Integer botId;
+    private final Long botId;
     private final String botName;
     private final String botToken;
     private List<BotCommand> botCommands;

@@ -66,5 +66,5 @@ public class StickerSet {
      *
      * @optional
      */
-    private @Optional PhotoSize thumb;
+    private PhotoSize thumb;
 }

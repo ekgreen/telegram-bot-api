@@ -16,6 +16,8 @@
 
 package com.goodboy.telegram.bot.spring.api.processor;
 
+import com.goodboy.telegram.bot.spring.api.data.BotData;
+
 import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -27,7 +29,7 @@ import java.lang.reflect.Method;
  */
 public interface BotAnnotationProcessor {
 
-    @Nonnull BotMethodProcessorChain createAnnotationProcessor(@Nonnull Method method);
+    @Nonnull BotMethodProcessorChain createAnnotationProcessor(@Nonnull BotData data, @Nonnull Method method);
 
     Class<? extends Annotation> supports();
 }

@@ -50,7 +50,7 @@ public class InlineQuery {
      *
      * @optional
      */
-    private @Optional Location location;
+    private Location location;
 
     /**
      * Text of the query (up to 256 characters)

@@ -16,6 +16,7 @@
 
 package com.goodboy.telegram.bot.http.api.client;
 
+import com.goodboy.telegram.bot.http.api.client.callbacks.TelegramApiCallback;
 import com.goodboy.telegram.bot.http.api.client.request.Request;
 import com.goodboy.telegram.bot.api.response.TelegramCoreResponse;
 import org.jetbrains.annotations.NotNull;
@@ -61,5 +62,5 @@ public interface TelegramHttpClient {
      * @param <T> the response body type
      * @param request the request
      */
-    <T, V> CompletableFuture<TelegramCoreResponse<T>> sendAsync(Request<V> request);
+    <T, V> void sendAsync(@NotNull Request<V> request, @NotNull TelegramApiCallback<T> callback);
 }

@@ -46,7 +46,7 @@ class ChatArgumentProcessorTest {
 
     @ParameterizedTest
     @MethodSource("chatUpdateSource")
-    void setArgument(Integer expected, Update update) {
+    void setArgument(Long expected, Update update) {
         // 1. create processor
         final var processor = new ChatArgumentProcessor();
         // 2. create object array
@@ -69,34 +69,34 @@ class ChatArgumentProcessorTest {
         return Stream.of(
                 Arguments.of(null,null),
                 Arguments.of(
-                        5,
+                        5L,
                         new Update()
                                 .setMessage(new Message()
                                         .setChat(new Chat()
-                                                .setId(5)
+                                                .setId(5L)
                                         )
                                 )
                 ),
                 Arguments.of(
-                        6,
+                        6L,
                         new Update()
                                 .setEditedMessage(new Message()
                                         .setChat(new Chat()
-                                                .setId(6)
+                                                .setId(6L)
                                         )
                                 )
                 ),
                 Arguments.of(
-                        5,
+                        5L,
                         new Update()
                                 .setMessage(new Message()
                                         .setChat(new Chat()
-                                                .setId(5)
+                                                .setId(5L)
                                         )
                                 )
                                 .setEditedMessage(new Message()
                                         .setChat(new Chat()
-                                                .setId(6)
+                                                .setId(6L)
                                         )
                                 )
                 )

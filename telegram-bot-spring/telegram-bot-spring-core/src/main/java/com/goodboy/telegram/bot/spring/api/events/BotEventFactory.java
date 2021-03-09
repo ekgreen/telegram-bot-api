@@ -17,6 +17,7 @@
 package com.goodboy.telegram.bot.spring.api.events;
 
 import com.goodboy.telegram.bot.spring.api.data.BotData;
+import com.goodboy.telegram.bot.spring.api.processor.BotRegistryService;
 
 import javax.annotation.Nonnull;
 
@@ -27,5 +28,7 @@ import javax.annotation.Nonnull;
  */
 public interface BotEventFactory {
 
-    void createOnRegistryEvent(@Nonnull BotData botData);
+    public void createOnRegistryEvent(@Nonnull BotData botData);
+
+    public void createBotsReadyEvent(BotRegistryService botRegistryService);
 }

@@ -79,8 +79,11 @@
         <telegram.bot.spring.version>0.0.1-SNAPSHOT</telegram.bot.spring.version>
         <telegram.bot.spring.core.version>0.0.1-SNAPSHOT</telegram.bot.spring.core.version>
         <telegram.bot.spring.web.version>0.0.1-SNAPSHOT</telegram.bot.spring.web.version>
+        <telegram.bot.spring.grabber.version>0.0.1-SNAPSHOT</telegram.bot.spring.grabber.version>
         <telegram.bot.web.spring.autoconfiguration.version>0.0.1-SNAPSHOT</telegram.bot.web.spring.autoconfiguration.version>
         <telegram.bot.web.spring.starter.version>0.0.1-SNAPSHOT</telegram.bot.web.spring.starter.version>
+        <telegram.bot.grabber.spring.autoconfiguration.version>0.0.1-SNAPSHOT</telegram.bot.grabber.spring.autoconfiguration.version>
+        <telegram.bot.grabber.spring.starter.version>0.0.1-SNAPSHOT</telegram.bot.grabber.spring.starter.version>
 
         <!-- maven plugins -->
         <maven.compile.plugin>3.8.1</maven.compile.plugin>
@@ -131,6 +134,12 @@
 
             <dependency>
                 <groupId>com.github.ekgreen</groupId>
+                <artifactId>telegram-bot-spring-grabber</artifactId>
+                <version>${telegram.bot.spring.grabber.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.ekgreen</groupId>
                 <artifactId>spring-boot-web-telegram-bot-autoconfiguration</artifactId>
                 <version>${telegram.bot.web.spring.autoconfiguration.version}</version>
             </dependency>
@@ -139,6 +148,18 @@
                 <groupId>com.github.ekgreen</groupId>
                 <artifactId>spring-boot-web-telegram-bot-starter</artifactId>
                 <version>${telegram.bot.web.spring.starter.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.ekgreen</groupId>
+                <artifactId>spring-boot-grabber-telegram-bot-autoconfiguration</artifactId>
+                <version>${telegram.bot.grabber.spring.autoconfiguration.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.ekgreen</groupId>
+                <artifactId>spring-boot-grabber-telegram-bot-starter</artifactId>
+                <version>${telegram.bot.grabber.spring.starter.version}</version>
             </dependency>
 
             <dependency>

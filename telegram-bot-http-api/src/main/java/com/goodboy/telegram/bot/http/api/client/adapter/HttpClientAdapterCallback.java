@@ -16,7 +16,9 @@
 
 package com.goodboy.telegram.bot.http.api.client.adapter;
 
+import com.goodboy.telegram.bot.http.api.client.callbacks.Callback;
 import com.goodboy.telegram.bot.http.api.client.request.Request;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -36,7 +38,19 @@ public interface HttpClientAdapterCallback {
      * @param <V>     тип отправляемых данных
      * @return        функция
      */
-    <V> Callback callback(@Nonnull HttpClientAdapter adapter, @Nonnull String url, @Nullable V payload);
+    <V> Call callback(@Nonnull HttpClientAdapter adapter, @Nonnull String url, @Nullable V payload);
+
+    /**
+     * Использует функцию для обработки ответа, используя http-adapter
+     *
+     * @param adapter   адаптер над одним из http-клиентов
+     * @param url       куда отправлять запрос
+     * @param payload   то что требуется отправить
+     * @param callback  функция для обработки ответа
+     * @param <V>       тип отправляемых данных
+     */
+    <V> void callback(@Nonnull HttpClientAdapter adapter, @Nonnull String url, @Nullable V payload , @NotNull Callback callback);
+
 
     /**
      * Тип поддерживаемого запроса

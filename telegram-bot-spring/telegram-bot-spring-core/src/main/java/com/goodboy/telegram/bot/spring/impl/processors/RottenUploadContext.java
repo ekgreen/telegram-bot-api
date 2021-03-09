@@ -33,7 +33,7 @@ public final class RottenUploadContext implements UpdateContext {
 
     public final static UpdateContext INSTANCE = new RottenUploadContext();
 
-    public @NotNull Integer getBotId() {
+    public @NotNull Long getBotId() {
         throw new TelegramApiRuntimeException(TelegramApiExceptionDefinitions.TECHNICAL_EXCEPTION, "rotten context");
     }
 

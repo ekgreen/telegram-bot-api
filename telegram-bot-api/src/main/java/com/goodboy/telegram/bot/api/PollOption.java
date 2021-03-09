@@ -39,5 +39,5 @@ public class PollOption {
     /**
      * Number of users that voted for this option
      */
-    private Integer voterCount;
+    private Long voterCount;
 }

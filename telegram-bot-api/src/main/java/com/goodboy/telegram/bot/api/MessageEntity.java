@@ -46,12 +46,12 @@ public class MessageEntity {
     /**
      * Offset in UTF-16 code units to the start of the entity
      */
-    private Integer offset;
+    private Long offset;
 
     /**
      * 	Length of the entity in UTF-16 code units
      */
-    private Integer length;
+    private Long length;
 
     /**
      * For “text_link” only, url that will be opened after user taps on the text
@@ -66,12 +66,12 @@ public class MessageEntity {
      *
      *  @optional
      */
-    private @Optional User user;
+    private User user;
 
     /**
      * For “pre” only, the programming language of the entity text
      *
      * @optional
      */
-    private @Optional String language;
+    private String language;
 }

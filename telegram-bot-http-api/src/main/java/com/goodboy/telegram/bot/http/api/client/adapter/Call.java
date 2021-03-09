@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package com.goodboy.telegram.bot.spring.api.events;
+package com.goodboy.telegram.bot.http.api.client.adapter;
 
-import com.goodboy.telegram.bot.spring.api.data.BotData;
+import com.goodboy.telegram.bot.http.api.client.response.TelegramHttpResponse;
 
-import javax.annotation.Nonnull;
+import java.util.function.Supplier;
 
 /**
- *
  * @author Izmalkov Roman (ekgreen)
  * @since 1.0.0
  */
-public interface OnBotRegistry {
-
-    void onRegistry(@Nonnull BotData data);
-}
+public interface Call extends Supplier<TelegramHttpResponse> {}

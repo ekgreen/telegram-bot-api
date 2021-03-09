@@ -64,7 +64,7 @@ public class CallbackQuery {
      *
      * @optional
      */
-    private @Optional String inlineMessageId;
+    private String inlineMessageId;
 
     /**
      * Global identifier, uniquely corresponding to the chat to which the message with the callback button was sent.
@@ -77,12 +77,12 @@ public class CallbackQuery {
      *
      * @optional
      */
-    private @Optional String data;
+    private String data;
 
     /**
      * Short name of a Game to be returned, serves as the unique identifier for the game
      *
      * @optional
      */
-    private @Optional String gameShortName;
+    private String gameShortName;
 }

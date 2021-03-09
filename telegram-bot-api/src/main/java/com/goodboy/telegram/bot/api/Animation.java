@@ -49,17 +49,17 @@ public class Animation{
     /**
      * 	Video width as defined by sender
      */
-    private Integer width;
+    private Long width;
 
     /**
      * 	Video height as defined by sender
      */
-    private Integer height;
+    private Long height;
 
     /**
      * Duration of the video in seconds as defined by sender
      */
-    private Integer duration;
+    private Long duration;
 
     /**
      * Animation thumbnail as defined by sender
@@ -74,20 +74,20 @@ public class Animation{
      *
      * @optional
      */
-    private @Optional String fileName;
+    private String fileName;
 
     /**
      *  MIME type of the file as defined by sender
      *
      * @optional
      */
-    private @Optional String mimeType;
+    private String mimeType;
 
     /**
      * File size
      *
      * @optional
      */
-    private @Optional Integer fileSize;
+    private Long fileSize;
 
 }

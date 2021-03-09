@@ -20,6 +20,7 @@ import com.goodboy.telegram.bot.api.meta.Multipart;
 import com.goodboy.telegram.bot.api.meta.Optional;
 import com.goodboy.telegram.bot.api.meta.TelegramApi;
 import com.goodboy.telegram.bot.api.methods.Api;
+import com.goodboy.telegram.bot.api.methods.updates.UpdateType;
 import com.goodboy.telegram.bot.api.platform.entry.Uploading;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -46,7 +47,7 @@ public class SetWebhookApi implements Api {
      *
      * @optional
      */
-    private @Optional Uploading certificate;
+    private Uploading certificate;
 
     /**
      * Maximum allowed number of simultaneous HTTPS connections to the webhook for update delivery, 1-100.
@@ -55,7 +56,7 @@ public class SetWebhookApi implements Api {
      *
      * @optional
      */
-    private @Optional Integer maxConnections;
+    private Long maxConnections;
 
     /**
      * A JSON-serialized list of the update types you want your bot to receive. For example, specify [“message”,
@@ -68,5 +69,5 @@ public class SetWebhookApi implements Api {
      *
      * @optional
      */
-    private @Optional List<String> allowedUpdates;
+    private List<UpdateType> allowedUpdates;
 }

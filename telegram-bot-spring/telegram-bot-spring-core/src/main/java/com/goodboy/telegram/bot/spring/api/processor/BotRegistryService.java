@@ -54,4 +54,11 @@ public interface BotRegistryService {
      * @return данные о боте
      */
     List<BotData> getBotDataByType(@Nonnull Class<?> botType);
+
+    /**
+     * Получить данные о всех зарегистрированных ботах
+     *
+     * @return данные о боте
+     */
+    List<BotData> getAll();
 }

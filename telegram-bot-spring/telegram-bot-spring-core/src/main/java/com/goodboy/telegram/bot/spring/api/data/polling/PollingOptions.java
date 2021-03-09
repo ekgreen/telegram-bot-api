@@ -14,14 +14,24 @@
  * limitations under the License.
  */
 
-package com.goodboy.telegram.bot.http.api.client.adapter;
+package com.goodboy.telegram.bot.spring.api.data.polling;
 
-import com.goodboy.telegram.bot.http.api.client.response.TelegramHttpResponse;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
-import java.util.function.Supplier;
+import javax.annotation.Nonnull;
+import java.util.List;
 
 /**
+ *
  * @author Izmalkov Roman (ekgreen)
  * @since 1.0.0
  */
-public interface Callback extends Supplier<TelegramHttpResponse> {}
+@Data
+@Accessors(chain = true)
+public class PollingOptions {
+
+
+
+
+}

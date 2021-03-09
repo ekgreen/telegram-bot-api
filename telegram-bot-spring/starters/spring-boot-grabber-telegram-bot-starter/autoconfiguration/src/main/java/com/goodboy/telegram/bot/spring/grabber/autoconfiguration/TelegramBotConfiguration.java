@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.goodboy.telegram.bot.spring.autoconfiguration;
+package com.goodboy.telegram.bot.spring.grabber.autoconfiguration;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.goodboy.telegram.bot.api.methods.action.TelegramChatActionApi;
 import com.goodboy.telegram.bot.http.api.client.BaseTelegramHttpClient;
 import com.goodboy.telegram.bot.http.api.client.TelegramHttpClient;
 import com.goodboy.telegram.bot.http.api.client.adapter.HttpClientAdapter;
@@ -44,15 +45,19 @@ import com.goodboy.telegram.bot.http.api.client.handlers.HttpFileBasedHandler;
 import com.goodboy.telegram.bot.http.api.client.handlers.HttpRequestTypeBasedHandler;
 import com.goodboy.telegram.bot.http.api.client.token.ContextBasedTokenResolver;
 import com.goodboy.telegram.bot.http.api.client.token.TelegramApiTokenResolver;
+import com.goodboy.telegram.bot.spring.api.processor.HeavyweightScheduler;
+import com.goodboy.telegram.bot.spring.impl.processors.NotificationHeavyweightScheduler;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.context.annotation.Primary;
 
 import javax.annotation.Nonnull;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  *
@@ -60,13 +65,29 @@ import java.util.List;
  * @since 1.0.0
  */
 @Configuration
-@EnableScheduling
 @ComponentScan("com.goodboy.telegram.bot.spring")
 public class TelegramBotConfiguration {
 
-    @Bean @ConditionalOnMissingBean
+    @Bean @Primary
     public TelegramHttpClient telegramHttpClient(
-            @Nonnull HttpClientAdapter adapter,
+            @Nonnull @Qualifier("httpClientAdapter") HttpClientAdapter adapter,
+            @Nonnull TelegramApiConfiguration configuration,
+            @Nonnull List<HttpClientAdapterCallback> mappers,
+            @Nonnull List<HttpRequestTypeBasedHandler> handlers,
+            @Nonnull TelegramApiTokenResolver tokenResolver
+    ) {
+        return new BaseTelegramHttpClient(
+                adapter,
+                configuration,
+                mappers,
+                handlers,
+                tokenResolver
+        );
+    }
+
+    @Bean
+    public TelegramHttpClient longPollingTelegramHttpClient(
+            @Nonnull @Qualifier("httpLongPollingClientAdapter") HttpClientAdapter adapter,
             @Nonnull TelegramApiConfiguration configuration,
             @Nonnull List<HttpClientAdapterCallback> mappers,
             @Nonnull List<HttpRequestTypeBasedHandler> handlers,
@@ -119,6 +140,11 @@ public class TelegramBotConfiguration {
     @Bean @ConditionalOnMissingBean
     public TelegramApiContextHandler threadLocalTelegramApiContextResolver() {
         return new TelegramApiThreadLocalContextHandlerImpl();
+    }
+
+    @Bean
+    public HeavyweightScheduler heavyweightScheduler(TelegramChatActionApi api) {
+        return new NotificationHeavyweightScheduler(new ConcurrentLinkedQueue<>(), api);
     }
 
     @Bean @ConditionalOnMissingBean

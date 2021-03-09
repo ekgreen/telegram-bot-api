@@ -16,6 +16,7 @@
 
 package com.goodboy.telegram.bot.spring.impl.processors;
 
+import com.goodboy.telegram.bot.spring.api.data.BotData;
 import com.goodboy.telegram.bot.spring.api.meta.Infrastructure;
 import com.goodboy.telegram.bot.spring.api.processor.BotAnnotationProcessor;
 import com.goodboy.telegram.bot.spring.api.processor.BotAnnotationProcessorFactory;
@@ -85,8 +86,8 @@ public class SimpleBotAnnotationProcessorFactory implements BotAnnotationProcess
     }
 
     public @Nonnull
-    BotMethodProcessorChain createAnnotationProcessor(@Nonnull Method method) {
-        return resolver.apply(method).createAnnotationProcessor(method);
+    BotMethodProcessorChain createAnnotationProcessor(@Nonnull BotData botData, @Nonnull Method method) {
+        return resolver.apply(method).createAnnotationProcessor(botData, method);
     }
 
     public boolean supports(Method method) {

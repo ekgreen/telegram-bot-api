@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.github.ekgreen</groupId>
-            <artifactId>spring-boot-web-telegram-bot-starter</artifactId>
+            <artifactId>spring-boot-grabber-telegram-bot-starter</artifactId>
         </dependency>
     </dependencies>
 </project>

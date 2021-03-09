@@ -37,7 +37,7 @@ public class User {
     /**
      * Unique identifier for this user or bot
      */
-    private Integer id;
+    private Long id;
 
     /**
      * True, if this user is a bot
@@ -60,7 +60,7 @@ public class User {
      *
      * @optional
      */
-    private @Optional String username;
+    private String username;
 
     /**
      *  IETF language tag of the user's language
@@ -68,27 +68,27 @@ public class User {
      * @see <a href="https://en.wikipedia.org/wiki/IETF_language_tag">IETF</a>
      * @optional
      */
-    private @Optional String languageCode;
+    private String languageCode;
 
     /**
      * True, if the bot can be invited to groups. Returned only in getMe
      *
      * @optional
      */
-    private @Optional Boolean canJoinGroups;
+    private Boolean canJoinGroups;
 
     /**
      * True, if privacy mode is disabled for the bot. Returned only in getMe
      *
      * @optional
      */
-    private @Optional Boolean canReadAllGroupMessages;
+    private Boolean canReadAllGroupMessages;
 
     /**
      * True, if the bot supports inline queries. Returned only in getMe
      *
      * @optional
      */
-    private @Optional Boolean supportsInlineQueries;
+    private Boolean supportsInlineQueries;
 
 }

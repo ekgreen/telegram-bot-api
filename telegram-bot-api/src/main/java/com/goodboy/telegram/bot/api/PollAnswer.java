@@ -48,5 +48,5 @@ public class PollAnswer {
     /**
      * 0-based identifiers of answer options, chosen by the user. May be empty if the user retracted their vote.
      */
-    private List<Integer> optionIds;
+    private List<Long> optionIds;
 }

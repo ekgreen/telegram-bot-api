@@ -40,5 +40,5 @@ public class Dice {
     /**
      * Value of the dice, 1-6 for “🎲” and “🎯” base emoji, 1-5 for “🏀” base emoji
      */
-    private Integer value;
+    private Long value;
 }

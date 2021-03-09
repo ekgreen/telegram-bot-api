@@ -50,12 +50,12 @@ public class Sticker {
     /**
      * 	Video width as defined by sender
      */
-    private Integer width;
+    private Long width;
 
     /**
      * 	Video height as defined by sender
      */
-    private Integer height;
+    private Long height;
 
     /**
      * True, if the sticker is animated
@@ -75,21 +75,21 @@ public class Sticker {
      *
      * @optional
      */
-    private @Optional String setName;
+    private String setName;
 
     /**
      * For mask stickers, the position where the mask should be placed
      *
      * @optional
      */
-    private @Optional MaskPosition maskPosition;
+    private MaskPosition maskPosition;
 
     /**
      * File size
      *
      * @optional
      */
-    private @Optional Integer fileSize;
+    private Long fileSize;
 
 
     /**
@@ -97,5 +97,5 @@ public class Sticker {
      *
      * @optional
      */
-    private @Optional PhotoSize thumb;
+    private PhotoSize thumb;
 }

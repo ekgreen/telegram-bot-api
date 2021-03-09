@@ -18,6 +18,7 @@ package com.goodboy.telegram.bot.spring.impl.processors;
 
 import com.goodboy.telegram.bot.http.api.client.context.TelegramApiContextHandler;
 import com.goodboy.telegram.bot.spring.api.data.BotData;
+import com.goodboy.telegram.bot.spring.api.events.BotEventFactory;
 import com.goodboy.telegram.bot.spring.api.meta.Bot;
 import com.goodboy.telegram.bot.spring.api.meta.Infrastructure;
 import com.goodboy.telegram.bot.spring.api.processor.*;
@@ -34,12 +35,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.lang.Nullable;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
 /**
  * @author Izmalkov Roman (ekgreen)
@@ -54,6 +60,7 @@ public class BotBehaviourBeanPostProcessor implements BeanPostProcessor {
 
     private final TelegramApiContextHandler apiContextHandler;
     private final BotRegistryService botRegistryService;
+    private final BotEventFactory eventFactory;
 
     private final BotArgumentProcessorFactory botArgumentProcessorFactory;
     private final BotAnnotationProcessorFactory botAnnotationProcessorFactory;
@@ -85,7 +92,7 @@ public class BotBehaviourBeanPostProcessor implements BeanPostProcessor {
             // 2. Должны получить метаинформацию о боте
             final BotMetadata bot = bots.get(beanName);
 
-            // 2.1 Получим сразу все даннные, чтобы 50 раз не обращаться к метаданным
+            // 2.1 Получим сразу все данные, чтобы 50 раз не обращаться к метаданным
             final Class<?> controllerType = bot.getNativeBotType();
             final Bot annotation = bot.getAnnotation();
 
@@ -95,15 +102,17 @@ public class BotBehaviourBeanPostProcessor implements BeanPostProcessor {
             // 4. Инициализируем описание для каждого желанного метода
             final Map<Method, BotMethodProcessorChain> processors = createCallMethodDefinitions(controllerType, annotation, botData);
 
-            // 5. Создаем proxy над контроллером, исопльзуя cglib
+            // 5. Создаем proxy над контроллером, используя cglib
             Enhancer enhancer = new Enhancer();
             enhancer.setSuperclass(controllerType);
             enhancer.setCallback((MethodInterceptor) (o, method, args, methodProxy) -> {
                 BotMethodProcessorChain holder;
 
                 // handled by our enhancer
-                if ((holder = processors.get(method)) != null)
-                    return holder.invoke(bean, method, args);
+                if ((holder = processors.get(method)) != null) {
+                    holder.invoke(bean, method, args);
+                    return null; // as a part of bot api contract, there is no response body for calling client
+                }
 
                 // skip
                 return method.invoke(bean, args);
@@ -123,7 +132,7 @@ public class BotBehaviourBeanPostProcessor implements BeanPostProcessor {
             if (botAnnotationProcessorFactory.supports(method)) {
 
                 // 1. Процессор предоставляет оригинальный механизм для исполнения текущего метода
-                final BotMethodProcessorChain origin = botAnnotationProcessorFactory.createAnnotationProcessor(method);
+                final BotMethodProcessorChain origin = botAnnotationProcessorFactory.createAnnotationProcessor(botData, method);
 
                 // 2. Создадим копию доступных процессоров, добавим в них технические, создаваемые
                 final var copy = new ArrayList<>(this.botMethodProcessors);
@@ -163,6 +172,11 @@ public class BotBehaviourBeanPostProcessor implements BeanPostProcessor {
         }
 
         return holders;
+    }
+
+    @EventListener(ContextRefreshedEvent.class)
+    public void registeredBotNotification() {
+        eventFactory.createBotsReadyEvent(botRegistryService);
     }
 
     @RequiredArgsConstructor

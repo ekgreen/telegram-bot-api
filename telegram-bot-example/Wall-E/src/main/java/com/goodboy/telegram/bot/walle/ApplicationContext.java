@@ -16,8 +16,14 @@
 
 package com.goodboy.telegram.bot.walle;
 
+import com.goodboy.telegram.bot.api.methods.action.TelegramChatActionApi;
+import com.goodboy.telegram.bot.http.api.client.TelegramHttpClient;
+import com.goodboy.telegram.bot.http.api.method.action.TelegramChatActionImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author Izmalkov Roman (ekgreen)
@@ -29,4 +35,5 @@ public class ApplicationContext {
     public static void main(String[] args) {
         SpringApplication.run(ApplicationContext.class, args);
     }
+
 }

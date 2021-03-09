@@ -46,10 +46,10 @@ public class PassportFile {
     /**
      * File size
      */
-    private Integer fileSize;
+    private Long fileSize;
 
     /**
      * 	Unix time when the file was uploaded
      */
-    private Integer fileData;
+    private Long fileData;
 }

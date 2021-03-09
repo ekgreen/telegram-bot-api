@@ -32,7 +32,7 @@ public interface UpdateContext {
     /**
      * @return идентификатор бота в телеграм
      */
-    @Nonnull Integer getBotId();
+    @Nonnull Long getBotId();
 
     /**
      * @return название обрабатывающего бота

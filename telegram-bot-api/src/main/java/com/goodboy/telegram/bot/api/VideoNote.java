@@ -50,12 +50,12 @@ public class VideoNote {
     /**
      * Video width and height (diameter of the video message) as defined by sender
      */
-    private Integer length;
+    private Long length;
 
     /**
      * Duration of the audio in seconds as defined by sender
      */
-    private Integer duration;
+    private Long duration;
 
     /**
      * File size
@@ -63,7 +63,7 @@ public class VideoNote {
      * @optional
      */
     private @Optional
-    Integer fileSize;
+    Long fileSize;
 
 
     /**
@@ -71,5 +71,5 @@ public class VideoNote {
      *
      * @optional
      */
-    private @Optional PhotoSize thumb;
+    private PhotoSize thumb;
 }

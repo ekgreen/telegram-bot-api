@@ -16,6 +16,8 @@
 
 package com.goodboy.telegram.bot.api.methods;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 
 /**

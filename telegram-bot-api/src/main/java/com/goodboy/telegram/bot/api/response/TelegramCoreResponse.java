@@ -43,7 +43,7 @@ public class TelegramCoreResponse<T> {
      * @optional
      */
     private @Optional
-    Integer errorCode;
+    Long errorCode;
 
     /**
      * Description of request action
@@ -74,7 +74,7 @@ public class TelegramCoreResponse<T> {
      *
      * @return optional
      */
-    public java.util.Optional<T> get() {
+    public java.util.Optional<T> optional() {
         return java.util.Optional.ofNullable(isOk() ? result : null);
     }
 
@@ -84,7 +84,7 @@ public class TelegramCoreResponse<T> {
      * @return optional
      */
     public T orElseGet(Supplier<T> handler) {
-        return get().orElseGet(handler);
+        return optional().orElseGet(handler);
     }
 
     /**

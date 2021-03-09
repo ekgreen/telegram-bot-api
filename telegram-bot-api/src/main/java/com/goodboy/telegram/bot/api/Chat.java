@@ -39,7 +39,7 @@ public class Chat {
      * may have difficulty/silent defects in interpreting it. But it is smaller than 52 bits, so a signed 64
      * bit integer or double-precision float type are safe for storing this identifier.
      */
-    private Integer id;
+    private Long id;
 
     /**
      * Type of chat, can be either “private”, “group”, “supergroup” or “channel”
@@ -59,35 +59,35 @@ public class Chat {
      *
      * @optional
      */
-    private @Optional String username;
+    private String username;
 
     /**
      * First name of the other party in a private chat
      *
      * @optional
      */
-    private @Optional String firstName;
+    private String firstName;
 
     /**
      * Last name of the other party in a private chat
      *
      * @optional
      */
-    private @Optional String lastName;
+    private String lastName;
 
     /**
      * Chat photo. Returned only in getChat
      *
      * @optional
      */
-    private @Optional ChatPhoto photo;
+    private ChatPhoto photo;
 
     /**
      * Description, for groups, supergroups and channel chats. Returned only in getChat
      *
      * @optional
      */
-    private @Optional String description;
+    private String description;
 
     /**
      * Chat invite link, for groups, supergroups and channel chats. Each administrator in a chat generates their
@@ -95,21 +95,21 @@ public class Chat {
      *
      * @optional
      */
-    private @Optional String inviteLink;
+    private String inviteLink;
 
     /**
      *  Pinned message, for groups, supergroups and channels. Returned only in getChat
      *
      * @optional
      */
-    private @Optional Message pinnedMessage;
+    private Message pinnedMessage;
 
     /**
      * Default chat member permissions, for groups and supergroups. Returned only in getChat
      *
      * @optional
      */
-    private @Optional ChatPermissions permissions;
+    private ChatPermissions permissions;
 
     /**
      * For supergroups, the minimum allowed delay between consecutive messages sent by each unpriviledged user.
@@ -117,20 +117,20 @@ public class Chat {
      *
      * @optional
      */
-    private @Optional Integer slowModeDelay;
+    private Long slowModeDelay;
 
     /**
      * For supergroups, name of group sticker set. Returned only in getChat
      *
      * @optional
      */
-    private @Optional String stickerSetName;
+    private String stickerSetName;
 
     /**
      * True, if the bot can change the group sticker set. Returned only in getChat
      *
      * @optional
      */
-    private @Optional Boolean canSetStickerSet;
+    private Boolean canSetStickerSet;
 
 }

@@ -53,7 +53,7 @@ public class KeyboardButton {
      *
      * @optional
      */
-    private @Optional Boolean requestContact;
+    private Boolean requestContact;
 
     /**
      * If True, the user's current location will be sent when the button is pressed.
@@ -61,7 +61,7 @@ public class KeyboardButton {
      *
      * @optional
      */
-    private @Optional Boolean requestLocation;
+    private Boolean requestLocation;
 
     /**
      * If specified, the user will be asked to create a poll and send it to
@@ -69,5 +69,5 @@ public class KeyboardButton {
      *
      * @optional
      */
-    private @Optional KeyboardButtonPollType requestPoll;
+    private KeyboardButtonPollType requestPoll;
 }

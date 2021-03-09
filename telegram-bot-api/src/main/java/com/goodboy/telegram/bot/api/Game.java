@@ -67,12 +67,12 @@ public class Game {
      *
      * @optional
      */
-    private @Optional List<MessageEntity> textEntities;
+    private List<MessageEntity> textEntities;
 
     /**
      * Animation that will be displayed in the game message in chats. Upload via BotFather
      *
      * @optional
      */
-    private @Optional Animation animation;
+    private Animation animation;
 }

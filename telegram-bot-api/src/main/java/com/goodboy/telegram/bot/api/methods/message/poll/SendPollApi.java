@@ -54,7 +54,7 @@ public class SendPollApi implements Api {
      *
      * @optional
      */
-    private @Optional String caption;
+    private String caption;
 
     /**
      * Mode for parsing entities in the message text
@@ -62,28 +62,28 @@ public class SendPollApi implements Api {
      * @see <a href="https://core.telegram.org/bots/api#formatting-options">formatting options</a>
      * @optional
      */
-    private @Optional String parseMode;
+    private String parseMode;
 
     /**
      * Duration of the audio in seconds
      *
      * @optional
      */
-    private @Optional Long duration;
+    private Long duration;
 
     /**
      * Performer
      *
      * @optional
      */
-    private @Optional String performer;
+    private String performer;
 
     /**
      * Track name
      *
      * @optional
      */
-    private @Optional String title;
+    private String title;
 
     /**
      * Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side.
@@ -93,21 +93,21 @@ public class SendPollApi implements Api {
      * if the thumbnail was uploaded using multipart/form-data under <file_attach_name>.
      * @optional
      */
-    private @Optional @Upload Supplier<?> thumb;
+    private @Upload Supplier<?> thumb;
 
     /**
      * Sends the message silently. Users will receive a notification with no sound
      *
      * @optional
      */
-    private @Optional Boolean disableNotification;
+    private Boolean disableNotification;
 
     /**
      * If the message is a reply, ID of the original message
      *
      * @optional
      */
-    private @Optional Integer replyToMessageId;
+    private Long replyToMessageId;
 
     /**
      * Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard,
@@ -115,5 +115,5 @@ public class SendPollApi implements Api {
      *
      * @optional
      */
-    private @Optional ReplyMarkup replyMarkup;
+    private ReplyMarkup replyMarkup;
 }

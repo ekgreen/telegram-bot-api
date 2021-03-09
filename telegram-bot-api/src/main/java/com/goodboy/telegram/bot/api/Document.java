@@ -50,7 +50,7 @@ public class Document {
     /**
      * Duration of the audio in seconds as defined by sender
      */
-    private Integer duration;
+    private Long duration;
 
     /**
      * Original filename as defined by sender
@@ -65,7 +65,7 @@ public class Document {
      *
      * @optional
      */
-    private @Optional String mimeType;
+    private String mimeType;
 
 
     /**
@@ -73,7 +73,7 @@ public class Document {
      *
      * @optional
      */
-    private @Optional Integer fileSize;
+    private Long fileSize;
 
 
     /**
@@ -81,5 +81,5 @@ public class Document {
      *
      * @optional
      */
-    private @Optional PhotoSize thumb;
+    private PhotoSize thumb;
 }

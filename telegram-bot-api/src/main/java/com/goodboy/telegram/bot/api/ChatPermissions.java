@@ -45,14 +45,14 @@ public class ChatPermissions {
      *
      * @optional
      */
-    private @Optional Boolean canSendMediaMessages;
+    private Boolean canSendMediaMessages;
 
     /**
      * True, if the user is allowed to send polls, implies can_send_messages
      *
      * @optional
      */
-    private @Optional Boolean canSendPolls;
+    private Boolean canSendPolls;
 
     /**
      * True, if the user is allowed to send animations, games, stickers and use inline bots,
@@ -60,14 +60,14 @@ public class ChatPermissions {
      *
      * @optional
      */
-    private @Optional Boolean canSendOtherMessages;
+    private Boolean canSendOtherMessages;
 
     /**
      *  True, if the user is allowed to add web page previews to their messages, implies can_send_media_messages
      *
      * @optional
      */
-    private @Optional Boolean canAddWebPagePreviews;
+    private Boolean canAddWebPagePreviews;
 
     /**
      * True, if the user is allowed to change the chat title, photo and other settings. Ignored in @TelegramApi
@@ -77,14 +77,14 @@ public supergroups
      *
      * @optional
      */
-    private @Optional Boolean canChangeInfo;
+    private Boolean canChangeInfo;
 
     /**
      * True, if the user is allowed to invite new users to the chat
      *
      * @optional
      */
-    private @Optional Boolean canInviteUsers;
+    private Boolean canInviteUsers;
 
     /**
      * True, if the user is allowed to pin messages. Ignored in @TelegramApi
@@ -94,5 +94,5 @@ public supergroups
      *
      * @optional
      */
-    private @Optional Boolean canPinMessages;
+    private Boolean canPinMessages;
 }

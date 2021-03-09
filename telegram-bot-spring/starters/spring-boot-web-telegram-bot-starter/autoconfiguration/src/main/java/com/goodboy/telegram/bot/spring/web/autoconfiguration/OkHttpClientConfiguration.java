@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.goodboy.telegram.bot.spring.autoconfiguration;
+package com.goodboy.telegram.bot.spring.web.autoconfiguration;
 
 import com.goodboy.telegram.bot.http.api.client.adapter.HttpClientAdapter;
 import com.goodboy.telegram.bot.http.client.OkHttpClientAdapter;

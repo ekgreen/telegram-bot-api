@@ -19,7 +19,7 @@ package com.goodboy.telegram.bot.spring.web.servlet;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goodboy.telegram.bot.api.Update;
 import com.goodboy.telegram.bot.spring.api.data.BotData;
-import com.goodboy.telegram.bot.spring.api.events.OnBotRegistry;
+import com.goodboy.telegram.bot.spring.api.events.BotRegisteredEvent;
 import com.goodboy.telegram.bot.spring.api.gateway.Gateway;
 import com.goodboy.telegram.bot.spring.api.meta.Infrastructure;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.event.EventListener;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -36,8 +37,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.goodboy.telegram.bot.spring.web.servlet.ServletTelegramApi.GET_UPDATE_TELEGRAM_API_SERVLET;
 
 
 /**
@@ -55,9 +54,9 @@ import static com.goodboy.telegram.bot.spring.web.servlet.ServletTelegramApi.GET
  */
 @Slf4j
 @Infrastructure
-@ServletTelegramApi(GET_UPDATE_TELEGRAM_API_SERVLET)
+@ServletTelegramApi(ServletTelegramApi.GET_UPDATE_TELEGRAM_API_SERVLET)
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
-public class ServletTelegramUpdateApi extends HttpServlet implements OnBotRegistry {
+public class ServletTelegramUpdateApi extends HttpServlet {
 
     // simple rout from path to bot name
     private final Map<String, String> routes = new HashMap<>();
@@ -102,8 +101,10 @@ public class ServletTelegramUpdateApi extends HttpServlet implements OnBotRegist
     }
 
 
-    @Override
-    public void onRegistry(@NotNull BotData data) {
+    @EventListener(BotRegisteredEvent.class)
+    public void onRegistry(@NotNull BotRegisteredEvent event) {
+        final BotData data = event.getBotData();
+
         final String botName = data.getName();
         final String[] paths = data.getPaths();
 

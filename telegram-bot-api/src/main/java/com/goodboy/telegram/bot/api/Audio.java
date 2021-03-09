@@ -50,14 +50,14 @@ public class Audio {
     /**
      * Duration of the audio in seconds as defined by sender
      */
-    private Integer duration;
+    private Long duration;
 
     /**
      * Performer of the audio as defined by sender or by audio tags
      *
      * @optional
      */
-    private @Optional String performer;
+    private String performer;
 
 
     /**
@@ -65,7 +65,7 @@ public class Audio {
      *
      * @optional
      */
-    private @Optional String title;
+    private String title;
 
 
     /**
@@ -73,7 +73,7 @@ public class Audio {
      *
      * @optional
      */
-    private @Optional String mimeType;
+    private String mimeType;
 
 
     /**
@@ -81,7 +81,7 @@ public class Audio {
      *
      * @optional
      */
-    private @Optional Integer fileSize;
+    private Long fileSize;
 
 
     /**
@@ -89,5 +89,5 @@ public class Audio {
      *
      * @optional
      */
-    private @Optional PhotoSize thumb;
+    private PhotoSize thumb;
 }

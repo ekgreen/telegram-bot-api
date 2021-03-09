@@ -64,5 +64,5 @@ public class ForceReply implements ReplyMarkup {
      *
      * @optional
      */
-    private @Optional Boolean selective;
+    private Boolean selective;
 }

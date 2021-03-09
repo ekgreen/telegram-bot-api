@@ -17,13 +17,13 @@
 package com.goodboy.telegram.bot.spring.impl.gateway;
 
 import com.goodboy.telegram.bot.api.Update;
-import com.goodboy.telegram.bot.http.api.client.response.UpdateProvider;
 import com.goodboy.telegram.bot.spring.api.data.BotData;
-import com.goodboy.telegram.bot.spring.api.events.OnBotRegistry;
+import com.goodboy.telegram.bot.spring.api.events.BotRegisteredEvent;
 import com.goodboy.telegram.bot.spring.api.gateway.GatewayFilter;
 import com.goodboy.telegram.bot.spring.api.gateway.GatewayFilterChain;
 import com.goodboy.telegram.bot.spring.api.meta.Infrastructure;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.context.event.EventListener;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -34,7 +34,7 @@ import java.util.Map;
  * @since 1.0.0
  */
 @Infrastructure
-public class GatewaySetUpdateArgument implements GatewayFilter, OnBotRegistry {
+public class GatewayUpdateArgumentBinder implements GatewayFilter {
 
     // default position = no position
     private final static int DEFAULT_UPDATE_POSITION = -1;
@@ -52,8 +52,10 @@ public class GatewaySetUpdateArgument implements GatewayFilter, OnBotRegistry {
         return chain.invoke(proxy, method, args, update);
     }
 
-    @Override
-    public void onRegistry(@NotNull BotData data) {
+    @EventListener(BotRegisteredEvent.class)
+    public void onRegistry(@NotNull BotRegisteredEvent event) {
+        final BotData data = event.getBotData();
+
         final Class<?> originBotType = data.getOriginBotType();
 
         final Method[] declaredMethods = originBotType.getDeclaredMethods();

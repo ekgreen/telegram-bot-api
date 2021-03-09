@@ -57,5 +57,5 @@ public class ReplyKeyboardRemove implements ReplyMarkup {
      *
      * @optional
      */
-    private @Optional Boolean selective;
+    private Boolean selective;
 }

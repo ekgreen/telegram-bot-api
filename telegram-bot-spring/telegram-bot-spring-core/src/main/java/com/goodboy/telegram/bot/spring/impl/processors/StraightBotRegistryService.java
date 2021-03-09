@@ -39,12 +39,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 
 import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
+
+import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
 /**
  *
@@ -63,7 +68,6 @@ public class StraightBotRegistryService implements BotRegistryService {
     // http client for grab data from api
     private final TelegramHttpClient client;
     // section and lock for concurrency modification def
-    private final ReadWriteLock lock = new ReentrantReadWriteLock();
     private final Map<String, BotData> botsByName = new HashMap<>();
 
     public @NotNull BotData registryBot(String beanName, Class<?> botType) {
@@ -74,11 +78,7 @@ public class StraightBotRegistryService implements BotRegistryService {
 
         final BotData botData = transformAnnotationToData(beanName, botType);
 
-        lock.writeLock().lock();
         botsByName.put(beanName, botData);
-        lock.writeLock().unlock();
-
-        eventFactory.createOnRegistryEvent(botData);
 
         return botData;
     }
@@ -86,9 +86,7 @@ public class StraightBotRegistryService implements BotRegistryService {
     public Optional<BotData> getBotDataByBeanName(@NotNull String beanName) {
         BotData data = null;
 
-        lock.readLock().lock();
         data = botsByName.get(beanName);
-        lock.readLock().unlock();
 
         return Optional.ofNullable(data);
     }
@@ -96,11 +94,14 @@ public class StraightBotRegistryService implements BotRegistryService {
     public List<BotData> getBotDataByType(@NotNull Class<?> botType) {
         final List<BotData> list;
 
-        lock.readLock().lock();
         list = botsByName.values().stream().filter(botData -> botType.isAssignableFrom(botData.getOriginBotType())).collect(Collectors.toList());
-        lock.readLock().unlock();
 
         return list;
+    }
+
+    @Override
+    public List<BotData> getAll() {
+        return new ArrayList<>(botsByName.values());
     }
 
     private @Nonnull
@@ -133,7 +134,7 @@ public class StraightBotRegistryService implements BotRegistryService {
 
             // 6. Залогируем
             if (log.isDebugEnabled())
-                log.debug("Bit data successful initialized = {}", botData);
+                log.debug("bot data successful initialized = {}", botData);
 
             return botData;
         } catch (Exception transformationException) {

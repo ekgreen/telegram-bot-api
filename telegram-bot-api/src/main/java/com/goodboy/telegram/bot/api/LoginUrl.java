@@ -72,12 +72,12 @@ public class LoginUrl {
      *
      * @optional
      */
-    private @Optional String botUsername;
+    private String botUsername;
 
     /**
      * Pass True to request the permission for your bot to send messages to the user
      *
      * @optional
      */
-    private @Optional String requestWriteAccess;
+    private String requestWriteAccess;
 }

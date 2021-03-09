@@ -50,17 +50,17 @@ public class Video {
     /**
      * 	Video width as defined by sender
      */
-    private Integer width;
+    private Long width;
 
     /**
      * 	Video height as defined by sender
      */
-    private Integer height;
+    private Long height;
 
     /**
      * Duration of the audio in seconds as defined by sender
      */
-    private Integer duration;
+    private Long duration;
 
     /**
      * MIME type of the file as defined by sender
@@ -76,7 +76,7 @@ public class Video {
      *
      * @optional
      */
-    private @Optional Integer fileSize;
+    private Long fileSize;
 
 
     /**
@@ -84,5 +84,5 @@ public class Video {
      *
      * @optional
      */
-    private @Optional PhotoSize thumb;
+    private PhotoSize thumb;
 }

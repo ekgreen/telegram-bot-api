@@ -41,14 +41,14 @@ public class Message {
      * Unique message identifier inside this chat
      */
     @MessageId
-    private Integer id;
+    private Long id;
 
     /**
      * Sender, empty for messages sent to channels
      *
      * @optional
      */
-    private @Optional User from;
+    private User from;
 
     /**
      * Date the message was sent in Unix time
@@ -65,35 +65,35 @@ public class Message {
      *
      * @optional
      */
-    private @Optional User forwardFrom;
+    private User forwardFrom;
 
     /**
      * For messages forwarded from channels, identifier of the original message in the channel
      *
      * @optional
      */
-    private @Optional Integer forwardFromMessageId;
+    private Long forwardFromMessageId;
 
     /**
      * For messages forwarded from channels, signature of the post author if present
      *
      * @optional
      */
-    private @Optional String forwardSignature;
+    private String forwardSignature;
 
     /**
      *  Sender's name for messages forwarded from users who disallow adding a link to their account in forwarded messages
      *
      * @optional
      */
-    private @Optional String forwardSenderName;
+    private String forwardSenderName;
 
     /**
      * For forwarded messages, date the original message was sent in Unix time
      *
      * @optional
      */
-    private @Optional Instant forwardDate;
+    private Instant forwardDate;
 
     /**
      * For replies, the original message. Note that the Message object in this field will not contain further
@@ -101,49 +101,49 @@ public class Message {
      *
      * @optional
      */
-    private @Optional Message replyToMessageId;
+    private Message replyToMessageId;
 
     /**
      * Bot through which the message was sent
      *
      * @optional
      */
-    private @Optional User viaBot;
+    private User viaBot;
 
     /**
      * Date the message was last edited in Unix time
      *
      * @optional
      */
-    private @Optional Instant editDate;
+    private Instant editDate;
 
     /**
      * The unique identifier of a media message group this message belongs to
      *
      * @optional
      */
-    private @Optional String mediaGroupId;
+    private String mediaGroupId;
 
     /**
      * Signature of the post author for messages in channels
      *
      * @optional
      */
-    private @Optional String authorSignature;
+    private String authorSignature;
 
     /**
      * For text messages, the actual UTF-8 text of the message, 0-4096 characters
      *
      * @optional
      */
-    private @Optional String text;
+    private String text;
 
     /**
      * For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text
      *
      * @optional
      */
-    private @Optional List<MessageEntity> entities;
+    private List<MessageEntity> entities;
 
     /**
      * Message is an animation, information about the animation. For backward compatibility, when this field is set,
@@ -151,98 +151,98 @@ public class Message {
      *
      * @optional
      */
-    private @Optional Animation animation;
+    private Animation animation;
 
     /**
      * Message is an audio file, information about the file
      *
      * @optional
      */
-    private @Optional Audio audio;
+    private Audio audio;
 
     /**
      * Message is a general file, information about the file
      *
      * @optional
      */
-    private @Optional Document document;
+    private Document document;
 
     /**
      * Message is a photo, available sizes of the photo
      *
      * @optional
      */
-    private @Optional List<PhotoSize> photo;
+    private List<PhotoSize> photo;
 
     /**
      * Message is a sticker, information about the sticker
      *
      * @optional
      */
-    private @Optional Sticker sticker;
+    private Sticker sticker;
 
     /**
      * Message is a video, information about the video
      *
      * @optional
      */
-    private @Optional Video video;
+    private Video video;
 
     /**
      * Message is a video note, information about the video message
      *
      * @optional
      */
-    private @Optional VideoNote videoNote;
+    private VideoNote videoNote;
 
     /**
      * Message is a voice message, information about the file
      *
      * @optional
      */
-    private @Optional Voice voice;
+    private Voice voice;
 
     /**
      * Caption for the animation, audio, document, photo, video or voice, 0-1024 characters
      *
      * @optional
      */
-    private @Optional String caption;
+    private String caption;
 
     /**
      * For messages with a caption, special entities like usernames, URLs, bot commands, etc. that appear in the caption
      *
      * @optional
      */
-    private @Optional List<MessageEntity> captionEntities;
+    private List<MessageEntity> captionEntities;
 
     /**
      * Message is a shared contact, information about the contact
      *
      * @optional
      */
-    private @Optional Contact contact;
+    private Contact contact;
 
     /**
      * Message is a dice with random value from 1 to 6
      *
      * @optional
      */
-    private @Optional Dice dice;
+    private Dice dice;
 
     /**
      * Message is a game, information about the game. More about games
      *
      * @optional
      */
-    private @Optional Game game;
+    private Game game;
 
     /**
      * Message is a native poll, information about the poll
      *
      * @optional
      */
-    private @Optional Poll poll;
+    private Poll poll;
 
     /**
      * Message is a venue, information about the venue. For backward compatibility, when this field is set,
@@ -250,14 +250,14 @@ public class Message {
      *
      * @optional
      */
-    private @Optional Venue venue;
+    private Venue venue;
 
     /**
      * Message is a shared location, information about the location
      *
      * @optional
      */
-    private @Optional Location location;
+    private Location location;
 
     /**
      * New members that were added to the group or supergroup and information about them (the bot itself may be one of
@@ -265,7 +265,7 @@ public class Message {
      *
      * @optional
      */
-    private @Optional List<User> newChatMembers;
+    private List<User> newChatMembers;
 
 
     /**
@@ -273,7 +273,7 @@ public class Message {
      *
      * @optional
      */
-    private @Optional User leftChatMember;
+    private User leftChatMember;
 
 
     /**
@@ -281,7 +281,7 @@ public class Message {
      *
      * @optional
      */
-    private @Optional String newChatTitle;
+    private String newChatTitle;
 
 
     /**
@@ -289,14 +289,14 @@ public class Message {
      *
      * @optional
      */
-    private @Optional List<PhotoSize> newChatPhoto;
+    private List<PhotoSize> newChatPhoto;
 
     /**
      * Service message: the chat photo was deleted
      *
      * @optional
      */
-    private @Optional Boolean deleteChatPhoto;
+    private Boolean deleteChatPhoto;
 
 
     /**
@@ -304,7 +304,7 @@ public class Message {
      *
      * @optional
      */
-    private @Optional Boolean groupChatCreated;
+    private Boolean groupChatCreated;
 
 
     /**
@@ -314,7 +314,7 @@ public class Message {
      *
      * @optional
      */
-    private @Optional Boolean supergroupChatCreated;
+    private Boolean supergroupChatCreated;
 
 
     /**
@@ -324,7 +324,7 @@ public class Message {
      *
      * @optional
      */
-    private @Optional Boolean channelChatCreated;
+    private Boolean channelChatCreated;
 
 
     /**
@@ -334,7 +334,7 @@ public class Message {
      *
      * @optional
      */
-    private @Optional Integer migrateToChatId;
+    private Long migrateToChatId;
 
 
     /**
@@ -344,7 +344,7 @@ public class Message {
      *
      * @optional
      */
-    private @Optional Integer migrateFromChatId;
+    private Long migrateFromChatId;
 
 
     /**
@@ -353,7 +353,7 @@ public class Message {
      *
      * @optional
      */
-    private @Optional Message pinnedMessage;
+    private Message pinnedMessage;
 
 
     /**
@@ -362,7 +362,7 @@ public class Message {
      * @see <a href="https://core.telegram.org/bots/api#payments">More about payments</a>
      * @optional
      */
-    private @Optional Invoice invoice;
+    private Invoice invoice;
 
 
     /**
@@ -371,7 +371,7 @@ public class Message {
      * @see <a href="https://core.telegram.org/bots/api#payments">More about payments</a>
      * @optional
      */
-    private @Optional SuccessfulPayment successfulPayment;
+    private SuccessfulPayment successfulPayment;
 
 
     /**
@@ -380,14 +380,14 @@ public class Message {
      * @see <a href="https://core.telegram.org/widgets/login">More about Telegram Login</a>
      * @optional
      */
-    private @Optional String connectedWebsite;
+    private String connectedWebsite;
 
 
     /**
      * Telegram Passport data
      * @optional
      */
-    private @Optional PassportData passportData;
+    private PassportData passportData;
 
 
     /**

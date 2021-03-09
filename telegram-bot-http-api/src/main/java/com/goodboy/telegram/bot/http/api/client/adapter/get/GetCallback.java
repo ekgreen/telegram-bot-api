@@ -16,10 +16,11 @@
 
 package com.goodboy.telegram.bot.http.api.client.adapter.get;
 
-import com.goodboy.telegram.bot.http.api.client.adapter.Callback;
+import com.goodboy.telegram.bot.http.api.client.adapter.Call;
 import com.goodboy.telegram.bot.http.api.client.adapter.HttpClientAdapter;
 import com.goodboy.telegram.bot.http.api.client.adapter.HttpClientAdapterCallback;
 import com.goodboy.telegram.bot.http.api.client.adapter.TelegramApiToAdapterRequestMapper;
+import com.goodboy.telegram.bot.http.api.client.callbacks.Callback;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
@@ -41,8 +42,17 @@ public class GetCallback implements HttpClientAdapterCallback {
     private final TelegramApiToAdapterRequestMapper<Iterable<QueryAttribute>> mapper;
 
     @Override
-    public <V> Callback callback(@NotNull HttpClientAdapter adapter, @Nonnull String url, @Nullable V payload) {
-        return () -> adapter.get(new CallableGetRequest(url, mapper.transform(payload)));
+    public <V> Call callback(@NotNull HttpClientAdapter adapter, @Nonnull String url, @Nullable V payload) {
+        return () -> adapter.get(createGetRequest(url,payload));
+    }
+
+    @Override
+    public <V> void callback(@NotNull HttpClientAdapter adapter, @NotNull String url, @Nullable V payload, @NotNull Callback callback) {
+        adapter.getAsync(createGetRequest(url,payload), callback);
+    }
+
+    private <V> @NotNull GetRequest createGetRequest(@Nonnull String url, @Nullable V payload) {
+        return new CallableGetRequest(url, mapper.transform(payload));
     }
 
     @Override

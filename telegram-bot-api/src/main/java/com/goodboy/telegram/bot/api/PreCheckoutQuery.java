@@ -54,7 +54,7 @@ public class PreCheckoutQuery {
      * US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past
      * the decimal point for each currency (2 for the majority of currencies).
      */
-    private Integer totalAmount;
+    private Long totalAmount;
 
     /**
      * Bot specified invoice payload
@@ -74,5 +74,5 @@ public class PreCheckoutQuery {
      *
      * @optional
      */
-    private @Optional OrderInfo orderInfo;
+    private OrderInfo orderInfo;
 }

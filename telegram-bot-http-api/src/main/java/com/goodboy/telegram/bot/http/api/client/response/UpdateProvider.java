@@ -25,4 +25,6 @@ import com.goodboy.telegram.bot.api.Update;
 public interface UpdateProvider {
 
     Update getUpdate();
+
+    void setUpdate(Update update);
 }
