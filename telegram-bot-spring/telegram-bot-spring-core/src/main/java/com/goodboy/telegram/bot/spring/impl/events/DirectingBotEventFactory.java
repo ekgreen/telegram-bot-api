@@ -17,34 +17,58 @@
 package com.goodboy.telegram.bot.spring.impl.events;
 
 import com.goodboy.telegram.bot.spring.api.events.BotEventFactory;
+import com.goodboy.telegram.bot.spring.api.events.BotRegisteredEvent;
+import com.goodboy.telegram.bot.spring.api.events.BotsReadyEvent;
 import com.goodboy.telegram.bot.spring.api.events.OnBotRegistry;
 import com.goodboy.telegram.bot.spring.api.meta.Infrastructure;
 import com.goodboy.telegram.bot.spring.api.data.BotData;
+import com.goodboy.telegram.bot.spring.api.processor.BotRegistryService;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
 
 /**
- *
  * @author Izmalkov Roman (ekgreen)
  * @since 1.0.0
  */
 @Infrastructure
-public class DirectingBotEventFactory implements BotEventFactory {
+public class DirectingBotEventFactory implements BotEventFactory, ApplicationContextAware {
 
-    // beans waiting on registry event
-    private List<OnBotRegistry> waitingRegistryEvent;
+    private ApplicationEventPublisher applicationEventPublisher;
+    private ApplicationContext context;
+    private List<OnBotRegistry> onBotRegistryListeners;
 
     @Override
     public void createOnRegistryEvent(@NotNull BotData botData) {
-        if(waitingRegistryEvent != null && !waitingRegistryEvent.isEmpty())
-            waitingRegistryEvent.forEach(consumer -> consumer.onRegistry(botData));
+        if (onBotRegistryListeners != null && !onBotRegistryListeners.isEmpty()) {
+            final BotRegisteredEvent botRegisteredEvent = new BotRegisteredEvent(this, botData);
+
+            onBotRegistryListeners.forEach(listener -> listener.onRegistry(botRegisteredEvent));
+        }
+    }
+
+    @Override
+    public void createBotsReadyEvent(BotRegistryService botRegistryService) {
+        applicationEventPublisher.publishEvent(new BotsReadyEvent(this, botRegistryService, context));
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.context = applicationContext;
     }
 
     @Autowired
-    public void setWaitingRegistryEvent(@Nullable List<OnBotRegistry> waitingRegistryEvent) {
-        this.waitingRegistryEvent = waitingRegistryEvent;
+    public void setOnBotRegistryListeners(List<OnBotRegistry> onBotRegistryListeners) {
+        this.onBotRegistryListeners = onBotRegistryListeners;
+    }
+
+    @Autowired
+    public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 }

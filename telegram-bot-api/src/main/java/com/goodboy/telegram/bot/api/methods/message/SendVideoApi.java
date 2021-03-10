@@ -40,7 +40,7 @@ public class SendVideoApi implements Api {
      * Unique identifier for the target chat or username
      * of the target channel (in the format @channelusername)
      */
-    private Integer chatId;
+    private Long chatId;
 
     /**
      * Video to send. Pass a file_id as String to send a video that exists on the Telegram servers (recommended),
@@ -130,7 +130,7 @@ public class SendVideoApi implements Api {
      * @optional
      */
     private @Optional
-    Integer replyToMessageId;
+    Long replyToMessageId;
 
     /**
      * Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard,

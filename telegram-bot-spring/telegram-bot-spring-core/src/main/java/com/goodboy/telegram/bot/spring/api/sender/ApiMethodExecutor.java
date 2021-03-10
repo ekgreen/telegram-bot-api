@@ -26,9 +26,7 @@ import javax.annotation.Nonnull;
  * @author Izmalkov Roman (ekgreen)
  * @since 1.0.0
  */
-public interface ApiMethodExecutor<T extends Api> {
+public interface ApiMethodExecutor {
 
-    void handle(@Nonnull UpdateContext context, @Nonnull T api);
-
-    @Nonnull Class<T> type();
+    void sendApi(@Nonnull UpdateContext context, @Nonnull Api api);
 }

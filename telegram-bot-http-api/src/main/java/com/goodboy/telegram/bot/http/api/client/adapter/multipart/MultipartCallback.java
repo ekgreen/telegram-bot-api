@@ -16,10 +16,11 @@
 
 package com.goodboy.telegram.bot.http.api.client.adapter.multipart;
 
-import com.goodboy.telegram.bot.http.api.client.adapter.Callback;
+import com.goodboy.telegram.bot.http.api.client.adapter.Call;
 import com.goodboy.telegram.bot.http.api.client.adapter.HttpClientAdapter;
 import com.goodboy.telegram.bot.http.api.client.adapter.HttpClientAdapterCallback;
 import com.goodboy.telegram.bot.http.api.client.adapter.TelegramApiToAdapterRequestMapper;
+import com.goodboy.telegram.bot.http.api.client.callbacks.Callback;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
@@ -41,8 +42,17 @@ public class MultipartCallback implements HttpClientAdapterCallback {
     private final TelegramApiToAdapterRequestMapper<Iterable<MultipartParameter<?>>> mapper;
 
     @Override
-    public <V> Callback callback(@NotNull HttpClientAdapter adapter, @Nonnull String url, @Nullable V payload) {
-        return () -> adapter.multipart(new CallableMultipartRequest(url, mapper.transform(payload)));
+    public <V> Call callback(@NotNull HttpClientAdapter adapter, @Nonnull String url, @Nullable V payload) {
+        return () -> adapter.multipart(createMultipartRequest(url, payload));
+    }
+
+    @Override
+    public <V> void callback(@NotNull HttpClientAdapter adapter, @NotNull String url, @Nullable V payload, @NotNull Callback callback) {
+        adapter.multipartAsync(createMultipartRequest(url,payload), callback);
+    }
+
+    private <V> @NotNull MultipartRequest createMultipartRequest(@Nonnull String url, @Nullable V payload) {
+        return new CallableMultipartRequest(url, mapper.transform(payload));
     }
 
     @Override

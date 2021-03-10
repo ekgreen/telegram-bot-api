@@ -54,7 +54,7 @@ public class Poll {
     /**
      * Total number of users that voted in the poll
      */
-    private Integer totalVoterCount;
+    private Long totalVoterCount;
 
     /**
      * True, if the poll is closed
@@ -84,7 +84,7 @@ public class Poll {
      * @optional
      */
     private @Optional
-    Integer correctOptionId;
+    Long correctOptionId;
 
     /**
      * Text that is shown when a user chooses an incorrect answer or taps on the lamp icon in a quiz-style poll,
@@ -92,27 +92,27 @@ public class Poll {
      *
      * @optional
      */
-    private @Optional String explanation;
+    private String explanation;
 
     /**
      * Special entities like usernames, URLs, bot commands, etc. that appear in the explanation
      *
      * @optional
      */
-    private @Optional List<MessageEntity> explanationEntities;
+    private List<MessageEntity> explanationEntities;
 
     /**
      * Amount of time in seconds the poll will be active after creation
      *
      * @optional
      */
-    private @Optional Integer openPeriod;
+    private Long openPeriod;
 
     /**
      * Point in time (Unix timestamp) when the poll will be automatically closed
      *
      * @optional
      */
-    private @Optional Integer closeDate;
+    private Long closeDate;
 
 }

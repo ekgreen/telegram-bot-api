@@ -45,19 +45,19 @@ public class OrderInfo {
      *
      * @optional
      */
-    private @Optional String phoneNumber;
+    private String phoneNumber;
 
     /**
      * User email
      *
      * @optional
      */
-    private @Optional String email;
+    private String email;
 
     /**
      * User shipping address
      *
      * @optional
      */
-    private @Optional ShippingAddress shippingAddress;
+    private ShippingAddress shippingAddress;
 }

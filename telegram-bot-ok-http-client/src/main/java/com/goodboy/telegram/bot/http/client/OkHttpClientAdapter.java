@@ -32,6 +32,7 @@
 
 package com.goodboy.telegram.bot.http.client;
 
+import com.goodboy.telegram.bot.http.api.client.callbacks.Callback;
 import com.goodboy.telegram.bot.http.api.client.adapter.HttpClientAdapter;
 import com.goodboy.telegram.bot.http.api.client.adapter.get.GetRequest;
 import com.goodboy.telegram.bot.http.api.client.adapter.multipart.MultipartParameter;
@@ -44,6 +45,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.Objects;
 
 /**
@@ -59,18 +61,28 @@ public class OkHttpClientAdapter implements HttpClientAdapter {
 
     private final OkHttpClient client;
 
-    @SneakyThrows
-    public TelegramHttpResponse post(@NotNull PostRequest request) {
-        final var buildRequest = new Request.Builder()
+    private @NotNull Request buildPostRequest(@NotNull PostRequest request){
+        return new Request.Builder()
                 .url(request.url())
                 .post(RequestBody.create(request.payload(), JSON))
                 .build();
+    }
+
+    @SneakyThrows
+    public TelegramHttpResponse post(@NotNull PostRequest request) {
+        final var buildRequest = buildPostRequest(request);
 
         return handleRequest(buildRequest);
     }
 
     @Override
-    public TelegramHttpResponse get(@NotNull GetRequest request) {
+    public void postAsync(@NotNull PostRequest request, @NotNull Callback callback) {
+        final var buildRequest = buildPostRequest(request);
+
+        handleAsyncRequest(buildRequest, callback);
+    }
+
+    private @NotNull Request buildGetRequest(@NotNull GetRequest request){
         final var urlBuilder = HttpUrl.get(request.url()).newBuilder();
 
         var payload = request.payload();
@@ -81,15 +93,26 @@ public class OkHttpClientAdapter implements HttpClientAdapter {
             }
         }
 
-        final var buildRequest = new Request.Builder()
+        return new Request.Builder()
                 .url(urlBuilder.build())
                 .build();
+    }
+
+    @Override
+    public TelegramHttpResponse get(@NotNull GetRequest request) {
+        final var buildRequest = buildGetRequest(request);
 
         return handleRequest(buildRequest);
     }
 
     @Override
-    public TelegramHttpResponse multipart(@NotNull MultipartRequest request) {
+    public void getAsync(@NotNull GetRequest request, @NotNull Callback callback) {
+        final var buildRequest = buildGetRequest(request);
+
+        handleAsyncRequest(buildRequest, callback);
+    }
+
+    private @NotNull Request buildMultipartRequest(@NotNull MultipartRequest request){
         final var multipartBuilder = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM);
 
@@ -105,12 +128,25 @@ public class OkHttpClientAdapter implements HttpClientAdapter {
             }
         }
 
-        final var buildRequest = new Request.Builder()
+        return new Request.Builder()
                 .url(request.url())
                 .post(multipartBuilder.build())
                 .build();
 
+    }
+
+    @Override
+    public TelegramHttpResponse multipart(@NotNull MultipartRequest request) {
+        final var buildRequest = buildMultipartRequest(request);
+
         return handleRequest(buildRequest);
+    }
+
+    @Override
+    public void multipartAsync(@NotNull MultipartRequest request, @NotNull Callback callback) {
+        final var buildRequest = buildMultipartRequest(request);
+
+        handleAsyncRequest(buildRequest, callback);
     }
 
     @SneakyThrows
@@ -120,11 +156,31 @@ public class OkHttpClientAdapter implements HttpClientAdapter {
         }
     }
 
+    private void handleAsyncRequest(@NotNull Request buildRequest, @NotNull Callback callback) {
+        client.newCall(buildRequest).enqueue(new UniformedCallback(callback));
+    }
+
+    @RequiredArgsConstructor
+    private class UniformedCallback implements okhttp3.Callback{
+
+        private final Callback callback;
+
+        @Override
+        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+            callback.onSuccess(convert(response));
+        }
+
+        @Override
+        public void onFailure(@NotNull Call call, @NotNull IOException exception) {
+            callback.onError(exception);
+        }
+
+    }
+
     @SneakyThrows
     private TelegramHttpResponse convert(@NotNull Response response) {
         return new TelegramHttpResponse()
                 .setStatusCode(response.code())
                 .setBody(Objects.requireNonNull(response.body()).bytes());
     }
-
 }

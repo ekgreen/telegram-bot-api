@@ -16,9 +16,11 @@
 
 package com.goodboy.telegram.bot.http.api.client;
 
-import com.goodboy.telegram.bot.http.api.client.adapter.Callback;
+import com.goodboy.telegram.bot.http.api.client.adapter.Call;
 import com.goodboy.telegram.bot.http.api.client.adapter.HttpClientAdapter;
 import com.goodboy.telegram.bot.http.api.client.adapter.HttpClientAdapterCallback;
+import com.goodboy.telegram.bot.http.api.client.callbacks.Callback;
+import com.goodboy.telegram.bot.http.api.client.callbacks.TelegramApiCallback;
 import com.goodboy.telegram.bot.http.api.client.configuration.TelegramApiConfiguration;
 import com.goodboy.telegram.bot.http.api.client.handlers.HttpRequestTypeBasedHandler;
 import com.goodboy.telegram.bot.http.api.client.token.TelegramApiTokenResolver;
@@ -29,16 +31,14 @@ import com.goodboy.telegram.bot.http.api.client.request.RequestType;
 import com.goodboy.telegram.bot.api.platform.entry.Uploading;
 import com.goodboy.telegram.bot.api.response.TelegramCoreResponse;
 import com.goodboy.telegram.bot.http.api.client.response.TelegramHttpResponse;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
@@ -93,8 +93,7 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class BaseTelegramHttpClient implements TelegramHttpClient {
 
-
-    // Адаптер для отправки азпросов
+    // Адаптер для отправки запросов
     private final HttpClientAdapter adapter;
 
     // Набор настроек для клиента
@@ -110,11 +109,11 @@ public class BaseTelegramHttpClient implements TelegramHttpClient {
     private final TelegramApiTokenResolver tokenResolver;
 
     public BaseTelegramHttpClient(
-            @Nonnull HttpClientAdapter adapter,
-            @Nonnull TelegramApiConfiguration configuration,
-            @Nonnull List<HttpClientAdapterCallback> mappers,
-            @Nonnull List<HttpRequestTypeBasedHandler> handlers,
-            @Nonnull TelegramApiTokenResolver tokenResolver
+            @NotNull HttpClientAdapter adapter,
+            @NotNull TelegramApiConfiguration configuration,
+            @NotNull List<HttpClientAdapterCallback> mappers,
+            @NotNull List<HttpRequestTypeBasedHandler> handlers,
+            @NotNull TelegramApiTokenResolver tokenResolver
     ) {
         this.adapter = adapter;
         this.configuration = configuration;
@@ -125,16 +124,16 @@ public class BaseTelegramHttpClient implements TelegramHttpClient {
 
     @Override
     public <T, V> TelegramCoreResponse<T> send(@NotNull Request<V> request) {
-        return process(request);
+        return process(request, null);
     }
 
     @Override
-    public <T, V> CompletableFuture<TelegramCoreResponse<T>> sendAsync(Request<V> request) {
-        throw new UnsupportedOperationException();
+    public <T, V> void sendAsync(@NotNull Request<V> request, @NotNull TelegramApiCallback<T> callback) {
+        process(request, callback);
     }
 
-    private <T, V> TelegramCoreResponse<T> process(Request<V> request) {
-        final @NonNull Request.CallMethod method = request.callMethod();
+    private <T, V> TelegramCoreResponse<T> process(Request<V> request, @Nullable TelegramApiCallback<T> callback) {
+        final @NotNull Request.CallMethod method = request.callMethod();
 
         // 1. Получаем урл для формирования запроса без токена
         final String tokenFreeUrl = createTokenFreeUrl(method);
@@ -142,14 +141,36 @@ public class BaseTelegramHttpClient implements TelegramHttpClient {
         // 2. Определяем метод отправки запроса GET, POST, MULTIPART
         final Request.HttpMethod type = method.desireHttpMethod().orElseGet(() -> getHttpMethodByContentType(request.payload()));
 
-        // 3. Формируем UniTypeRequest для передачи в адаптер
-        final Callback  function = mappers.get(type).callback(adapter, format(tokenFreeUrl, request.token().orElseGet(tokenResolver)), request.payload().orElse(null));
+        if (callback == null) {
+            // sync batch
+            // 3. Формируем UniTypeRequest для передачи в адаптер
+            final Call function = mappers.get(type).callback(adapter, format(tokenFreeUrl, request.token().orElseGet(tokenResolver)), request.payload().orElse(null));
 
-        // 4. Получим результат вызова
-        final TelegramHttpResponse response = function.get();
+            // 4. Получим результат вызова
+            final TelegramHttpResponse response = function.get();
 
+            return handleResponse(method, response);
+        } else {
+            // async batch
+            mappers.get(type).callback(adapter, format(tokenFreeUrl, request.token().orElseGet(tokenResolver)), request.payload().orElse(null), new Callback() {
+
+                @Override
+                public void onSuccess(@NotNull TelegramHttpResponse response) {
+                    callback.onSuccess(handleResponse(method, response));
+                }
+
+                @Override
+                public void onError(@NotNull Throwable exception) {
+                    callback.onError(exception);
+                }
+            });
+            return null;
+        }
+    }
+
+    private <T> TelegramCoreResponse<T> handleResponse(@NotNull Request.CallMethod method, @NotNull TelegramHttpResponse response) {
         if (configuration.throwExceptionOnNon2XXHttpCode(response.getStatusCode())) {
-            if(log.isDebugEnabled() && response.getBody() != null)
+            if (log.isDebugEnabled() && response.getBody() != null)
                 log.debug("request for telegram api failed with message:" + new String(response.getBody()));
             throw new TelegramApiRuntimeException(TelegramApiExceptionDefinitions.NOT_200_HTTP_STATUS_CODE, "status code " + response.getStatusCode());
         }
@@ -172,7 +193,7 @@ public class BaseTelegramHttpClient implements TelegramHttpClient {
 
     private <V> Request.HttpMethod getHttpMethodByContentType(V payload) {
         // 1) если нет полей => GET
-        if(payload == null)
+        if (payload == null)
             return Request.HttpMethod.GET;
 
         List<Uploading> uploads;
@@ -183,13 +204,13 @@ public class BaseTelegramHttpClient implements TelegramHttpClient {
                 .filter(Objects::nonNull)
                 .collect(toList());
 
-        if(uploads
+        if (uploads
                 .stream()
                 .allMatch(upload -> upload.fileId() != null || upload.httpLink() != null))
             return configuration.desireHttpMethod().orElseThrow(NullPointerException::new);
 
         // 3) иначе, есть аплоуды с загрузкой файла на клиенте
-        if(uploads
+        if (uploads
                 .stream()
                 .anyMatch(upload -> upload.uploadNewFile() != null))
             return Request.HttpMethod.MULTIPART;
@@ -199,7 +220,7 @@ public class BaseTelegramHttpClient implements TelegramHttpClient {
     }
 
     @SneakyThrows
-    private Object getFieldValue(@Nonnull Object object, @Nonnull Field field) {
+    private Object getFieldValue(@NotNull Object object, @NotNull Field field) {
         field.setAccessible(true);
         return field.get(object);
     }

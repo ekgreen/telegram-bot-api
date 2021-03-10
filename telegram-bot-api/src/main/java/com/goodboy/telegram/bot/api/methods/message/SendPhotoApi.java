@@ -37,7 +37,7 @@ public class SendPhotoApi implements Api {
      * Unique identifier for the target chat or username
      * of the target channel (in the format @channelusername)
      */
-    private Integer  chatId;
+    private Long  chatId;
 
     /**
      * 	Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended),
@@ -52,7 +52,7 @@ public class SendPhotoApi implements Api {
      *
      * @optional
      */
-    private @Optional String caption;
+    private String caption;
 
     /**
      * Mode for parsing entities in the message text
@@ -60,21 +60,21 @@ public class SendPhotoApi implements Api {
      * @see <a href="https://core.telegram.org/bots/api#formatting-options">formatting options</a>
      * @optional
      */
-    private @Optional String parseMode;
+    private String parseMode;
 
     /**
      * Sends the message silently. Users will receive a notification with no sound
      *
      * @optional
      */
-    private @Optional Boolean disableNotification;
+    private Boolean disableNotification;
 
     /**
      * If the message is a reply, ID of the original message
      *
      * @optional
      */
-    private @Optional Integer replyToMessageId;
+    private Long replyToMessageId;
 
     /**
      * Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard,
@@ -82,5 +82,5 @@ public class SendPhotoApi implements Api {
      *
      * @optional
      */
-    private @Optional ReplyMarkup replyMarkup;
+    private ReplyMarkup replyMarkup;
 }

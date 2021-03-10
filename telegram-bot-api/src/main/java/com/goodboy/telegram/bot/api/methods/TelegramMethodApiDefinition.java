@@ -39,6 +39,12 @@ public final class TelegramMethodApiDefinition {
     public final static String GET_ME = "getMe";
 
     /**
+     * Use this method to receive incoming updates using long polling.
+     * An Array of Update objects is returned.
+     */
+    public final static String GET_UPDATES = "getUpdates";
+
+    /**
      * Part of http uri path. Based on telegram bot api.
      * Use this method to change the list of the bot's commands
      */
@@ -178,5 +184,11 @@ public final class TelegramMethodApiDefinition {
      * Use this method to get current webhook status. Requires no parameters.
      */
     public final static String GET_WEBHOOK_INFO_CALL_METHOD = "getWebhookInfo";
+
+    /**
+     * Use this method when you need to tell the user that something is happening on the bot's side. The status is set
+     * for 5 seconds or less (when a message arrives from your bot, Telegram clients clear its typing status).
+     */
+    public final static String SEND_CHAT_ACTION_CALL_METHOD = "sendChatAction";
 
 }

@@ -16,10 +16,13 @@
 
 package com.goodboy.telegram.bot.http.api.client.adapter.post;
 
-import com.goodboy.telegram.bot.http.api.client.adapter.Callback;
+import com.goodboy.telegram.bot.http.api.client.adapter.Call;
 import com.goodboy.telegram.bot.http.api.client.adapter.HttpClientAdapter;
 import com.goodboy.telegram.bot.http.api.client.adapter.HttpClientAdapterCallback;
 import com.goodboy.telegram.bot.http.api.client.adapter.TelegramApiToAdapterRequestMapper;
+import com.goodboy.telegram.bot.http.api.client.adapter.multipart.MultipartCallback;
+import com.goodboy.telegram.bot.http.api.client.adapter.multipart.MultipartRequest;
+import com.goodboy.telegram.bot.http.api.client.callbacks.Callback;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
@@ -41,8 +44,17 @@ public class PostCallback implements HttpClientAdapterCallback {
     private final TelegramApiToAdapterRequestMapper<byte[]> mapper;
 
     @Override
-    public <V> Callback callback(@NotNull HttpClientAdapter adapter, @Nonnull String url, @Nullable V payload) {
-        return () -> adapter.post(new CallablePostRequest(url, mapper.transform(payload)));
+    public <V> Call callback(@NotNull HttpClientAdapter adapter, @Nonnull String url, @Nullable V payload) {
+        return () -> adapter.post(createPostRequest(url,payload));
+    }
+
+    @Override
+    public <V> void callback(@NotNull HttpClientAdapter adapter, @NotNull String url, @Nullable V payload, @NotNull Callback callback) {
+        adapter.postAsync(createPostRequest(url,payload), callback);
+    }
+
+    private <V> @NotNull PostRequest createPostRequest(@Nonnull String url, @Nullable V payload) {
+        return new CallablePostRequest(url, mapper.transform(payload));
     }
 
     @Override

@@ -66,7 +66,7 @@ public class InlineKeyboardButton {
      *
      * @optional
      */
-    private @Optional String callbackData;
+    private String callbackData;
 
     /**
      * If set, pressing the button will insert the bot's username and the specified inline query in the current chat's
@@ -74,7 +74,7 @@ public class InlineKeyboardButton {
      *
      * @optional
      */
-    private @Optional String switchInlineQuery;
+    private String switchInlineQuery;
 
     /**
      * This offers a quick way for the user to open your bot in inline mode in the same chat – good for selecting
@@ -82,7 +82,7 @@ public class InlineKeyboardButton {
      *
      * @optional
      */
-    private @Optional String switchInlineQueryCurrentChat;
+    private String switchInlineQueryCurrentChat;
 
     /**
      * Description of the game that will be launched when the user presses the button.
@@ -103,5 +103,5 @@ public class InlineKeyboardButton {
      *
      * @optional
      */
-    private @Optional Boolean pay;
+    private Boolean pay;
 }

@@ -16,6 +16,7 @@
 
 package com.goodboy.telegram.bot.http.api.client.adapter;
 
+import com.goodboy.telegram.bot.http.api.client.callbacks.Callback;
 import com.goodboy.telegram.bot.http.api.client.adapter.get.GetRequest;
 import com.goodboy.telegram.bot.http.api.client.adapter.multipart.MultipartRequest;
 import com.goodboy.telegram.bot.http.api.client.adapter.post.PostRequest;
@@ -43,6 +44,20 @@ public interface HttpClientAdapter {
     TelegramHttpResponse post(@Nonnull PostRequest request);
 
     /**
+     * Sends async the given request using this client, non-blocking if necessary to get
+     * the response. The returned {@link TelegramHttpResponse}contains the
+     * response status and body
+     *
+     * Use method POST to send body
+     *
+     * @param request the request
+     * @async
+     *
+     * @return the response
+     */
+    void postAsync(@Nonnull PostRequest request, @Nonnull Callback callback);
+
+    /**
      * Sends the given request using this client, blocking if necessary to get
      * the response. The returned {@link TelegramHttpResponse}contains the
      * response status and body
@@ -54,6 +69,18 @@ public interface HttpClientAdapter {
     TelegramHttpResponse get(@Nonnull GetRequest request);
 
     /**
+     * Sends async the given request using this client, non-blocking if necessary to get
+     * the response. The returned {@link TelegramHttpResponse}contains the
+     * response status and body
+     *
+     * Use method GET without body
+     *
+     * @async
+     * @return the response
+     */
+    void getAsync(@Nonnull GetRequest request, @Nonnull Callback callback);
+
+    /**
      * Sends the given request using this client, blocking if necessary to get
      * the response. The returned {@link TelegramHttpResponse}contains the
      * response status and body
@@ -63,5 +90,16 @@ public interface HttpClientAdapter {
      * @return the response
      */
     TelegramHttpResponse multipart(@Nonnull MultipartRequest request);
+
+    /**
+     * Sends async the given request using this client, non-blocking if necessary to get
+     * the response. The returned {@link TelegramHttpResponse}contains the
+     * response status and body
+     *
+     * Use method POST to send multipart body
+     *
+     * @return the response
+     */
+    void multipartAsync(@Nonnull MultipartRequest request, @Nonnull Callback callback);
 
 }

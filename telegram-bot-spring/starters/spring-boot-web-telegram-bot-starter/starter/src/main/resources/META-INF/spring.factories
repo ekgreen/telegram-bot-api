@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.goodboy.telegram.bot.spring.autoconfiguration.TelegramBotConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.goodboy.telegram.bot.spring.web.autoconfiguration.TelegramBotConfiguration

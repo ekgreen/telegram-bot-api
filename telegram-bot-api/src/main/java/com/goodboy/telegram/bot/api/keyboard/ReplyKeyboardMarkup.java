@@ -45,7 +45,7 @@ public class ReplyKeyboardMarkup implements ReplyMarkup {
      *
      * @optional
      */
-    private @Optional Boolean resizeKeyboard;
+    private Boolean resizeKeyboard;
 
     /**
      * Requests clients to hide the keyboard as soon as it's been used.
@@ -57,7 +57,7 @@ public class ReplyKeyboardMarkup implements ReplyMarkup {
      *
      * @optional
      */
-    private @Optional Boolean oneTimeKeyboard;
+    private Boolean oneTimeKeyboard;
 
     /**
      * Use this parameter if you want to show the keyboard to specific users only.
@@ -68,6 +68,6 @@ public class ReplyKeyboardMarkup implements ReplyMarkup {
      *
      * @optional
      */
-    private @Optional Boolean selective;
+    private Boolean selective;
 
 }

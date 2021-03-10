@@ -21,6 +21,7 @@ import com.goodboy.telegram.bot.spring.api.token.TelegramApiTokenProvider;
 import com.goodboy.telegram.bot.spring.impl.gateway.UniformWeightGatewayRoutingResolver;
 import com.goodboy.telegram.bot.spring.impl.token.SpringEnvironmentTelegramApiTokenProvider;
 import org.springframework.core.annotation.AliasFor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.lang.annotation.ElementType;
@@ -56,6 +57,8 @@ public @interface Bot {
      * @return request mapping
      */
     String[] path() default "";
+
+    
 
     /**
      * @return token provider class

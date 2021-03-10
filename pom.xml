@@ -56,8 +56,11 @@
         <module>telegram-bot-ok-http-client</module>
         <module>telegram-bot-spring/telegram-bot-spring-core</module>
         <module>telegram-bot-spring/telegram-bot-spring-web</module>
+        <module>telegram-bot-spring/telegram-bot-spring-grabber</module>
         <module>telegram-bot-spring/starters/spring-boot-web-telegram-bot-starter/autoconfiguration</module>
         <module>telegram-bot-spring/starters/spring-boot-web-telegram-bot-starter/starter</module>
+        <module>telegram-bot-spring/starters/spring-boot-grabber-telegram-bot-starter/autoconfiguration</module>
+        <module>telegram-bot-spring/starters/spring-boot-grabber-telegram-bot-starter/starter</module>
         <module>telegram-bot-example</module>
         <module>coverage</module>
     </modules>

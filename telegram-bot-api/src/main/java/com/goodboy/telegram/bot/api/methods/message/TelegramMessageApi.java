@@ -67,7 +67,7 @@ public interface TelegramMessageApi {
      *
      * @see TelegramMessageApi#sendPhoto(SendPhotoApi)
      */
-    default @NotNull TelegramCoreResponse<Message> sendPhoto(@NotNull Integer chatId, @NotNull Uploading photo) {
+    default @NotNull TelegramCoreResponse<Message> sendPhoto(@NotNull Long chatId, @NotNull Uploading photo) {
         return sendPhoto(new SendPhotoApi()
                 .setChatId(chatId)
                 .setPhoto(photo)
@@ -89,7 +89,7 @@ public interface TelegramMessageApi {
      *
      * @see TelegramMessageApi#sendAudio(SendAudioApi)
      */
-    default @NotNull TelegramCoreResponse<Message> sendAudio(@NotNull Integer chatId, @NotNull Supplier<?> audio) {
+    default @NotNull TelegramCoreResponse<Message> sendAudio(@NotNull Long chatId, @NotNull Supplier<?> audio) {
         return sendAudio(new SendAudioApi()
                 .setChatId(chatId)
                 .setAudio(audio)
@@ -111,7 +111,7 @@ public interface TelegramMessageApi {
      *
      * @see TelegramMessageApi#sendDocument(SendDocumentApi)
      */
-    default @NotNull TelegramCoreResponse<Message> sendDocument(@NotNull Integer chatId, @NotNull Supplier<?> document) {
+    default @NotNull TelegramCoreResponse<Message> sendDocument(@NotNull Long chatId, @NotNull Supplier<?> document) {
         return sendDocument(new SendDocumentApi()
                 .setChatId(chatId)
                 .setDocument(document)
@@ -135,7 +135,7 @@ public interface TelegramMessageApi {
      *
      * @see TelegramMessageApi#sendVideo(SendVideoApi)
      */
-    default @NotNull TelegramCoreResponse<Message> sendVideo(@NotNull Integer chatId, @NotNull Supplier<?> video) {
+    default @NotNull TelegramCoreResponse<Message> sendVideo(@NotNull Long chatId, @NotNull Supplier<?> video) {
         return sendVideo(new SendVideoApi()
                 .setChatId(chatId)
                 .setVideo(video)
@@ -159,7 +159,7 @@ public interface TelegramMessageApi {
      *
      * @see TelegramMessageApi#sendAnimation(SendAnimationApi)
      */
-    default @NotNull TelegramCoreResponse<Message> sendAnimation(@NotNull Integer chatId, @NotNull Uploading animation) {
+    default @NotNull TelegramCoreResponse<Message> sendAnimation(@NotNull Long chatId, @NotNull Uploading animation) {
         return sendAnimation(new SendAnimationApi()
                 .setChatId(chatId)
                 .setAnimation(animation)
@@ -182,7 +182,7 @@ public interface TelegramMessageApi {
      *
      * @see TelegramMessageApi#sendLocation(SendLocationApi)
      */
-    default @NotNull TelegramCoreResponse<Message> sendLocation(@NotNull Integer chatId, @NotNull Double latitude, @NotNull Double longitude) {
+    default @NotNull TelegramCoreResponse<Message> sendLocation(@NotNull Long chatId, @NotNull Double latitude, @NotNull Double longitude) {
         return sendLocation(new SendLocationApi()
                 .setChatId(chatId)
                 .setLatitude(latitude)

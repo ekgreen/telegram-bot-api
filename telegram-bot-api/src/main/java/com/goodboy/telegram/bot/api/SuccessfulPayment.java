@@ -44,7 +44,7 @@ public class SuccessfulPayment {
      * See the exp parameter in currencies.json, it shows the number of digits past the decimal point
      * for each currency (2 for the majority of currencies).
      */
-    private Integer totalAmount;
+    private Long totalAmount;
 
 
     /**
@@ -65,7 +65,7 @@ public class SuccessfulPayment {
      *
      * @optional
      */
-    private @Optional OrderInfo orderInfo;
+    private OrderInfo orderInfo;
 
 
     /**

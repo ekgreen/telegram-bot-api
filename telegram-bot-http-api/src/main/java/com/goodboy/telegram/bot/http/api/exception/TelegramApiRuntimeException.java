@@ -28,12 +28,12 @@ public class TelegramApiRuntimeException extends RuntimeException {
     private final String code;
 
     public TelegramApiRuntimeException() {
-        this(TelegramApiExceptionDefinitions.TECHNICAL_EXCEPTION);
+        this.code = TelegramApiExceptionDefinitions.TECHNICAL_EXCEPTION;
     }
 
-    public TelegramApiRuntimeException(String code) {
-        super();
-        this.code = code;
+    public TelegramApiRuntimeException(String message) {
+        super(message);
+        this.code = TelegramApiExceptionDefinitions.TECHNICAL_EXCEPTION;
     }
 
     public TelegramApiRuntimeException(String code, String message) {

@@ -18,6 +18,7 @@ package com.goodboy.telegram.bot.api.methods.webhook;
 
 import com.goodboy.telegram.bot.api.meta.Optional;
 import com.goodboy.telegram.bot.api.meta.TelegramApi;
+import com.goodboy.telegram.bot.api.methods.updates.UpdateType;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -47,15 +48,14 @@ public class WebhookInfo {
     /**
      * Number of updates awaiting delivery
      */
-    private Integer pendingUpdateCount;
+    private Long pendingUpdateCount;
 
     /**
      * Unix time for the most recent error that happened when trying to deliver an update via webhook
      *
      * @optional
      */
-    private @Optional
-    Integer lastErrorDate;
+    private Long lastErrorDate;
 
     /**
      * Error message in human-readable format for the most recent error that happened when trying
@@ -63,22 +63,19 @@ public class WebhookInfo {
      *
      * @optional
      */
-    private @Optional
-    String lastErrorMessage;
+    private String lastErrorMessage;
 
     /**
      * Maximum allowed number of simultaneous HTTPS connections to the webhook for update delivery
      *
      * @optional
      */
-    private @Optional
-    Integer maxConnections;
+    private Long maxConnections;
 
     /**
      * A list of update types the bot is subscribed to. Defaults to all update types
      *
      * @optional
      */
-    private @Optional
-    List<String> allowedUpdates;
+    private List<UpdateType> allowedUpdates;
 }

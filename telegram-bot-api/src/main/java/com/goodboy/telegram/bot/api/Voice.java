@@ -50,7 +50,7 @@ public class Voice {
     /**
      * Duration of the audio in seconds as defined by sender
      */
-    private Integer duration;
+    private Long duration;
 
     /**
      * MIME type of the file as defined by sender
@@ -66,7 +66,7 @@ public class Voice {
      *
      * @optional
      */
-    private @Optional Integer fileSize;
+    private Long fileSize;
 
 
     /**
@@ -74,5 +74,5 @@ public class Voice {
      *
      * @optional
      */
-    private @Optional PhotoSize thumb;
+    private PhotoSize thumb;
 }

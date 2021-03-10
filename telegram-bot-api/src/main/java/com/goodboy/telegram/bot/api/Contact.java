@@ -55,12 +55,12 @@ public class Contact {
      *
      * @optional
      */
-    private @Optional Integer userId;
+    private Long userId;
 
     /**
      * Additional data about the contact in the form of a vCard
      *
      * @optional
      */
-    private @Optional String vcard;
+    private String vcard;
 }

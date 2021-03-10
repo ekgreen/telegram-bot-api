@@ -40,5 +40,5 @@ public class KeyboardButtonPollType {
      *
      * @optional
      */
-    private @Optional String type;
+    private String type;
 }

@@ -18,15 +18,37 @@ package com.goodboy.telegram.bot.spring.api.gateway;
 
 
 import com.goodboy.telegram.bot.api.Update;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 
 /**
+ * Responsible for routing bot requests
  *
  * @author Izmalkov Roman (ekgreen)
  * @since 1.0.0
  */
 public interface Gateway {
 
-    Object routing(@Nonnull String botName, @Nonnull Update update);
+    /**
+     * Routing update to bots by producers
+     *
+     * @param botName desire bot name
+     * @param update  request
+     *
+     * @throws TelegramApiGatewayException throws on routing troubles, for instance no command found
+     */
+    void routing(@Nonnull String botName, @Nonnull Update update) throws TelegramApiGatewayException;
+
+    /**
+     * Routing batches of updates to bots by producers
+     *
+     * @param botName desire bot name
+     * @param updates batch
+     * @return routing result
+     *
+     * @throws TelegramApiGatewayException throws on routing troubles, for instance no bot found
+     */
+    @NotNull GatewayBatchResponse routing(@Nonnull String botName, @Nonnull List<Update> updates);
 }

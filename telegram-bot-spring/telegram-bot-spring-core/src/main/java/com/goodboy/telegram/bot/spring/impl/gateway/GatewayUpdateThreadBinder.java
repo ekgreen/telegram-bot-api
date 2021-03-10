@@ -1,0 +1,54 @@
+/*
+ * Copyright 2020-2021 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.goodboy.telegram.bot.spring.impl.gateway;
+
+import com.goodboy.telegram.bot.api.Update;
+import com.goodboy.telegram.bot.http.api.client.update.ModifiableUpdateProvider;
+import com.goodboy.telegram.bot.spring.api.gateway.GatewayFilter;
+import com.goodboy.telegram.bot.spring.api.gateway.GatewayFilterChain;
+import com.goodboy.telegram.bot.spring.api.meta.Infrastructure;
+import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.lang.reflect.Method;
+
+/**
+ * @author Izmalkov Roman (ekgreen)
+ * @since 1.0.0
+ */
+@Infrastructure
+@RequiredArgsConstructor(onConstructor_ = {@Autowired})
+public class GatewayUpdateThreadBinder implements GatewayFilter {
+
+    // cache for request scopes updates
+    private final ModifiableUpdateProvider provider;
+
+    @Override
+
+    public Object invoke(Object proxy, Method method, Object[] args, Update update, GatewayFilterChain chain) {
+        try {
+            // add in cache
+            provider.setUpdate(update);
+            return chain.invoke(proxy, method, args, update);
+        } finally {
+            // remove from cache
+            provider.clean();
+        }
+    }
+
+}

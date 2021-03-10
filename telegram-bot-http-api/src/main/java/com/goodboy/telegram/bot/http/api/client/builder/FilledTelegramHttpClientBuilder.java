@@ -25,7 +25,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.goodboy.telegram.bot.http.api.client.BaseTelegramHttpClient;
 import com.goodboy.telegram.bot.http.api.client.TelegramHttpClient;
-import com.goodboy.telegram.bot.http.api.client.adapter.Callback;
 import com.goodboy.telegram.bot.http.api.client.adapter.HttpClientAdapter;
 import com.goodboy.telegram.bot.http.api.client.adapter.HttpClientAdapterCallback;
 import com.goodboy.telegram.bot.http.api.client.adapter.get.GetCallback;

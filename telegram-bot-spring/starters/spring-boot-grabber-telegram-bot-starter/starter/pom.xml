@@ -1,0 +1,23 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.github.ekgreen</groupId>
+        <artifactId>telegram-bot-parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../../../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>spring-boot-grabber-telegram-bot-starter</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.ekgreen</groupId>
+            <artifactId>spring-boot-grabber-telegram-bot-autoconfiguration</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

@@ -17,11 +17,25 @@
 package com.goodboy.telegram.bot.walle.bot;
 
 import com.goodboy.telegram.bot.api.Update;
+import com.goodboy.telegram.bot.api.methods.Api;
+import com.goodboy.telegram.bot.api.methods.message.SendMessageApi;
+import com.goodboy.telegram.bot.http.api.exception.TelegramApiRuntimeException;
+import com.goodboy.telegram.bot.spring.api.actions.FastAction;
+import com.goodboy.telegram.bot.spring.api.actions.Solo;
+import com.goodboy.telegram.bot.spring.api.actions.VoidApi;
 import com.goodboy.telegram.bot.spring.api.meta.Bot;
+import com.goodboy.telegram.bot.spring.api.meta.ChatId;
+import com.goodboy.telegram.bot.spring.api.meta.Nickname;
 import com.goodboy.telegram.bot.spring.api.meta.Webhook;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Nonnull;
+
+import java.util.concurrent.TimeUnit;
+
+import static com.goodboy.telegram.bot.api.methods.action.Action.TYPING;
+import static com.goodboy.telegram.bot.spring.api.meta.Webhook.ExecutionType.HEAVYWEIGHT;
 
 /**
  * Somebody: Where are we going?
@@ -34,8 +48,37 @@ import javax.annotation.Nonnull;
 @Bot(value = "walle", path = "/walle")
 public class WallE {
 
-    @Webhook
+    @Webhook(command = "talk")
     public void walleListening(@Nonnull Update update) {
         log.info("Are u talking to me? {}", update);
+    }
+
+    @Webhook(type = HEAVYWEIGHT, action = TYPING)
+    public @SneakyThrows Api chatAction(@ChatId String chatId, @Nickname String nickname) {
+        TimeUnit.SECONDS.sleep(2);
+        return new SendMessageApi()
+                .setChatId(chatId)
+                .setText("I dream of space but for now I'm with you " + ( nickname != null ? nickname : "the stranger" ));
+    }
+
+    @Webhook(command = "test", type = HEAVYWEIGHT)
+    public FastAction<Api> explicitChatAction(@ChatId String chatId, @Nickname String nickname) {
+        return () -> {
+            try {
+                TimeUnit.SECONDS.sleep(2);
+                return new SendMessageApi()
+                        .setChatId(chatId)
+                        .setText("I dream of space but for now I'm with you " + (nickname != null ? nickname : "the stranger"));
+            } catch (Exception exception){
+                log.warn("[walle] walle cannot execute test method properly", exception);
+                return errorMessage(chatId, nickname);
+            }
+        };
+    }
+
+    private Api errorMessage(@ChatId String chatId, @Nickname String nickname) {
+        return new SendMessageApi()
+                .setChatId(chatId)
+                .setText("Sorry, " + (nickname != null ? nickname : "the stranger") + "! I am out ...");
     }
 }

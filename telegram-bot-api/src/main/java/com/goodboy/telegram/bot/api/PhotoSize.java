@@ -50,12 +50,12 @@ public class PhotoSize {
     /**
      * Photo width
      */
-    private Integer width;
+    private Long width;
 
     /**
      * Photo height
      */
-    private Integer height;
+    private Long height;
 
     /**
      * File size
@@ -63,5 +63,5 @@ public class PhotoSize {
      * @optional
      */
     private @Optional
-    Integer fileSize;
+    Long fileSize;
 }

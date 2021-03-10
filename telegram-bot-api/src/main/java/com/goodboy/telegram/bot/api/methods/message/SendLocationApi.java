@@ -40,7 +40,7 @@ public class SendLocationApi implements Api {
      * Unique identifier for the target chat or username
      * of the target channel (in the format @channelusername)
      */
-    private Integer  chatId;
+    private Long  chatId;
 
     /**
      * Latitude of the location
@@ -58,21 +58,21 @@ public class SendLocationApi implements Api {
      *
      * @see <a href="https://telegram.org/blog/live-locations">Live Locations</a>
      */
-    private Integer livePeriod;
+    private Long livePeriod;
 
     /**
      * Sends the message silently. Users will receive a notification with no sound
      *
      * @optional
      */
-    private @Optional Boolean disableNotification;
+    private Boolean disableNotification;
 
     /**
      * If the message is a reply, ID of the original message
      *
      * @optional
      */
-    private @Optional Integer replyToMessageId;
+    private Long replyToMessageId;
 
     /**
      * Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard,
@@ -80,5 +80,5 @@ public class SendLocationApi implements Api {
      *
      * @optional
      */
-    private @Optional ReplyMarkup replyMarkup;
+    private ReplyMarkup replyMarkup;
 }

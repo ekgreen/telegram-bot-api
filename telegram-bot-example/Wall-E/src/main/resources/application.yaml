@@ -1,5 +1,21 @@
 telegram:
   servlet:
     context-path: /telegram-bot
+  grabber:
+    type: HOME
   walle:
     token: ${DEFAULT_TEST_TOKEN_VALUE}
+    grabber:
+      limit: 100
+      timeout: 60
+      allowed_updates:
+        - MESSAGE
+        - EDITED_CHANNEL_POST
+        - CALLBACK_QUERY
+
+logging:
+  level:
+    com:
+      goodboy:
+        telegram:
+          bot: TRACE
