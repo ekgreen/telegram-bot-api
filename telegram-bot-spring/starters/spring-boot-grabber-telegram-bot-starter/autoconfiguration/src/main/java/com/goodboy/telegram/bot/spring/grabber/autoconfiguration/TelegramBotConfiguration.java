@@ -40,13 +40,17 @@ import com.goodboy.telegram.bot.http.api.client.configuration.TelegramHttpClient
 import com.goodboy.telegram.bot.http.api.client.context.TelegramApiContextHandler;
 import com.goodboy.telegram.bot.http.api.client.context.TelegramApiContextResolver;
 import com.goodboy.telegram.bot.http.api.client.context.TelegramApiThreadLocalContextHandlerImpl;
+import com.goodboy.telegram.bot.http.api.client.extended.ExtendedTelegramHttpClient;
+import com.goodboy.telegram.bot.http.api.client.extended.PathScanningExtendedTelegramClient;
 import com.goodboy.telegram.bot.http.api.client.handlers.HttpCommandBasedHandler;
 import com.goodboy.telegram.bot.http.api.client.handlers.HttpFileBasedHandler;
 import com.goodboy.telegram.bot.http.api.client.handlers.HttpRequestTypeBasedHandler;
 import com.goodboy.telegram.bot.http.api.client.token.ContextBasedTokenResolver;
 import com.goodboy.telegram.bot.http.api.client.token.TelegramApiTokenResolver;
+import com.goodboy.telegram.bot.http.api.client.update.ModifiableThreadLocalUpdateProvider;
+import com.goodboy.telegram.bot.http.api.client.update.ModifiableUpdateProvider;
 import com.goodboy.telegram.bot.spring.api.processor.HeavyweightScheduler;
-import com.goodboy.telegram.bot.spring.impl.processors.NotificationHeavyweightScheduler;
+import com.goodboy.telegram.bot.spring.impl.processors.annotations.webhook.NotificationHeavyweightScheduler;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -103,6 +107,11 @@ public class TelegramBotConfiguration {
     }
 
     @Bean
+    public ExtendedTelegramHttpClient extendedTelegramHttpClient(TelegramHttpClient client) {
+        return new PathScanningExtendedTelegramClient(client);
+    }
+
+    @Bean
     public TelegramApiConfiguration propertyTelegramApiConfiguration() {
         return new PropertyTelegramApiConfiguration(new TelegramHttpClientProperties());
     }
@@ -140,6 +149,11 @@ public class TelegramBotConfiguration {
     @Bean @ConditionalOnMissingBean
     public TelegramApiContextHandler threadLocalTelegramApiContextResolver() {
         return new TelegramApiThreadLocalContextHandlerImpl();
+    }
+
+    @Bean @ConditionalOnMissingBean
+    public ModifiableUpdateProvider modifiableThreadLocalUpdateProvider() {
+        return new ModifiableThreadLocalUpdateProvider();
     }
 
     @Bean

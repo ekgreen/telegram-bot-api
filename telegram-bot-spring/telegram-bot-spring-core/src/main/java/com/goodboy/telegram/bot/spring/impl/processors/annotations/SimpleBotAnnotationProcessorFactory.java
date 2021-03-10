@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.goodboy.telegram.bot.spring.impl.processors;
+package com.goodboy.telegram.bot.spring.impl.processors.annotations;
 
 import com.goodboy.telegram.bot.spring.api.data.BotData;
 import com.goodboy.telegram.bot.spring.api.meta.Infrastructure;

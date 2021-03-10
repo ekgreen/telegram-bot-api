@@ -17,45 +17,38 @@
 package com.goodboy.telegram.bot.spring.impl.gateway;
 
 import com.goodboy.telegram.bot.api.Update;
-import com.goodboy.telegram.bot.http.api.client.response.UpdateProvider;
+import com.goodboy.telegram.bot.http.api.client.update.ModifiableUpdateProvider;
 import com.goodboy.telegram.bot.spring.api.gateway.GatewayFilter;
 import com.goodboy.telegram.bot.spring.api.gateway.GatewayFilterChain;
 import com.goodboy.telegram.bot.spring.api.meta.Infrastructure;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Method;
 
 /**
- *
  * @author Izmalkov Roman (ekgreen)
  * @since 1.0.0
  */
 @Infrastructure
-public class GatewayUpdateThreadBinder implements GatewayFilter, UpdateProvider {
+@RequiredArgsConstructor(onConstructor_ = {@Autowired})
+public class GatewayUpdateThreadBinder implements GatewayFilter {
 
     // cache for request scopes updates
-    private final static ThreadLocal<Update> CACHE = new ThreadLocal<>();
+    private final ModifiableUpdateProvider provider;
 
     @Override
+
     public Object invoke(Object proxy, Method method, Object[] args, Update update, GatewayFilterChain chain) {
         try {
             // add in cache
-            CACHE.set(update);
+            provider.setUpdate(update);
             return chain.invoke(proxy, method, args, update);
-        }finally {
+        } finally {
             // remove from cache
-            CACHE.remove();
+            provider.clean();
         }
-    }
-
-    @Override
-    public Update getUpdate() {
-        return CACHE.get();
-    }
-
-    @Override
-    public void setUpdate(@NotNull Update update) {
-        CACHE.set(update);
     }
 
 }

@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package com.goodboy.telegram.bot.spring.api.sender;
+package com.goodboy.telegram.bot.http.api.client.update;
 
-import com.goodboy.telegram.bot.api.methods.Api;
-import com.goodboy.telegram.bot.http.api.client.context.UpdateContext;
-
-import javax.annotation.Nonnull;
+import com.goodboy.telegram.bot.api.Update;
 
 /**
- *
  * @author Izmalkov Roman (ekgreen)
  * @since 1.0.0
  */
-public interface ApiMethodExecutor {
+public interface ModifiableUpdateProvider extends UpdateProvider{
 
-    void sendApi(@Nonnull UpdateContext context, @Nonnull Api api);
+    void setUpdate(Update update);
+
+    void clean();
 }

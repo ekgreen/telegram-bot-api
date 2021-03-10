@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.goodboy.telegram.bot.spring.impl.processors;
+package com.goodboy.telegram.bot.spring.impl.processors.registry;
 
 import com.goodboy.telegram.bot.api.BotCommand;
 import com.goodboy.telegram.bot.api.User;
@@ -79,6 +79,8 @@ public class StraightBotRegistryService implements BotRegistryService {
         final BotData botData = transformAnnotationToData(beanName, botType);
 
         botsByName.put(beanName, botData);
+
+        eventFactory.createOnRegistryEvent(botData);
 
         return botData;
     }

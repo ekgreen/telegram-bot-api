@@ -11,7 +11,7 @@ public class BotsReadyEvent extends ApplicationEvent {
     private final BotRegistryService registryService;
 
     @Getter
-    private final ApplicationContext context;
+    private final ApplicationContext applicationContext;
 
     /**
      * Create a new {@code ApplicationEvent}.
@@ -23,6 +23,6 @@ public class BotsReadyEvent extends ApplicationEvent {
     public BotsReadyEvent(Object source, BotRegistryService registryService, ApplicationContext context) {
         super(source);
         this.registryService = registryService;
-        this.context = context;
+        this.applicationContext = context;
     }
 }

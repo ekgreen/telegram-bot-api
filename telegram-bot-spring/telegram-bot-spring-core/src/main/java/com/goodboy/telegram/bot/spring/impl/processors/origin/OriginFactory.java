@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package com.goodboy.telegram.bot.http.api.client.response;
+package com.goodboy.telegram.bot.spring.impl.processors.origin;
 
-import com.goodboy.telegram.bot.api.Update;
+import com.goodboy.telegram.bot.spring.api.meta.Infrastructure;
+import org.springframework.beans.factory.annotation.Qualifier;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
+ *
  * @author Izmalkov Roman (ekgreen)
  * @since 1.0.0
  */
-public interface UpdateProvider {
-
-    Update getUpdate();
-
-    void setUpdate(Update update);
-}
+@Qualifier
+@Infrastructure
+@Retention(RetentionPolicy.RUNTIME)
+public @interface OriginFactory {}

@@ -110,8 +110,7 @@ public class BotBehaviourBeanPostProcessor implements BeanPostProcessor {
 
                 // handled by our enhancer
                 if ((holder = processors.get(method)) != null) {
-                    holder.invoke(bean, method, args);
-                    return null; // as a part of bot api contract, there is no response body for calling client
+                    return holder.invoke(bean, method, args);
                 }
 
                 // skip

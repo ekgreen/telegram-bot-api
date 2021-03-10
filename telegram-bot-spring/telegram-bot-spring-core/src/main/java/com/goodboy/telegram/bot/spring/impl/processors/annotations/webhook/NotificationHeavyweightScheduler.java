@@ -1,4 +1,4 @@
-package com.goodboy.telegram.bot.spring.impl.processors;
+package com.goodboy.telegram.bot.spring.impl.processors.annotations.webhook;
 
 import com.goodboy.telegram.bot.api.methods.ApiRequest;
 import com.goodboy.telegram.bot.api.methods.action.SendChatActionApi;
@@ -169,7 +169,5 @@ public class NotificationHeavyweightScheduler implements HeavyweightScheduler, D
     private static class NotificationTask {
         private final FutureFastAction action;
         private final long timestamp;
-
-
     }
 }

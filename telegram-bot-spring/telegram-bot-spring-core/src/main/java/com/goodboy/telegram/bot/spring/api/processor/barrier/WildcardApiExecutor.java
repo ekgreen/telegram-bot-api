@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.goodboy.telegram.bot.spring.api.sender;
+package com.goodboy.telegram.bot.spring.api.processor.barrier;
 
 import com.goodboy.telegram.bot.api.methods.Api;
 import com.goodboy.telegram.bot.http.api.client.context.UpdateContext;
@@ -26,7 +26,6 @@ import javax.annotation.Nonnull;
  * @author Izmalkov Roman (ekgreen)
  * @since 1.0.0
  */
-public interface ApiMethodExecutor {
-
-    void sendApi(@Nonnull UpdateContext context, @Nonnull Api api);
+public interface WildcardApiExecutor {
+    void sendApi(Api api);
 }

@@ -20,6 +20,7 @@ import com.goodboy.telegram.bot.api.BotCommand;
 import com.goodboy.telegram.bot.api.Update;
 import com.goodboy.telegram.bot.spring.api.data.BotData;
 import com.goodboy.telegram.bot.spring.api.events.BotRegisteredEvent;
+import com.goodboy.telegram.bot.spring.api.events.BotsReadyEvent;
 import com.goodboy.telegram.bot.spring.api.gateway.*;
 import com.goodboy.telegram.bot.spring.api.gateway.GatewayBatchResponse.Fail;
 import com.goodboy.telegram.bot.spring.api.meta.Infrastructure;
@@ -74,15 +75,6 @@ public class TelegramBotApiGateway implements Gateway {
                 Executors.newCachedThreadPool()
         ;
         this.batchSize = batchSize != null ? batchSize : 20;
-    }
-
-    @EventListener(ContextRefreshedEvent.class)
-    public void grabBotsInGateway(ContextRefreshedEvent event) {
-        final ApplicationContext context = event.getApplicationContext();
-
-        beansNameResolver.values().forEach(beanName -> {
-            bots.put(beanName, context.getBean(beanName));
-        });
     }
 
     private GatewayRouter findBotAndRouter(@NotNull String botName) {
@@ -145,13 +137,22 @@ public class TelegramBotApiGateway implements Gateway {
         return routers.get(botName);
     }
 
-    @EventListener(BotRegisteredEvent.class)
-    public void onRegistry(@NotNull BotRegisteredEvent event) {
-        final BotData data = event.getBotData();
-        // registry routes
-        gatewayRouteRegistry(data);
-        // registry name resolver
-        gatewayNameInResolver(data);
+    @EventListener(BotsReadyEvent.class)
+    public void onRegistry(@NotNull BotsReadyEvent event) {
+        final List<BotData> bots = event.getRegistryService().getAll();
+
+        for (BotData data : bots) {
+            // registry routes
+            gatewayRouteRegistry(data);
+            // registry name resolver
+            gatewayNameInResolver(data);
+        }
+
+        final ApplicationContext context = event.getApplicationContext();
+
+        beansNameResolver.values().forEach(beanName -> {
+            this.bots.put(beanName, context.getBean(beanName));
+        });
     }
 
     private void gatewayRouteRegistry(@NotNull BotData data) {

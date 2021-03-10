@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goodboy.telegram.bot.api.Update;
 import com.goodboy.telegram.bot.spring.api.data.BotData;
 import com.goodboy.telegram.bot.spring.api.events.BotRegisteredEvent;
+import com.goodboy.telegram.bot.spring.api.events.OnBotRegistry;
 import com.goodboy.telegram.bot.spring.api.gateway.Gateway;
 import com.goodboy.telegram.bot.spring.api.meta.Infrastructure;
 import lombok.RequiredArgsConstructor;
@@ -56,7 +57,7 @@ import java.util.Map;
 @Infrastructure
 @ServletTelegramApi(ServletTelegramApi.GET_UPDATE_TELEGRAM_API_SERVLET)
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
-public class ServletTelegramUpdateApi extends HttpServlet {
+public class ServletTelegramUpdateApi extends HttpServlet implements OnBotRegistry {
 
     // simple rout from path to bot name
     private final Map<String, String> routes = new HashMap<>();
@@ -101,7 +102,6 @@ public class ServletTelegramUpdateApi extends HttpServlet {
     }
 
 
-    @EventListener(BotRegisteredEvent.class)
     public void onRegistry(@NotNull BotRegisteredEvent event) {
         final BotData data = event.getBotData();
 

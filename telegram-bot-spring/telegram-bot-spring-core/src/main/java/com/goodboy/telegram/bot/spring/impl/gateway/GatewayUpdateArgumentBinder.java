@@ -19,6 +19,7 @@ package com.goodboy.telegram.bot.spring.impl.gateway;
 import com.goodboy.telegram.bot.api.Update;
 import com.goodboy.telegram.bot.spring.api.data.BotData;
 import com.goodboy.telegram.bot.spring.api.events.BotRegisteredEvent;
+import com.goodboy.telegram.bot.spring.api.events.OnBotRegistry;
 import com.goodboy.telegram.bot.spring.api.gateway.GatewayFilter;
 import com.goodboy.telegram.bot.spring.api.gateway.GatewayFilterChain;
 import com.goodboy.telegram.bot.spring.api.meta.Infrastructure;
@@ -34,7 +35,7 @@ import java.util.Map;
  * @since 1.0.0
  */
 @Infrastructure
-public class GatewayUpdateArgumentBinder implements GatewayFilter {
+public class GatewayUpdateArgumentBinder implements GatewayFilter, OnBotRegistry {
 
     // default position = no position
     private final static int DEFAULT_UPDATE_POSITION = -1;
@@ -52,7 +53,6 @@ public class GatewayUpdateArgumentBinder implements GatewayFilter {
         return chain.invoke(proxy, method, args, update);
     }
 
-    @EventListener(BotRegisteredEvent.class)
     public void onRegistry(@NotNull BotRegisteredEvent event) {
         final BotData data = event.getBotData();
 

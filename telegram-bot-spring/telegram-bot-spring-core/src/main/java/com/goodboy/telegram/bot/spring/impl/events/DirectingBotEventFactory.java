@@ -19,6 +19,7 @@ package com.goodboy.telegram.bot.spring.impl.events;
 import com.goodboy.telegram.bot.spring.api.events.BotEventFactory;
 import com.goodboy.telegram.bot.spring.api.events.BotRegisteredEvent;
 import com.goodboy.telegram.bot.spring.api.events.BotsReadyEvent;
+import com.goodboy.telegram.bot.spring.api.events.OnBotRegistry;
 import com.goodboy.telegram.bot.spring.api.meta.Infrastructure;
 import com.goodboy.telegram.bot.spring.api.data.BotData;
 import com.goodboy.telegram.bot.spring.api.processor.BotRegistryService;
@@ -29,6 +30,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationEventPublisher;
 
+import java.util.List;
+
 /**
  * @author Izmalkov Roman (ekgreen)
  * @since 1.0.0
@@ -36,14 +39,17 @@ import org.springframework.context.ApplicationEventPublisher;
 @Infrastructure
 public class DirectingBotEventFactory implements BotEventFactory, ApplicationContextAware {
 
-    private @Autowired
-    ApplicationEventPublisher applicationEventPublisher;
-
+    private ApplicationEventPublisher applicationEventPublisher;
     private ApplicationContext context;
+    private List<OnBotRegistry> onBotRegistryListeners;
 
     @Override
     public void createOnRegistryEvent(@NotNull BotData botData) {
-        applicationEventPublisher.publishEvent(new BotRegisteredEvent(this, botData));
+        if (onBotRegistryListeners != null && !onBotRegistryListeners.isEmpty()) {
+            final BotRegisteredEvent botRegisteredEvent = new BotRegisteredEvent(this, botData);
+
+            onBotRegistryListeners.forEach(listener -> listener.onRegistry(botRegisteredEvent));
+        }
     }
 
     @Override
@@ -54,5 +60,15 @@ public class DirectingBotEventFactory implements BotEventFactory, ApplicationCon
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.context = applicationContext;
+    }
+
+    @Autowired
+    public void setOnBotRegistryListeners(List<OnBotRegistry> onBotRegistryListeners) {
+        this.onBotRegistryListeners = onBotRegistryListeners;
+    }
+
+    @Autowired
+    public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 }

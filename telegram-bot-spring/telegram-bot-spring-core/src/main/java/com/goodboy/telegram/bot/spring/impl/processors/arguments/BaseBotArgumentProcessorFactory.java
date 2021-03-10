@@ -23,7 +23,7 @@ import com.goodboy.telegram.bot.spring.api.processor.arguments.BotArgumentProces
 import com.goodboy.telegram.bot.spring.api.processor.arguments.BotArgumentProcessorFactory;
 import com.goodboy.telegram.bot.spring.api.data.BotData;
 import com.goodboy.telegram.bot.spring.api.processor.arguments.TypeArgumentProcessor;
-import com.goodboy.telegram.bot.http.api.client.response.UpdateProvider;
+import com.goodboy.telegram.bot.http.api.client.update.UpdateProvider;
 import com.google.common.collect.ImmutableMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

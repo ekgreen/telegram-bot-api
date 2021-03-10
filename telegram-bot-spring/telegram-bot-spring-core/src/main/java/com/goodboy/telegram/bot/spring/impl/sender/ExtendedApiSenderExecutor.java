@@ -14,19 +14,30 @@
  * limitations under the License.
  */
 
-package com.goodboy.telegram.bot.spring.api.sender;
+package com.goodboy.telegram.bot.spring.impl.sender;
 
 import com.goodboy.telegram.bot.api.methods.Api;
 import com.goodboy.telegram.bot.http.api.client.context.UpdateContext;
-
-import javax.annotation.Nonnull;
+import com.goodboy.telegram.bot.http.api.client.extended.ExtendedTelegramHttpClient;
+import com.goodboy.telegram.bot.spring.api.sender.ApiMethodExecutor;
+import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Izmalkov Roman (ekgreen)
  * @since 1.0.0
  */
-public interface ApiMethodExecutor {
+@Component
+@RequiredArgsConstructor(onConstructor_={@Autowired})
+public class ExtendedApiSenderExecutor implements ApiMethodExecutor {
 
-    void sendApi(@Nonnull UpdateContext context, @Nonnull Api api);
+    private final ExtendedTelegramHttpClient client;
+
+    @Override
+    public void sendApi(@NotNull UpdateContext context, @NotNull Api api) {
+        client.sendWithToken(api, context.getBotToken());
+    }
 }

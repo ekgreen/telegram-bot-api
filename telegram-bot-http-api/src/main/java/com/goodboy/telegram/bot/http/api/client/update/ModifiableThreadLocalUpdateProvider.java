@@ -14,20 +14,36 @@
  * limitations under the License.
  */
 
-package com.goodboy.telegram.bot.spring.impl.processors;
+package com.goodboy.telegram.bot.http.api.client.update;
 
-import com.goodboy.telegram.bot.spring.api.meta.Infrastructure;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.goodboy.telegram.bot.api.Update;
+import org.jetbrains.annotations.NotNull;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import java.lang.reflect.Method;
 
 /**
  *
  * @author Izmalkov Roman (ekgreen)
  * @since 1.0.0
  */
-@Qualifier
-@Infrastructure
-@Retention(RetentionPolicy.RUNTIME)
-@interface OriginFactory {}
+public class ModifiableThreadLocalUpdateProvider implements ModifiableUpdateProvider {
+
+    // cache for request scopes updates
+    private final static ThreadLocal<Update> CACHE = new ThreadLocal<>();
+
+    @Override
+    public Update getUpdate() {
+        return CACHE.get();
+    }
+
+    @Override
+    public void setUpdate(@NotNull Update update) {
+        CACHE.set(update);
+    }
+
+    @Override
+    public void clean() {
+        CACHE.remove();
+    }
+
+}

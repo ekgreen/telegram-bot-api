@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.goodboy.telegram.bot.spring.impl.processors;
+package com.goodboy.telegram.bot.spring.impl.processors.annotations.webhook;
 
 import com.goodboy.telegram.bot.api.Update;
 import com.goodboy.telegram.bot.api.methods.Api;
 import com.goodboy.telegram.bot.api.methods.action.Action;
-import com.goodboy.telegram.bot.http.api.client.response.UpdateProvider;
+import com.goodboy.telegram.bot.http.api.client.update.ModifiableUpdateProvider;
 import com.goodboy.telegram.bot.spring.api.actions.FastAction;
 import com.goodboy.telegram.bot.spring.api.actions.FutureFastAction;
 import com.goodboy.telegram.bot.spring.api.data.BotData;
@@ -28,7 +28,7 @@ import com.goodboy.telegram.bot.spring.api.meta.Infrastructure;
 import com.goodboy.telegram.bot.spring.api.meta.Webhook;
 import com.goodboy.telegram.bot.spring.api.processor.*;
 import com.goodboy.telegram.bot.spring.api.processor.arguments.TypeArgumentEvaluator;
-import com.google.common.base.Strings;
+import com.goodboy.telegram.bot.spring.impl.processors.origin.OriginFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.reflections.ReflectionUtils;
@@ -67,7 +67,7 @@ public class WebhookAnnotationProcessor implements BotAnnotationProcessor, Appli
 
     private final BotAnnotationProcessorFactory originFactory;
     private final HeavyweightScheduler scheduler;
-    private final UpdateProvider updateProvider;
+    private final ModifiableUpdateProvider updateProvider;
     private final TypeArgumentEvaluator typeArgumentEvaluator;
 
     private final Map<String, ExecutorService> heavyweightExecutorServices = new HashMap<>();
@@ -76,7 +76,7 @@ public class WebhookAnnotationProcessor implements BotAnnotationProcessor, Appli
     private ApplicationContext context;
 
     @Autowired
-    public WebhookAnnotationProcessor(@OriginFactory BotAnnotationProcessorFactory originFactory, HeavyweightScheduler scheduler, UpdateProvider updateProvider, TypeArgumentEvaluator evaluator) {
+    public WebhookAnnotationProcessor(@OriginFactory BotAnnotationProcessorFactory originFactory, HeavyweightScheduler scheduler, ModifiableUpdateProvider updateProvider, TypeArgumentEvaluator evaluator) {
         this.originFactory = originFactory;
         this.scheduler = scheduler;
         this.updateProvider = updateProvider;
@@ -351,10 +351,31 @@ public class WebhookAnnotationProcessor implements BotAnnotationProcessor, Appli
             // transfer update btw providers
             final Update currentThreadUpdate = updateProvider.getUpdate();
             // method -> detached
-            return heavyweightExecutorServices.get(executorServiceBeanName).submit(() -> {
-                updateProvider.setUpdate(currentThreadUpdate);
-                botMethod.run();
-            });
+            return heavyweightExecutorServices.get(executorServiceBeanName).submit(new ContextualHeavyweightThreadExecutor(botMethod));
+        }
+    }
+
+    private class ContextualHeavyweightThreadExecutor implements Runnable{
+
+        private final Runnable origin;
+        private final Update parentThreadUpdate;
+
+        public ContextualHeavyweightThreadExecutor(Runnable origin) {
+            this.origin = origin;
+            this.parentThreadUpdate = updateProvider.getUpdate();
+        }
+
+        @Override
+        public void run() {
+            try {
+                // add parent thread update to current
+                updateProvider.setUpdate(parentThreadUpdate);
+                // execute origin
+                origin.run();
+            } finally {
+                // clean provider from request
+                updateProvider.clean();
+            }
         }
     }
 
